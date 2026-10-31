@@ -28,7 +28,7 @@ export default function TopNavigation({ active, onNavigate, mode, onMode, status
   }
   return <header className="nt-topnav">
     <div className="nt-topnav-brand" aria-label="NextTest 实验决策工作台">
-      <span className="nt-topnav-mark"><i /><i /><i /></span>
+      <img className="nt-topnav-mark" src="/nexttest-mark.svg" alt="" width="30" height="30" />
       <span>NextTest</span><small>EXPERIMENTAL STUDIO</small>
     </div>
     <nav className="nt-topnav-links" aria-label="主功能" data-tour="nav">
