@@ -8,9 +8,19 @@ NextTest 不只预测一个结果，而是从尚未揭示的历史方案中提�
 
 > **普通访客请先看这里：** 不要直接点 `Code → Download ZIP` 后运行，源码包需要 Node/npm 构建。最简单的使用方式是下载下面 Release 里的 `Install_NextTest.cmd`，双击即可，不需要命令行、Node 或 cd。
 
+## 普通用户：3 步使用
+
+完整图文步骤见 [安装与使用教程](docs/INSTALL_TUTORIAL_CN.md)。
+
+1. 打开 [Releases](https://github.com/yeto0620/NextTest/releases/tag/v3.0.0)，下载 `Install_NextTest.cmd`。
+2. 双击它；Windows 提示时选择“更多信息 → 仍要运行”。
+3. 等安装窗口自动下载、安装依赖并启动；浏览器会打开工作台。
+
+不需要 Node/npm，不需要 `cd frontend`，也不要在 Desktop 下手动运行 `npm ci`。
+
 ## 不想用命令行？
 
-下载并双击：
+直接下载并双击：
 
 [Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v3.0.0/Install_NextTest.cmd)
 
@@ -125,7 +135,7 @@ DeepSeek 模式：
 
 启动后浏览器打开 `127.0.0.1:8501–8510` 中自动选择的端口。
 
-完整下载、安装、数据和故障排查说明见 [DOWNLOAD_AND_USE_CN.md](docs/DOWNLOAD_AND_USE_CN.md)。
+完整下载、安装、数据和故障排查说明见 [INSTALL_TUTORIAL_CN.md](docs/INSTALL_TUTORIAL_CN.md)；技术环境说明见 [DOWNLOAD_AND_USE_CN.md](docs/DOWNLOAD_AND_USE_CN.md)。
 
 ## DeepSeek 配置
 

@@ -42,6 +42,7 @@ PUBLIC_DOCS = (
     "docs/PUBLIC_RELEASE_RUNBOOK.md",
     "docs/WINDOWS_QUICKSTART.md",
     "docs/DOWNLOAD_AND_USE_CN.md",
+    "docs/INSTALL_TUTORIAL_CN.md",
     "docs/FINAL_RELEASE_REPORT.md",
     "docs/contest_fit_2026.md",
 )
