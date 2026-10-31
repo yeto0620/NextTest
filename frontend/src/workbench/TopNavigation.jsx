@@ -31,11 +31,11 @@ export default function TopNavigation({ active, onNavigate, mode, onMode, status
       <span className="nt-topnav-mark"><i /><i /><i /></span>
       <span>NextTest</span><small>EXPERIMENTAL STUDIO</small>
     </div>
-    <nav className="nt-topnav-links" aria-label="主功能">
+    <nav className="nt-topnav-links" aria-label="主功能" data-tour="nav">
       {items.map(item => {
         const Icon = item.icon
         const selected = active === item.id
-        return <button type="button" key={item.id} className={selected ? 'is-active' : ''} onClick={() => select(item)}>
+        return <button type="button" key={item.id} data-tour={item.id} className={selected ? 'is-active' : ''} onClick={() => select(item)}>
           <Icon size={14} /><span>{item.label}</span>
         </button>
       })}
@@ -44,7 +44,7 @@ export default function TopNavigation({ active, onNavigate, mode, onMode, status
       {mode === 'research' && <span className="nt-topnav-dataset" title={datasetName || '当前数据集'}><i />{datasetName || '数据集'}</span>}
       <button type="button" className="nt-topnav-icon" onClick={onTour} title="新手引导" aria-label="打开新手引导"><Sparkles size={15} /></button>
       <button type="button" className="nt-topnav-icon" onClick={onTheme} title={theme === 'light' ? '切换到深色主题' : '切换到亮色主题'} aria-label={theme === 'light' ? '切换到深色主题' : '切换到亮色主题'}>{theme === 'light' ? <Moon size={15} /> : <Sun size={15} />}</button>
-      <div className="nt-mode" role="group" aria-label="信息密度">
+      <div className="nt-mode" role="group" aria-label="信息密度" data-tour="mode">
         <button type="button" className={mode === 'research' ? 'is-selected' : ''} onClick={() => onMode('research')}>研究</button>
         <button type="button" className={mode === 'explore' ? 'is-selected' : ''} onClick={() => onMode('explore')}>科普</button>
       </div>
