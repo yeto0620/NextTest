@@ -4,6 +4,8 @@ NextTest 是一个面向有限试验预算的**实验决策智能体工作台**�
 
 主界面是 React + Three.js 本地工作台，由 FastAPI 提供页面与固定 schema API；支持研究/科普双模式、数据坞、策略观测台、只读项目库、证据包和科研智能体。
 
+[▶ 查看 19 秒功能演示视频](docs/NextTest_Demo.mp4)
+
 ## DeepSeek / LLM 已接入
 
 当前版本已接入 DeepSeek，科研智能体可以直接调用 `deepseek-chat` 解释白名单公开证据；真实请求已通过 HTTP 200 验收。
