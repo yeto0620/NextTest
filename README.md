@@ -4,7 +4,7 @@
 
 NextTest 不只预测一个结果，而是从尚未揭示的历史方案中提出“下一次最值得验证什么”，先封存预测，人工确认后再揭示历史实测，并把模型、SHA 和证据链一起更新。
 
-[▶ 1 分 44 秒功能演示（中文配音 + 字幕）](docs/NextTest_Demo.mp4) · [快速开始](#下载与快速开始) · [DeepSeek 配置](#deepseek-配置) · [使用说明](docs/DOWNLOAD_AND_USE_CN.md)
+[▶ 1 分 44 秒功能演示（中文配音 + 字幕）](https://github.com/yeto0620/NextTest/releases/download/v3.0.0/NextTest_Demo.mp4) · [快速开始](#下载与快速开始) · [DeepSeek 配置](#deepseek-配置) · [使用说明](docs/DOWNLOAD_AND_USE_CN.md)
 
 ## 这是什么
 
