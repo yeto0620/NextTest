@@ -4,7 +4,7 @@
 
 推荐下载 **ReadyToRun** 包，已包含前端构建，不需要安装 Node：
 
-- `NextTest_V3_ReadyToRun.zip`
+- [NextTest_V3_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v3.0.0/NextTest_V3_ReadyToRun.zip)
 
 如果使用源码包：
 

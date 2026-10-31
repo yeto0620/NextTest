@@ -63,7 +63,7 @@ DeepSeek 解释白名单公开证据；没有 Key 时自动使用本地规则。
 
 ### 最快方式：ReadyToRun
 
-1. 下载 `NextTest_V3_ReadyToRun.zip`（已包含前端构建，不需要 Node/npm）。
+1. 下载 [NextTest_V3_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v3.0.0/NextTest_V3_ReadyToRun.zip)（已包含前端构建，不需要 Node/npm）。
 2. **解压**到本地目录，不要直接在压缩包里运行。
 3. 进入解压后的文件夹，确认能看到 `setup_nexttest.cmd`、`start_nexttest.cmd`、`frontend`。
 4. 双击 `setup_nexttest.cmd`。
