@@ -67,7 +67,7 @@ export default function ExperimentBench(props) {
     <div className="nt-bench-grid">
       <div className="nt-bench-controls">
         <div className="nt-control-block">
-          <div className="nt-control-title"><span>01</span><strong>策略</strong>{!research && <small>{snapshot ? '项目策略已锁定' : '锁定前可切换'}</small>}</div>
+          <div className="nt-control-title"><span>01</span><strong>策略</strong>{!research && <small>{snapshot ? '项目策略已锁定' : '锁定前可切换'}</small>}<button type="button" className="nt-help" title="查看本区块说明" aria-label="查看本区块说明">?</button></div>
           <div className="nt-strategy-stack" role="group" aria-label="推荐策略">
             {Object.entries(STRATEGY_META).map(([id, meta]) => <button type="button" key={id} disabled={Boolean(snapshot)} className={strategy === id ? 'is-selected' : ''} onClick={() => onStrategy(id)}>
               <span><strong>{meta.label}</strong>{!research && <small>{meta.copy}</small>}</span><i className="nt-radio" />
@@ -77,14 +77,14 @@ export default function ExperimentBench(props) {
         </div>
 
         <div className="nt-control-block">
-          <div className="nt-control-title"><span>02</span><strong>目标</strong>{!research && <small>目标方向</small>}</div>
+          <div className="nt-control-title"><span>02</span><strong>目标</strong>{!research && <small>目标方向</small>}<button type="button" className="nt-help" title="查看本区块说明" aria-label="查看本区块说明">?</button></div>
           <div className="nt-segmented full"><button type="button" className={goal === 'maximize' ? 'is-selected' : ''} disabled={Boolean(snapshot)} onClick={() => onGoal('maximize')}>尽量提高强度</button><button type="button" className={goal === 'minimize' ? 'is-selected' : ''} disabled={Boolean(snapshot)} onClick={() => onGoal('minimize')}>尽量降低目标</button></div>
           <label className="nt-threshold"><input type="checkbox" checked={threshold != null} disabled={Boolean(snapshot)} onChange={e => onThreshold(e.target.checked ? 40 : null)} /> 设置参考阈值（可选）</label>
           {threshold != null && <div className="nt-threshold-input"><input type="number" min="-1000000" max="1000000" step="0.1" value={threshold} disabled={Boolean(snapshot)} onChange={e => onThreshold(Number(e.target.value))} aria-label="参考阈值" /><span>{meta.target.unit || ''}</span></div>}
         </div>
 
         <div className="nt-control-block">
-          <div className="nt-control-title"><span>03</span><strong>预算</strong>{!research && <small>{snapshot ? '已创建项目不可改' : '最多揭示几次历史结果'}</small>}</div>
+          <div className="nt-control-title"><span>03</span><strong>预算</strong>{!research && <small>{snapshot ? '已创建项目不可改' : '最多揭示几次历史结果'}</small>}<button type="button" className="nt-help" title="查看本区块说明" aria-label="查看本区块说明">?</button></div>
           <div className="nt-budget-row"><input type="range" min="1" max="20" value={snapshot?.budget || budget} disabled={Boolean(snapshot)} onChange={e => onBudget(Number(e.target.value))} aria-label="回放预算" /><strong>{snapshot?.budget || budget} <small>次</small></strong></div>
           <div className="nt-range-ends"><span>1 次</span><span>20 次</span></div>
         </div>

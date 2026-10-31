@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Radar } from 'lucide-react'
+import { Radar, Sparkles } from 'lucide-react'
 import Landscape from './Landscape'
 import TopNavigation from './workbench/TopNavigation'
 import WorkspaceShortcuts from './workbench/WorkspaceShortcuts'
@@ -404,6 +404,9 @@ export default function App() {
         <footer className="nt-footer"><span>NextTest · 实验决策工作台</span><span>历史回放 / 非生产试验 / 关联不等于因果</span><span>{snapshot ? `${strategyLabel(snapshot.strategy)} · ${snapshot.revealed_count}/${snapshot.budget}` : '尚未创建项目'}</span></footer>
       </div>
     </main>
+    <button type="button" className="nt-sprite" onClick={() => setAssistantOpen(true)} title="打开小精灵答疑" aria-label="打开小精灵答疑">
+      <Sparkles size={18} /><span>小精灵</span><small>问我</small>
+    </button>
     <NewUserTour open={tourOpen} onClose={closeTour} />
     <GuideDrawer open={guideOpen} onClose={() => setGuideOpen(false)} onNavigate={navigate} />
     <WorkspaceShortcuts open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} onNavigate={navigate}

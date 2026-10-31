@@ -419,4 +419,16 @@ html[data-theme="light"] .nt-cockpit-study strong,
 html[data-theme="light"] .nt-plate svg text,
 html[data-theme="light"] .nt-research-cockpit svg text { color:#244b42 !important; fill:#244b42 !important; }
 html[data-theme="light"] .nt-plate .nt-pending-marker text { fill:#9a5b16 !important; }
+/* Readable control column: three blocks stack vertically instead of squeezing into 286px. */
+.nt-bench-controls { grid-template-columns: 1fr !important; align-content: start; }
+.nt-bench-action { grid-column: auto !important; flex-wrap: wrap; }
+.nt-control-title { grid-template-columns: 22px minmax(0,1fr) auto auto !important; }
+.nt-help { display: inline-grid; place-items: center; width: 21px; height: 21px; border: 1px solid rgba(94,234,212,.35); border-radius: 50%; background: rgba(94,234,212,.08); color: #5eead4; font: 700 11px var(--nt-mono); cursor: help; }
+.nt-help:hover { background: rgba(94,234,212,.2); color: #effffb; }
+html[data-theme="light"] .nt-help { border-color: rgba(15,118,110,.3); background: #e8f7f4; color: #0f766e; }
+.nt-sprite { position: fixed; z-index: 120; right: 22px; bottom: 22px; display: flex; align-items: center; gap: 7px; padding: 11px 13px; border: 1px solid rgba(94,234,212,.42); border-radius: 999px; background: linear-gradient(135deg,#123a3d,#0a2026); color:#eafffb; box-shadow:0 12px 30px rgba(0,0,0,.28); font:600 12px var(--nt-body); cursor:pointer; }
+.nt-sprite:hover { transform: translateY(-2px); border-color:#5eead4; box-shadow:0 16px 34px rgba(94,234,212,.18); }
+.nt-sprite svg { color:#5eead4; }.nt-sprite small { color:#8fb8b1; font:8px var(--nt-mono); }
+html[data-theme=light] .nt-sprite { background:#fff; color:#153b33; border-color:#b9ddd5; box-shadow:0 10px 24px rgba(20,70,60,.14); }
+html[data-theme=light] .nt-sprite small { color:#66837c; }
 
