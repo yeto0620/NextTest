@@ -6,6 +6,8 @@ NextTest 不只预测一个结果，而是从尚未揭示的历史方案中提�
 
 [▶ 1 分 44 秒功能演示（中文配音 + 字幕）](https://github.com/yeto0620/NextTest/releases/download/v3.0.0/NextTest_Demo.mp4) · [快速开始](#下载与快速开始) · [DeepSeek 配置](#deepseek-配置) · [使用说明](docs/DOWNLOAD_AND_USE_CN.md)
 
+**一键下载页：** https://yetoo620.github.io/NextTest/
+
 > **普通访客请先看这里：** 不要直接点 `Code → Download ZIP` 后运行，源码包需要 Node/npm 构建。最简单的使用方式是下载下面 Release 里的 `Install_NextTest.cmd`，双击即可，不需要命令行、Node 或 cd。
 
 ## 普通用户：3 步使用
