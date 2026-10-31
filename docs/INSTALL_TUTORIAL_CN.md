@@ -32,7 +32,7 @@ Install_NextTest.cmd
 
 点击下载。
 
-> 不要点 `Code → Download ZIP`。  
+> 不要点 `Code → Download ZIP`。
 > Code ZIP 是源码，需要 Node/npm 构建；普通使用者请用 Install_NextTest.cmd。
 
 ### 第 3 步：双击运行
@@ -115,7 +115,7 @@ python --version
 
 这个包已经包含前端构建，**不需要 npm**。
 
-> 不要在“下载”文件夹或 Desktop 里直接运行 `npm ci`。  
+> 不要在“下载”文件夹或 Desktop 里直接运行 `npm ci`。
 > 一定要先解压，再进入解压后的文件夹。
 
 ---
@@ -250,7 +250,7 @@ cd $env:USERPROFILE\Downloads
 
 ### 2. npm 无法识别
 
-普通使用者不需要 npm。请使用 `Install_NextTest.cmd` 或 `NextTest_V3_ReadyToRun.zip`。  
+普通使用者不需要 npm。请使用 `Install_NextTest.cmd` 或 `NextTest_V3_ReadyToRun.zip`。
 开发者请安装 Node.js LTS，并重新打开 PowerShell。
 
 ### 3. cd frontend 找不到路径
@@ -267,7 +267,7 @@ NextTest 会自动选择 `8501–8510` 中可用端口，不需要手动杀进�
 
 ### 6. 页面空白或 503
 
-检查是否完整解压，以及 `frontend\dist\index.html` 是否存在。  
+检查是否完整解压，以及 `frontend\dist\index.html` 是否存在。
 ReadyToRun 包已包含该文件；源码包需要执行 `npm run build`。
 
 ### 7. 视频打不开
