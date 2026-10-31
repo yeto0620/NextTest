@@ -3,7 +3,7 @@ param(
     [switch]$NoBrowser
 )
 
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Continue'
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $root
 
@@ -23,17 +23,32 @@ if (-not $python) {
     Write-Host 'Download: https://www.python.org/downloads/windows/' -ForegroundColor Yellow
     exit 3
 }
-$pyVersion = & python --version 2>&1
+$pyVersion = (& python --version 2>&1 | Out-String).Trim()
+if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($pyVersion)) {
+    Write-Host 'Python was found but could not run. Reinstall Python 3.13 with Add python.exe to PATH.' -ForegroundColor Red
+    exit 3
+}
 Write-Host "Python: $pyVersion" -ForegroundColor DarkGray
 
 $importCheck = 'import fastapi, uvicorn, numpy, pandas, sklearn'
-& python -c $importCheck *> $null
-if ($LASTEXITCODE -ne 0) {
+& python -c $importCheck 2>$null | Out-Null
+$importReady = ($LASTEXITCODE -eq 0)
+if (-not $importReady) {
     Write-Host 'Installing Python dependencies (first run may take a few minutes)...' -ForegroundColor DarkGray
-    & python -m pip install -r (Join-Path $root 'requirements-web.txt')
-    if ($LASTEXITCODE -ne 0) { Write-Host 'Python web dependencies failed.' -ForegroundColor Red; exit 4 }
-    & python -m pip install -r (Join-Path $root 'requirements-compute.txt')
-    if ($LASTEXITCODE -ne 0) { Write-Host 'Python compute dependencies failed.' -ForegroundColor Red; exit 5 }
+    $webReq = Join-Path $root 'requirements-web.txt'
+    $computeReq = Join-Path $root 'requirements-compute.txt'
+    & python -m pip install -r $webReq
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host 'Retrying Python web dependencies with --user...' -ForegroundColor Yellow
+        & python -m pip install --user -r $webReq
+    }
+    if ($LASTEXITCODE -ne 0) { Write-Host 'Python web dependencies failed. See the pip message above.' -ForegroundColor Red; exit 4 }
+    & python -m pip install -r $computeReq
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host 'Retrying Python compute dependencies with --user...' -ForegroundColor Yellow
+        & python -m pip install --user -r $computeReq
+    }
+    if ($LASTEXITCODE -ne 0) { Write-Host 'Python compute dependencies failed. See the pip message above.' -ForegroundColor Red; exit 5 }
 }
 else {
     Write-Host 'Python dependencies are ready.' -ForegroundColor DarkGray
