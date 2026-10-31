@@ -25,7 +25,7 @@ NextTest 不只预测一个结果，而是从尚未揭示的历史方案中提�
 
 [Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v3.0.0/Install_NextTest.cmd)
 
-它会自动下载 ReadyToRun 包、解压到 `%LOCALAPPDATA%\NextTest`、安装 Python 依赖并启动。**不需要 Node/npm，也不需要手动 cd。**
+它会自动下载 ReadyToRun 包、解压到 `%USERPROFILE%\NextTest`、安装 Python 依赖并启动。**不需要 Node/npm，也不需要手动 cd。**
 
 ## 这是什么
 

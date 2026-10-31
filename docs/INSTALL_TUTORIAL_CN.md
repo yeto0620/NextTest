@@ -52,7 +52,7 @@ Install_NextTest.cmd
 
 ```text
 下载 ReadyToRun 包
-解压到 %LOCALAPPDATA%\NextTest
+解压到 %USERPROFILE%\NextTest
 检查 Python
 安装 Python 依赖
 启动 NextTest
@@ -283,7 +283,7 @@ https://github.com/yeto0620/NextTest/releases/download/v3.0.0/NextTest_Demo.mp4
 NextTest 是便携式本地应用，不写系统服务。
 
 1. 关闭启动窗口；
-2. 删除 `%LOCALAPPDATA%\NextTest`；
+2. 删除 `%USERPROFILE%\NextTest`；
 3. 如需删除 DeepSeek 凭据，运行：
 
 ```powershell
