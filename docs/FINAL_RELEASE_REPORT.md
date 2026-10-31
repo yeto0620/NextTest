@@ -73,9 +73,18 @@ NextTest 是一个面向有限试验预算的**历史数据回放平台**：用�
 
 ### 当前真实状态
 
-**当前已保存的 Key 返回 HTTP 401，真实 DeepSeek 验收未通过。** 仅做了状态验证，没有输出、记录或提交 Key。
+**当前 DPAPI 凭据已通过 HTTP 200 验证。** 直接验证返回 200，随后启动本地服务并调用 `POST /api/copilot/explain`，返回：
 
-用户需要重新运行配置器并输入有效 DeepSeek API Key：
+```text
+provider=deepseek
+model=deepseek-chat
+disclaimer=AI 解释，不是新增科研证据
+answer_length=83
+```
+
+回答内容只解释公开证据和历史回放边界，没有输出、记录或提交 Key。真实 DeepSeek 解释链路已验收通过。
+
+如果 Key 被撤销或过期，配置器不会覆盖旧文件；重新运行：
 
 ```text
 configure_nexttest_llm.cmd
@@ -86,8 +95,6 @@ configure_nexttest_llm.cmd
 ```text
 start_nexttest_with_llm.cmd
 ```
-
-在有效 Key 实测成功前，不能写“真实 DeepSeek 验收通过”。
 
 ## 11. 一键启动
 
@@ -175,5 +182,5 @@ Copyright © 2026 Wu Yetao. All rights reserved.
 仍待用户处理：
 
 - GitHub 仓库地址和账号由项目负责人配置。
-- 当前保存的 DeepSeek Key 已失效（HTTP 401），需用户重新配置有效 Key。
+- DeepSeek Key 已通过 HTTP 200 验证；如以后被撤销，重新运行配置器即可，不需要改代码。
 - 科学边界与数据许可见前文。
