@@ -105,6 +105,7 @@ WINDOWS_ABSOLUTE = re.compile(r"[A-Za-z]:\\[^\s\"'`]+", re.IGNORECASE)
 RAW_CSV_PATH = re.compile(r"(?:^|[\s\"'`(])data/[^\s\"'`]+\.csv", re.IGNORECASE)
 PRIVATE_PROJECT_PATH = re.compile(r"(?:^|[\s\"'`(])(?:runs|artifacts)/nexttest[^\s\"'`]*", re.IGNORECASE)
 RAW_CSV_ALLOWLIST = ("data/nexttest/uci_concrete/canonical/concrete_age28.csv",)
+BUNDLED_DEMO_CSV = "nexttest/demo_assets/concrete_age28.csv"
 SELF_PATH = "nexttest/public_release.py"
 
 
@@ -395,6 +396,7 @@ def _extra_candidates(errors: list[str]) -> list[str]:
             continue
         if name == ".env" or name.startswith(".env.") or Path(rel).suffix.lower() in {".log", ".pyc", ".csv"}:
             candidates.append(rel)
+    candidates = [c for c in candidates if c != BUNDLED_DEMO_CSV]
     for candidate in sorted(set(candidates)):
         errors.append(f"sensitive public candidate: {candidate}")
     return sorted(set(candidates))

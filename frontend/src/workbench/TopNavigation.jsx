@@ -1,5 +1,5 @@
 import React from 'react'
-import { Archive, Beaker, CircleHelp, Database, Download, GitCompareArrows, Keyboard, MessageCircleMore, MonitorPlay, Orbit, Radar, ScanSearch } from 'lucide-react'
+import { Archive, Beaker, CircleHelp, Database, Download, GitCompareArrows, Keyboard, MessageCircleMore, MonitorPlay, Moon, Orbit, Radar, ScanSearch, Sparkles, Sun } from 'lucide-react'
 
 const RESEARCH_ITEMS = [
   { id: 'mission', label: '观测', icon: ScanSearch },
@@ -18,7 +18,7 @@ const EXPLORE_ITEMS = [
   { id: 'trail', label: '故事', icon: Radar },
 ]
 
-export default function TopNavigation({ active, onNavigate, mode, onMode, status, datasetName, onStrategy, onData, onLibrary, onGuide, onExport, onShortcuts, onStage, onAssistant }) {
+export default function TopNavigation({ active, onNavigate, mode, onMode, status, datasetName, onStrategy, onData, onLibrary, onGuide, onExport, onShortcuts, onStage, onAssistant, theme, onTheme, onTour }) {
   const items = mode === 'research' ? RESEARCH_ITEMS : EXPLORE_ITEMS
   function select(item) {
     if (item.id === 'strategy') return onStrategy()
@@ -42,6 +42,8 @@ export default function TopNavigation({ active, onNavigate, mode, onMode, status
     </nav>
     <div className="nt-topnav-tools">
       {mode === 'research' && <span className="nt-topnav-dataset" title={datasetName || '当前数据集'}><i />{datasetName || '数据集'}</span>}
+      <button type="button" className="nt-topnav-icon" onClick={onTour} title="新手引导" aria-label="打开新手引导"><Sparkles size={15} /></button>
+      <button type="button" className="nt-topnav-icon" onClick={onTheme} title={theme === 'light' ? '切换到深色主题' : '切换到亮色主题'} aria-label={theme === 'light' ? '切换到深色主题' : '切换到亮色主题'}>{theme === 'light' ? <Moon size={15} /> : <Sun size={15} />}</button>
       <div className="nt-mode" role="group" aria-label="信息密度">
         <button type="button" className={mode === 'research' ? 'is-selected' : ''} onClick={() => onMode('research')}>研究</button>
         <button type="button" className={mode === 'explore' ? 'is-selected' : ''} onClick={() => onMode('explore')}>科普</button>

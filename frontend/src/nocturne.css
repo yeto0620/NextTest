@@ -248,3 +248,51 @@ body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-event
 @keyframes nt-dock-in { from { opacity: 0; transform: translateY(-7px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes nt-stage-enter { from { opacity: 0; transform: translateY(12px) scale(.984); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
+
+/* New-user tour */
+.nt-tour-layer { position: fixed; z-index: 160; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(2,8,14,.72); backdrop-filter: blur(14px); }
+.nt-tour-card { position: relative; width: min(600px, 94vw); padding: 30px 32px 22px; border: 1px solid rgba(94,234,212,.35); border-radius: 24px; background: linear-gradient(145deg,#112630,#07121b 70%); color:#eafffb; box-shadow:0 35px 100px rgba(0,0,0,.62); }
+.nt-tour-close { position:absolute; top:14px; right:14px; display:grid; place-items:center; width:30px; height:30px; border:1px solid rgba(153,190,190,.25); border-radius:50%; background:transparent; color:#9ab8b4; }
+.nt-tour-icon { display:grid; place-items:center; width:48px; height:48px; margin-bottom:20px; border:1px solid rgba(94,234,212,.35); border-radius:14px; background:rgba(94,234,212,.1); color:#5eead4; }
+.nt-tour-eyebrow { color:#5eead4; font:10px var(--nt-mono); letter-spacing:.14em; }
+.nt-tour-card h2 { margin:10px 0; color:#f3fffc; font:650 27px/1.12 var(--nt-display); letter-spacing:-.035em; }
+.nt-tour-card p { min-height:76px; margin:0; color:#a9c4c0; font-size:13px; line-height:1.75; }
+.nt-tour-progress { display:flex; gap:7px; margin:22px 0; }
+.nt-tour-progress i { width:25px; height:3px; border-radius:3px; background:rgba(157,195,192,.22); }
+.nt-tour-progress i.is-active { background:#5eead4; box-shadow:0 0 10px rgba(94,234,212,.6); }
+.nt-tour-actions { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.nt-tour-skip { border:0; background:transparent; color:#8aa6a2; font-size:11px; }
+.nt-tour-next { display:inline-flex; align-items:center; gap:7px; padding:11px 18px; border:0; border-radius:11px; background:#5eead4; color:#06201e; font-weight:700; font-size:12px; }
+.nt-tour-foot { margin-top:18px; color:#6e8986; font:9px var(--nt-mono); }
+
+/* Light theme */
+html[data-theme="light"] { --nt-paper:#f3f7f5; --nt-ink:#142825; --nt-muted:#5d726e; --nt-line:rgba(35,74,68,.16); --nt-known:#0f766e; --nt-focus:#b45309; --nt-amber:#b45309; --nt-chamber:#eef4f1; }
+html[data-theme="light"], html[data-theme="light"] body, html[data-theme="light"] #root { background:#f3f7f5; color:#142825; }
+html[data-theme="light"] body::before { background:radial-gradient(900px 500px at 72% -8%,rgba(15,118,110,.14),transparent 68%),radial-gradient(620px 380px at 4% 55%,rgba(180,83,9,.06),transparent 70%),#f3f7f5; }
+html[data-theme="light"] body::after { opacity:.35; }
+html[data-theme="light"] .nt-topnav { border-bottom-color:rgba(35,74,68,.14); background:rgba(250,253,251,.92); }
+html[data-theme="light"] .nt-topnav-brand, html[data-theme="light"] .nt-topnav-links button.is-active { color:#12302a; }
+html[data-theme="light"] .nt-topnav-brand small, html[data-theme="light"] .nt-topnav-links button { color:#647b75; }
+html[data-theme="light"] .nt-topnav-links button:hover { color:#0f4f47; background:rgba(15,118,110,.07); }
+html[data-theme="light"] .nt-topnav-icon { border-color:rgba(35,74,68,.18); background:rgba(255,255,255,.7); color:#51706a; }
+html[data-theme="light"] .nt-topnav .nt-mode { border-color:rgba(35,74,68,.18); background:rgba(255,255,255,.7); }
+html[data-theme="light"] .nt-topnav .nt-mode button { color:#6b817b; }
+html[data-theme="light"] .nt-topnav .nt-mode button.is-selected { background:#d9f0ea; color:#0d4b42; }
+html[data-theme="light"] .nt-mission-deck, html[data-theme="light"] .nt-atlas, html[data-theme="light"] .nt-bench, html[data-theme="light"] .nt-detail, html[data-theme="light"] .nt-ledger, html[data-theme="light"] .nt-trail, html[data-theme="light"] .nt-shortcut-dock { border-color:rgba(35,74,68,.16)!important; background:#fff!important; box-shadow:0 20px 45px rgba(21,62,55,.08)!important; }
+html[data-theme="light"] .nt-mission-copy h1, html[data-theme="light"] .nt-section-head h2, html[data-theme="light"] .nt-ledger-head h2, html[data-theme="light"] .nt-atlas-readout h3, html[data-theme="light"] .nt-detail h3 { color:#12332c!important; }
+html[data-theme="light"] .nt-mission-copy h1 span { color:#0f766e; }
+html[data-theme="light"] .nt-mission-lead, html[data-theme="light"] .nt-section-head p, html[data-theme="light"] .nt-ledger-head p, html[data-theme="light"] .nt-detail-lead, html[data-theme="light"] .nt-detail-empty { color:#5c726c!important; }
+html[data-theme="light"] .nt-mission-facts > div, html[data-theme="light"] .nt-fact-action { border-color:rgba(35,74,68,.14)!important; background:#f7fbf9!important; color:#1c3d35!important; }
+html[data-theme="light"] .nt-mission-facts strong, html[data-theme="light"] .nt-fact-action strong, html[data-theme="light"] .nt-control-title strong, html[data-theme="light"] .nt-compare-number strong, html[data-theme="light"] .nt-compare-facts strong { color:#12332c!important; }
+html[data-theme="light"] .nt-plate, html[data-theme="light"] .nt-atlas-plot, html[data-theme="light"] .nt-plate-chamber { border-color:rgba(15,118,110,.22)!important; background:#f5faf8!important; box-shadow:none!important; }
+html[data-theme="light"] .nt-candidate-table { background:#fff!important; }
+html[data-theme="light"] .nt-candidate-table th { background:#e8f2ef!important; color:#4f6963!important; }
+html[data-theme="light"] .nt-candidate-table td, html[data-theme="light"] .nt-control-grid dd, html[data-theme="light"] .nt-atlas-readout dd { color:#23453d!important; }
+html[data-theme="light"] .nt-detail, html[data-theme="light"] .nt-atlas-readout, html[data-theme="light"] .nt-detail-strong, html[data-theme="light"] .nt-strategy-stack button, html[data-theme="light"] .nt-compare-card, html[data-theme="light"] .nt-hypothesis, html[data-theme="light"] .nt-prism, html[data-theme="light"] .nt-reflection { background:#f7fbf9!important; border-color:rgba(35,74,68,.14)!important; }
+html[data-theme="light"] .nt-secondary-button, html[data-theme="light"] .nt-link-button { border-color:rgba(35,74,68,.2); background:#fff; color:#315b52; }
+html[data-theme="light"] .nt-tour-card { background:#fff; color:#15352e; border-color:rgba(15,118,110,.24); }
+html[data-theme="light"] .nt-tour-card h2 { color:#12332c; }
+html[data-theme="light"] .nt-tour-card p { color:#59726b; }
+html[data-theme="light"] .nt-tour-close { color:#5d7770; border-color:rgba(35,74,68,.2); }
+html[data-theme="light"] .nt-tour-layer { background:rgba(225,238,234,.68); }
+

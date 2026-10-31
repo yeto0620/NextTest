@@ -20,8 +20,23 @@ from .schemas import canonical_json
 from .strategy import Goal, Recommendation, recommend
 
 ROOT = Path(__file__).resolve().parents[1]
-P1R_OUTPUT = ROOT / "artifacts" / "nexttest_p1_uci_concrete"
-P1R_CANONICAL = ROOT / "data" / "nexttest" / "uci_concrete" / "canonical" / "concrete_age28.csv"
+# Development/reproduction uses the audited artifacts and data directories.
+# The public source bundle ships the same four frozen, hash-checked files under
+# nexttest/demo_assets so a fresh clone can run the demo without raw data files.
+_P1R_EXTERNAL_OUTPUT = ROOT / "artifacts" / "nexttest_p1_uci_concrete"
+_P1R_EXTERNAL_CANONICAL = ROOT / "data" / "nexttest" / "uci_concrete" / "canonical" / "concrete_age28.csv"
+_P1R_BUNDLED_OUTPUT = ROOT / "nexttest" / "demo_assets"
+_P1R_BUNDLED_CANONICAL = _P1R_BUNDLED_OUTPUT / "concrete_age28.csv"
+_P1R_REQUIRED = ("manifest.json", "split.json", "source_manifest.json")
+if all((_P1R_EXTERNAL_OUTPUT / name).is_file() for name in _P1R_REQUIRED) and _P1R_EXTERNAL_CANONICAL.is_file():
+    P1R_OUTPUT = _P1R_EXTERNAL_OUTPUT
+    P1R_CANONICAL = _P1R_EXTERNAL_CANONICAL
+elif all((_P1R_BUNDLED_OUTPUT / name).is_file() for name in _P1R_REQUIRED) and _P1R_BUNDLED_CANONICAL.is_file():
+    P1R_OUTPUT = _P1R_BUNDLED_OUTPUT
+    P1R_CANONICAL = _P1R_BUNDLED_CANONICAL
+else:
+    P1R_OUTPUT = _P1R_EXTERNAL_OUTPUT
+    P1R_CANONICAL = _P1R_EXTERNAL_CANONICAL
 PROJECT_ROOT = ROOT / "artifacts" / "nexttest_p2" / "projects"
 PROJECT_SCHEMA = "nexttest_p2_project_v1"
 EVENT_SCHEMA = "nexttest_p2_event_v1"

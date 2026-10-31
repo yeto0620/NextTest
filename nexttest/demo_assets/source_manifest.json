@@ -1,0 +1,30 @@
+{
+  "accessed_utc": "2026-10-26T04:51:12.382106+00:00",
+  "attribution": "Yeh, I. (1998). Concrete Compressive Strength [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5PK67.",
+  "dataset": "Concrete Compressive Strength",
+  "dataset_page": "https://archive.ics.uci.edu/dataset/165/concrete+compressive+strength",
+  "doi": "10.24432/C5PK67",
+  "download_url": "https://archive.ics.uci.edu/static/public/165/concrete+compressive+strength.zip",
+  "files": {
+    "Concrete_Data.xls": {
+      "bytes": 124928,
+      "sha256": "710076c66b9ca3f8050e7942f3dcbdbe04013534daeb0077ffd3079a52d8e0c4"
+    },
+    "Concrete_Readme.txt": {
+      "bytes": 3808,
+      "sha256": "5cd3cdb31d3cfd68287daa6b22ed0541d6932113e83ee0980ced63641af3441d"
+    },
+    "concrete+compressive+strength.zip": {
+      "bytes": 34444,
+      "sha256": "dad85d14de8aee4e07479daa774e6b569a313715b71a3b92c95a07cf91c2c9a7"
+    }
+  },
+  "final_url": "https://archive.ics.uci.edu/static/public/165/concrete+compressive+strength.zip",
+  "http_status": 200,
+  "input_variables_expected": 8,
+  "instances_expected": 1030,
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "manifest_version": "nexttest_uci_concrete_source_v1",
+  "target_expected": 1
+}

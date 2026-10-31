@@ -18,6 +18,7 @@ import ResearchLedger from './workbench/ResearchLedger'
 import DataDock from './workbench/DataDock'
 import DatasetPassport from './workbench/DatasetPassport'
 import StrategyObservatory from './workbench/StrategyObservatory'
+import NewUserTour from './workbench/NewUserTour'
 import { CONCRETE_META, DatasetMetaProvider, metaFromView } from './workbench/dataset'
 import { STRATEGY_META, comparePair, controlEntries, number, statusLabel, strategyLabel } from './workbench/data'
 
@@ -86,6 +87,8 @@ export default function App() {
   const [selection, setSelection] = useState(null)
   const [compareIds, setCompareIds] = useState([])
   const [mode, setMode] = useState('research')
+  const [theme, setTheme] = useState(() => localStorage.getItem('nexttest.theme') || 'dark')
+  const [tourOpen, setTourOpen] = useState(() => localStorage.getItem('nexttest.tourSeen') !== '1')
   const [viewMode, setViewMode] = useState('table')
   const [active, setActive] = useState('mission')
   const [workspace, setWorkspace] = useState('mission')
@@ -117,6 +120,16 @@ export default function App() {
   const isCustom = Boolean(datasetId)
   const datasetMeta = useMemo(() => customDataset ? metaFromView({ dataset: customDataset }) : view?.dataset ? metaFromView(view) : CONCRETE_META, [customDataset, view?.dataset])
   const previewProjectId = projectId && snapshot?.status === 'ready' ? projectId : null
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    localStorage.setItem('nexttest.theme', theme)
+  }, [theme])
+
+  const closeTour = () => {
+    setTourOpen(false)
+    localStorage.setItem('nexttest.tourSeen', '1')
+  }
 
   const navigate = id => {
     setActive(id)
@@ -351,7 +364,7 @@ export default function App() {
 
   return <DatasetMetaProvider meta={datasetMeta}><div className={`nt-app nt-density-${mode}`}>
     <main className="nt-main">
-      <TopNavigation active={libraryOpen ? 'library' : observatoryOpen ? 'strategy' : dockOpen ? 'data' : active} onNavigate={navigate} mode={mode} onMode={changeMode} status={snapshot?.status}
+      <TopNavigation active={libraryOpen ? 'library' : observatoryOpen ? 'strategy' : dockOpen ? 'data' : active} onNavigate={navigate} mode={mode} onMode={changeMode} status={snapshot?.status} theme={theme} onTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')} onTour={() => setTourOpen(true)}
         datasetName={datasetMeta.name} onStrategy={() => { setActive('strategy'); setObservatoryOpen(true) }} onData={() => { setActive('data'); setDockOpen(true) }}
         onLibrary={() => { setActive('library'); setLibraryOpen(true) }} onGuide={() => setGuideOpen(true)} onExport={onDownload} onShortcuts={() => setShortcutsOpen(true)} onStage={() => setPresentationOpen(true)} onAssistant={() => setAssistantOpen(true)} />
 
@@ -391,6 +404,7 @@ export default function App() {
         <footer className="nt-footer"><span>NextTest · 实验决策工作台</span><span>历史回放 / 非生产试验 / 关联不等于因果</span><span>{snapshot ? `${strategyLabel(snapshot.strategy)} · ${snapshot.revealed_count}/${snapshot.budget}` : '尚未创建项目'}</span></footer>
       </div>
     </main>
+    <NewUserTour open={tourOpen} onClose={closeTour} />
     <GuideDrawer open={guideOpen} onClose={() => setGuideOpen(false)} onNavigate={navigate} />
     <WorkspaceShortcuts open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} onNavigate={navigate}
       onStrategy={() => { setActive('strategy'); setObservatoryOpen(true) }} onGuide={() => setGuideOpen(true)} onAssistant={() => setAssistantOpen(true)} onLibrary={() => { setActive('library'); setLibraryOpen(true) }} />
