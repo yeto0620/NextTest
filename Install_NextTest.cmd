@@ -10,8 +10,9 @@ powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command ^
   "$ErrorActionPreference='Stop';" ^
   "try {" ^
   "  [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12;" ^
-  "  $base=Join-Path $env:USERPROFILE 'NextTest';" ^
-  "  if (Test-Path -LiteralPath $base) { $target=Join-Path $env:USERPROFILE ('NextTest-' + (Get-Date -Format 'yyyyMMdd-HHmmss')) } else { $target=$base }" ^
+  "  $candidates=Get-ChildItem -LiteralPath $env:USERPROFILE -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -eq 'NextTest' -or $_.Name -like 'NextTest-*' } | Sort-Object LastWriteTime -Descending;" ^
+  "  $target=if ($candidates) { $candidates[0].FullName } else { Join-Path $env:USERPROFILE 'NextTest' };" ^
+  "  Write-Host ('Install/update destination: ' + $target) -ForegroundColor DarkGray;" ^
   "  $downloads=Join-Path $env:USERPROFILE 'Downloads';" ^
   "  New-Item -ItemType Directory -Force -Path $downloads | Out-Null;" ^
   "  $zip=Join-Path $downloads ('NextTest_' + [guid]::NewGuid().ToString('N') + '.zip');" ^
@@ -21,7 +22,7 @@ powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command ^
   "  if ((Get-Item -LiteralPath $zip).Length -lt 1000000) { throw 'Downloaded package is too small.' }" ^
   "  Write-Host ('Extract destination: ' + $target) -ForegroundColor DarkGray;" ^
   "  New-Item -ItemType Directory -Force -Path $target | Out-Null;" ^
-  "  Expand-Archive -LiteralPath $zip -DestinationPath $target -Force;" ^
+  "  try { Expand-Archive -LiteralPath $zip -DestinationPath $target -Force } catch { $target=Join-Path $env:USERPROFILE ('NextTest-' + (Get-Date -Format 'yyyyMMdd-HHmmss')); New-Item -ItemType Directory -Force -Path $target | Out-Null; Expand-Archive -LiteralPath $zip -DestinationPath $target -Force }" ^
   "  $setup=Join-Path $target 'setup_nexttest.cmd';" ^
   "  if (-not (Test-Path -LiteralPath $setup)) { throw ('setup_nexttest.cmd not found in ' + $target) }" ^
   "  Write-Host ('Starting: ' + $setup) -ForegroundColor Green;" ^

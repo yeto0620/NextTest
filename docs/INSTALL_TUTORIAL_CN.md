@@ -316,7 +316,18 @@ https://github.com/yeto0620/NextTest/releases/download/v3.0.0/NextTest_Demo.mp4
 
 ---
 
-## 八、卸载
+## 八、更新
+
+以后更新不需要重新配置环境，也不需要重新下载 Python 依赖。
+
+1. 关闭正在运行的 NextTest 窗口；
+2. 重新双击 `Install_NextTest.cmd`；
+3. 它会自动找到现有的 `NextTest` 或 `NextTest-时间戳` 目录并原地更新；
+4. Python 依赖已安装时会跳过，深色/亮色选择、DeepSeek Key 和项目记录保留。
+
+只有安装包本身需要重新下载（约 8 MB），依赖包不会每次重下。
+
+## 九、卸载
 
 NextTest 是便携式本地应用，不写系统服务。
 
@@ -332,7 +343,7 @@ NextTest 是便携式本地应用，不写系统服务。
 
 ---
 
-## 九、版权
+## 十、版权
 
 Copyright © 2026 Wu Yetao. All rights reserved.
 

@@ -21,6 +21,8 @@ NextTest 不只预测一个结果，而是从尚未揭示的历史方案中提�
 
 不需要 Node/npm，不需要 `cd frontend`，也不要在 Desktop 下手动运行 `npm ci`。
 
+以后更新时重新双击 `Install_NextTest.cmd` 即可；它会原地更新现有目录，Python 依赖和 DeepSeek Key 会保留。
+
 安装完成后会自动创建桌面和开始菜单快捷方式：
 
 ```text
