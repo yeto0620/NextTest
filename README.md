@@ -1,10 +1,10 @@
-# NextTest — 下一次，先验证什么？
+# NextTest V1 — 下一次，先验证什么？
 
 **面向有限试验预算的实验决策智能体工作台。**
 
 NextTest 不只预测一个结果，而是从尚未揭示的历史方案中提出“下一次最值得验证什么”，先封存预测，人工确认后再揭示历史实测，并把模型、SHA 和证据链一起更新。
 
-[▶ 1 分 44 秒功能演示（中文配音 + 字幕）](https://github.com/yeto0620/NextTest/releases/download/v3.0.0/NextTest_Demo.mp4) · [快速开始](#下载与快速开始) · [DeepSeek 配置](#deepseek-配置) · [使用说明](docs/DOWNLOAD_AND_USE_CN.md)
+[▶ 1 分 44 秒功能演示（中文配音 + 字幕）](https://github.com/yeto0620/NextTest/releases/download/v1.0.0/NextTest_Demo.mp4) · [快速开始](#下载与快速开始) · [DeepSeek 配置](#deepseek-配置) · [使用说明](docs/DOWNLOAD_AND_USE_CN.md)
 
 
 > **普通访客请先看这里：** 不要直接点 `Code → Download ZIP` 后运行，源码包需要 Node/npm 构建。最简单的使用方式是下载下面 Release 里的 `Install_NextTest.cmd`，双击即可，不需要命令行、Node 或 cd。
@@ -13,7 +13,7 @@ NextTest 不只预测一个结果，而是从尚未揭示的历史方案中提�
 
 完整图文步骤见 [安装与使用教程](docs/INSTALL_TUTORIAL_CN.md)。
 
-1. 打开 [Releases](https://github.com/yeto0620/NextTest/releases/tag/v3.0.0)，下载 `Install_NextTest.cmd`。
+1. 打开 [Releases](https://github.com/yeto0620/NextTest/releases/tag/v1.0.0)，下载 `Install_NextTest.cmd`。
 2. 双击它；Windows 提示时选择“更多信息 → 仍要运行”。
 3. 等安装窗口自动下载、安装依赖并启动；浏览器会打开工作台。
 4. 以后直接双击桌面的 **NextTest**，在弹窗中选择 **普通模式** 或 **DeepSeek 模式**。
@@ -35,7 +35,7 @@ NextTest    打开后选择普通模式或 DeepSeek 模式
 
 直接下载并双击：
 
-[Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v3.0.0/Install_NextTest.cmd)
+[Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v1.0.0/Install_NextTest.cmd)
 
 它会自动下载 ReadyToRun 包、解压到 `%USERPROFILE%\NextTest`、安装 Python 依赖并启动。**不需要 Node/npm，也不需要手动 cd。**
 
@@ -101,7 +101,7 @@ DeepSeek 解释白名单公开证据；没有 Key 时自动使用本地规则。
 
 ### 最快方式：ReadyToRun
 
-1. 下载 [NextTest_V3_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v3.0.0/NextTest_V3_ReadyToRun.zip)（已包含前端构建，不需要 Node/npm）。
+1. 下载 [NextTest_V1_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v1.0.0/NextTest_V1_ReadyToRun.zip)（已包含前端构建，不需要 Node/npm）。
 2. **解压**到本地目录，不要直接在压缩包里运行。
 3. 进入解压后的文件夹，确认能看到 `setup_nexttest.cmd`、`start_nexttest.cmd`、`frontend`。
 4. 双击 `setup_nexttest.cmd`。
