@@ -108,7 +108,7 @@ python -m pytest -q tests/test_nexttest_project_library.py tests/test_nexttest_e
 
 ## GitHub 公开版
 
-公开提交范围、数据来源和发布前检查见 [GITHUB_RELEASE_CHECKLIST.md](docs/GITHUB_RELEASE_CHECKLIST.md)。公开发布操作步骤见 [PUBLIC_RELEASE_RUNBOOK.md](docs/PUBLIC_RELEASE_RUNBOOK.md)。仓库不包含数据副本、运行记录、环境或密钥；许可证由项目负责人决定。
+公开提交范围、数据来源和发布前检查见 [GITHUB_RELEASE_CHECKLIST.md](docs/GITHUB_RELEASE_CHECKLIST.md)。公开发布操作步骤见 [PUBLIC_RELEASE_RUNBOOK.md](docs/PUBLIC_RELEASE_RUNBOOK.md)。最终验收记录见 [FINAL_RELEASE_REPORT.md](docs/FINAL_RELEASE_REPORT.md)。仓库不包含数据副本、运行记录、环境或密钥；许可证由项目负责人决定。
 
 ## 验证
 

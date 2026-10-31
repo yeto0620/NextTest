@@ -41,7 +41,7 @@ PUBLIC_DOCS = (
     "docs/PROJECT_LIBRARY_CONTRACT.md",
     "docs/PUBLIC_RELEASE_RUNBOOK.md",
     "docs/WINDOWS_QUICKSTART.md",
-    "docs/WINDOWS_DESKTOP_APP.md",
+    "docs/FINAL_RELEASE_REPORT.md",
     "docs/contest_fit_2026.md",
 )
 REQUIRED_REQUIREMENTS = (
