@@ -2,19 +2,27 @@
 
 ## 1. 获取方式
 
-- 下载发布压缩包：`NextTest_V3_GitHub_Source.zip`
-- 解压到任意**英文或中文路径**，不要放在系统受保护目录。
+推荐下载 **ReadyToRun** 包，已包含前端构建，不需要安装 Node：
+
+- `NextTest_V3_ReadyToRun.zip`
+
+如果使用源码包：
+
+- `NextTest_V3_GitHub_Source.zip`
+- 解压到任意中文或英文路径，不要放在系统受保护目录。
 - 也可以将解压后的内容直接导入 GitHub：GitHub → New repository → Upload an existing file，或使用 Git 推送到仓库。
 
-压缩包只包含公开源代码、测试、文档和配置模板；**不包含**：
-
-- 原始 CSV 或数据副本；
-- `data/`、`artifacts/`、`runs/`、`deliverables/` 运行产物；
-- `.env`、DPAPI 凭据或 API Key；
-- `node_modules/`、`frontend/dist/`、虚拟环境；
-- 历史项目记录、隐藏标签或私有路径。
+源码压缩包只包含公开源代码、测试、文档和配置模板；不包含原始 CSV、运行产物、`.env`、DPAPI 凭据、API Key、`node_modules/` 或 `frontend/dist/`。
 
 ## 2. 环境要求
+
+ReadyToRun 包：
+
+- Windows 10/11；
+- Python 3.13；
+- 不需要 Node.js。
+
+源码包：
 
 - Windows 10/11；
 - Python 3.13；
@@ -22,6 +30,16 @@
 - 首次运行前端需要安装依赖并构建。
 
 ## 3. 首次安装
+
+### 最快方式
+
+1. 解压 **ReadyToRun** 包。
+2. 进入解压后的文件夹，确认能看到 `setup_nexttest.cmd`、`start_nexttest.cmd` 和 `frontend`。
+3. 双击 `setup_nexttest.cmd`。
+
+脚本会检查 Python、安装依赖，并在需要时构建前端，然后启动工作台。
+
+### 源码方式
 
 在解压后的项目根目录打开 PowerShell：
 
@@ -32,7 +50,22 @@ cd frontend
 npm ci
 npm run build
 cd ..
+.\setup_nexttest.cmd
 ```
+
+### 常见错误
+
+**`npm` 无法识别**
+
+Node.js 未安装或未进入 PATH。安装 [Node.js LTS](https://nodejs.org/) 后，关闭并重新打开 PowerShell，运行 `npm -v` 确认。如果不想安装 Node，请使用 ReadyToRun 包。
+
+**`cd frontend` 找不到路径**
+
+当前目录不是项目根目录。先 `cd` 到包含 `start_nexttest.cmd` 的文件夹，或直接在解压后的文件夹中打开 PowerShell。
+
+**不要在 Desktop 直接运行**
+
+必须先解压，再进入解压后的项目根目录；不要在桌面目录直接执行 `npm ci` 或 `cd frontend`。
 
 ## 4. 启动
 

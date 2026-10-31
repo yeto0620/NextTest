@@ -61,15 +61,18 @@ DeepSeek 解释白名单公开证据；没有 Key 时自动使用本地规则。
 
 ## 下载与快速开始
 
-### 获取代码
+### 最快方式：ReadyToRun
 
-- GitHub：点击 **Code → Download ZIP**；
-- 或下载发布附件：`NextTest_V3_GitHub_Source.zip`；
-- 解压后文件直接位于根目录。
+1. 下载 `NextTest_V3_ReadyToRun.zip`（已包含前端构建，不需要 Node/npm）。
+2. **解压**到本地目录，不要直接在压缩包里运行。
+3. 进入解压后的文件夹，确认能看到 `setup_nexttest.cmd`、`start_nexttest.cmd`、`frontend`。
+4. 双击 `setup_nexttest.cmd`。
 
-### 首次运行
+首次会自动安装 Python 依赖并启动；浏览器打开 `127.0.0.1:8501–8510`。
 
-需要 Python 3.13 和 Node.js：
+### 从 GitHub 源码运行
+
+需要 Python 3.13 和 Node.js LTS：
 
 ```powershell
 python -m pip install -r requirements-web.txt
@@ -78,7 +81,22 @@ cd frontend
 npm ci
 npm run build
 cd ..
+.\setup_nexttest.cmd
 ```
+
+### 常见错误
+
+**`npm` 不是内部或外部命令**
+
+说明 Node.js 没有安装或没有进入 PATH。安装 Node.js LTS 后，**关闭并重新打开 PowerShell**，再运行 `npm -v`。如果不想安装 Node，请使用 ReadyToRun 压缩包。
+
+**`cd frontend` 找不到路径**
+
+说明当前目录不是解压后的 NextTest 根目录。请先 `cd` 到包含 `start_nexttest.cmd` 的文件夹，或在文件资源管理器中进入该文件夹后再打开 PowerShell。
+
+**不要这样做**
+
+不要在自己的 `Desktop` 目录直接运行 `npm ci` 或 `cd frontend`；要先解压并进入项目根目录。
 
 ### 启动
 
