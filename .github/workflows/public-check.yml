@@ -1,0 +1,48 @@
+name: public-check
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install backend dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-web.txt -r requirements-compute.txt
+
+      - name: Public release audit
+        run: python scripts/verify_public_release.py --check
+
+      - name: Public contract tests
+        run: |
+          python -m pytest -q tests/test_nexttest_public_release.py tests/test_nexttest_llm_copilot.py --basetemp="${{ runner.temp }}/nexttest_public_pytest"
+
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Frontend install
+        working-directory: frontend
+        run: npm ci
+
+      - name: Frontend build
+        working-directory: frontend
+        run: npm run build

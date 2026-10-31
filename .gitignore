@@ -1,0 +1,37 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Python environments and caches
+.venv/
+.venv-ui/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+
+# JavaScript dependencies and build output
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# Generated and local-only material
+artifacts/
+runs/
+deliverables/
+data/
+desktop/dist/
+desktop/build/
+src-tauri/target/
+src-tauri/gen/schemas/
+.dsh-*/
+*.log
+
+# Local desktop/tooling experiments (not part of final web release)
+.cargo/
+.playwright-cli/
+output/
+docs/WINDOWS_DESKTOP_APP.md
+desktop/
+src-tauri/
