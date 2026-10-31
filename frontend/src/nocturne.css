@@ -534,4 +534,7 @@ html[data-theme="light"] .nt-assistant-question + * button:disabled { opacity:1 
 html[data-theme="light"] .nt-assistant-answer header { background:#edf8f4 !important; }
 html[data-theme="light"] .nt-assistant-boundary { background:#f7fbf9 !important; }
 html[data-theme="light"] .nt-assistant-panel .nt-agent-link.is-online { color:#0f766e !important; background:#e8f7f3 !important; }
+.nt-sprite.is-disabled { opacity:.45; cursor:not-allowed; filter:grayscale(.7); }
+.nt-sprite.is-disabled:hover { transform:none; box-shadow:none; }
+.nt-topnav-assistant:disabled { opacity:.35; cursor:not-allowed; }
 

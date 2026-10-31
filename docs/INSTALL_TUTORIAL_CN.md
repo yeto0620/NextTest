@@ -78,13 +78,20 @@ Install_NextTest.cmd
 
 ### 第 7 步：以后怎么再次打开
 
-安装完成后，桌面和开始菜单会自动出现 3 个快捷方式：
+安装完成后，桌面和开始菜单只创建一个快捷方式：
 
 ```text
-NextTest                    普通打开
-NextTest DeepSeek           使用 DeepSeek 打开
-NextTest DeepSeek Config    配置或更换 DeepSeek Key
+NextTest
 ```
+
+双击后选择：
+
+```text
+Yes = DeepSeek 模式
+No  = 普通模式（智能体/小精灵置灰）
+```
+
+选择 DeepSeek 且没有 Key 时，会自动打开配置窗口。
 
 以后只需要双击 **NextTest**，不需要再找文件夹、不需要命令行。
 
@@ -233,17 +240,19 @@ frontend\
 
 ---
 
-## 六、可选：配置 DeepSeek
+## 六、配置 DeepSeek
 
-不配置 Key 也能使用本地规则解释。
+不配置 Key 也能使用普通模式；普通模式下科研智能体和小精灵置灰。
 
-### 配置
+### 首次配置
 
 双击桌面上的：
 
 ```text
-NextTest DeepSeek Config
+NextTest
 ```
+
+在弹窗中选择 **Yes（DeepSeek 模式）**。如果还没有 Key，会自动打开配置器。
 
 输入会遮罩；只有 DeepSeek 返回 HTTP 200 才保存。Key 使用 Windows current-user DPAPI 加密，保存在仓库外。
 
@@ -255,14 +264,17 @@ NextTest DeepSeek Config
 
 ### 使用 DeepSeek 启动
 
-配置成功后，双击：
+以后双击：
 
 ```text
-NextTest DeepSeek
+NextTest
 ```
 
-或者运行：
+在弹窗中选择 **Yes** 即可；Key 已保存时不会重复询问。
 
+普通模式选择 **No**，核心回放、数据坞、策略、项目库和证据包仍可用。
+
+### 手动启动
 ```powershell
 .\start_nexttest_with_llm.cmd
 ```

@@ -89,6 +89,7 @@ export default function App() {
   const [mode, setMode] = useState('research')
   const [theme, setTheme] = useState(() => localStorage.getItem('nexttest.theme') || 'dark')
   const [tourOpen, setTourOpen] = useState(() => localStorage.getItem('nexttest.tourSeen') !== '1')
+  const [llmReady, setLlmReady] = useState(null)
   const [viewMode, setViewMode] = useState('table')
   const [active, setActive] = useState('mission')
   const [workspace, setWorkspace] = useState('mission')
@@ -120,6 +121,10 @@ export default function App() {
   const isCustom = Boolean(datasetId)
   const datasetMeta = useMemo(() => customDataset ? metaFromView({ dataset: customDataset }) : view?.dataset ? metaFromView(view) : CONCRETE_META, [customDataset, view?.dataset])
   const previewProjectId = projectId && snapshot?.status === 'ready' ? projectId : null
+
+  useEffect(() => {
+    request('/api/runtime').then(data => setLlmReady(Boolean(data.llm_configured))).catch(() => setLlmReady(false))
+  }, [])
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
@@ -364,7 +369,7 @@ export default function App() {
 
   return <DatasetMetaProvider meta={datasetMeta}><div className={`nt-app nt-density-${mode}`}>
     <main className="nt-main">
-      <TopNavigation active={libraryOpen ? 'library' : observatoryOpen ? 'strategy' : dockOpen ? 'data' : active} onNavigate={navigate} mode={mode} onMode={changeMode} status={snapshot?.status} theme={theme} onTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')} onTour={() => setTourOpen(true)}
+      <TopNavigation active={libraryOpen ? 'library' : observatoryOpen ? 'strategy' : dockOpen ? 'data' : active} onNavigate={navigate} mode={mode} onMode={changeMode} status={snapshot?.status} theme={theme} onTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')} onTour={() => setTourOpen(true)} llmReady={llmReady}
         datasetName={datasetMeta.name} onStrategy={() => { setActive('strategy'); setObservatoryOpen(true) }} onData={() => { setActive('data'); setDockOpen(true) }}
         onLibrary={() => { setActive('library'); setLibraryOpen(true) }} onGuide={() => setGuideOpen(true)} onExport={onDownload} onShortcuts={() => setShortcutsOpen(true)} onStage={() => setPresentationOpen(true)} onAssistant={() => setAssistantOpen(true)} />
 
@@ -404,7 +409,7 @@ export default function App() {
         <footer className="nt-footer"><span>NextTest · 实验决策工作台</span><span>历史回放 / 非生产试验 / 关联不等于因果</span><span>{snapshot ? `${strategyLabel(snapshot.strategy)} · ${snapshot.revealed_count}/${snapshot.budget}` : '尚未创建项目'}</span></footer>
       </div>
     </main>
-    <button type="button" className="nt-sprite" onClick={() => setAssistantOpen(true)} title="打开小精灵答疑" aria-label="打开小精灵答疑">
+    <button type="button" className={`nt-sprite ${llmReady === false ? 'is-disabled' : ''}`} disabled={llmReady === false} onClick={() => setAssistantOpen(true)} title={llmReady === false ? '普通模式：接入 DeepSeek 后可用' : '打开小精灵答疑'} aria-label="打开小精灵答疑">
       <Sparkles size={18} /><span>小精灵</span><small>问我</small>
     </button>
     <NewUserTour open={tourOpen} onClose={closeTour} />

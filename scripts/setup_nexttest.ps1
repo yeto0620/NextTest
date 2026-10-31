@@ -99,13 +99,13 @@ function New-NextTestShortcut {
 
 $desktop = [Environment]::GetFolderPath('Desktop')
 $startMenu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs'
-$normalLauncher = Join-Path $root 'start_nexttest.cmd'
-$deepseekLauncher = Join-Path $root 'start_nexttest_with_llm.cmd'
-$deepseekConfig = Join-Path $root 'configure_nexttest_llm.cmd'
+$launcher = Join-Path $root 'Open_NextTest.cmd'
 foreach ($folder in @($desktop, $startMenu)) {
-    New-NextTestShortcut -Folder $folder -Name 'NextTest' -Script $normalLauncher -Description 'Open NextTest'
-    New-NextTestShortcut -Folder $folder -Name 'NextTest DeepSeek' -Script $deepseekLauncher -Description 'Open NextTest with DeepSeek'
-    New-NextTestShortcut -Folder $folder -Name 'NextTest DeepSeek Config' -Script $deepseekConfig -Description 'Configure DeepSeek key'
+    New-NextTestShortcut -Folder $folder -Name 'NextTest' -Script $launcher -Description 'Open NextTest and choose a mode'
+    foreach ($legacy in @('NextTest DeepSeek.lnk', 'NextTest DeepSeek Config.lnk')) {
+        $old = Join-Path $folder $legacy
+        if (Test-Path -LiteralPath $old) { Remove-Item -LiteralPath $old -Force -ErrorAction SilentlyContinue }
+    }
 }
 Write-Host 'Desktop and Start Menu shortcuts created.' -ForegroundColor Green
 

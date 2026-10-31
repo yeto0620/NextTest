@@ -309,6 +309,19 @@ async def no_store(request: Request, call_next):
 def health() -> dict:
     return {"status": "ok", "mode": "historical_replay", "production_trial": False}
 
+@app.get("/api/runtime")
+def runtime() -> dict:
+    """Report capability switches without exposing any credential."""
+    try:
+        configured = copilot.load_config() is not None
+    except Exception:
+        configured = False
+    return {
+        "llm_configured": configured,
+        "llm_mode": "deepseek" if configured else "local_rules",
+        "historical_replay": True,
+    }
+
 
 @lru_cache(maxsize=1)
 def _landscape() -> dict:
