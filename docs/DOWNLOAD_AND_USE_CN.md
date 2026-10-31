@@ -4,11 +4,11 @@
 
 推荐下载 **ReadyToRun** 包，已包含前端构建，不需要安装 Node。
 
-最省事：下载并双击 [Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v1.0.0/Install_NextTest.cmd)，它会自动下载、解压到 `%USERPROFILE%\NextTest` 并启动。
+最省事：下载并双击 [Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v3.0.0/Install_NextTest.cmd)，它会自动下载、解压到 `%USERPROFILE%\NextTest` 并启动。
 
 或手动下载：
 
-- [NextTest_V1_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v1.0.0/NextTest_V1_ReadyToRun.zip)
+- [NextTest_V3_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v3.0.0/NextTest_V3_ReadyToRun.zip)
 
 如果使用源码包：
 
