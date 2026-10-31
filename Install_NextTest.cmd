@@ -12,7 +12,9 @@ powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command ^
   "  [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12;" ^
   "  $base=Join-Path $env:USERPROFILE 'NextTest';" ^
   "  if (Test-Path -LiteralPath $base) { $target=Join-Path $env:USERPROFILE ('NextTest-' + (Get-Date -Format 'yyyyMMdd-HHmmss')) } else { $target=$base }" ^
-  "  $zip=Join-Path $env:TEMP ('NextTest_' + [guid]::NewGuid().ToString('N') + '.zip');" ^
+  "  $downloads=Join-Path $env:USERPROFILE 'Downloads';" ^
+  "  New-Item -ItemType Directory -Force -Path $downloads | Out-Null;" ^
+  "  $zip=Join-Path $downloads ('NextTest_' + [guid]::NewGuid().ToString('N') + '.zip');" ^
   "  Write-Host ('Download destination: ' + $zip) -ForegroundColor DarkGray;" ^
   "  Invoke-WebRequest -Uri 'https://github.com/yeto0620/NextTest/releases/download/v3.0.0/NextTest_V3_ReadyToRun.zip' -OutFile $zip -UseBasicParsing;" ^
   "  Unblock-File -LiteralPath $zip -ErrorAction SilentlyContinue;" ^
