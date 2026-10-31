@@ -59,7 +59,7 @@ POST /api/library/compare
 
 ## 启动（Windows PowerShell）
 
-普通评委请直接看 [Windows 一键启动](docs/WINDOWS_QUICKSTART.md)。
+普通评委请直接看 [Windows 一键启动](docs/WINDOWS_QUICKSTART.md)。下载、首次安装和功能入口见 [下载与使用说明](docs/DOWNLOAD_AND_USE_CN.md)。
 
 在仓库根目录运行：
 
