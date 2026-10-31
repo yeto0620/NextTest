@@ -76,6 +76,26 @@ Install_NextTest.cmd
 
 回到启动窗口，按 `Ctrl+C`，或关闭窗口。启动器只停止本次启动的本地服务。
 
+### 第 7 步：以后怎么再次打开
+
+安装完成后，桌面和开始菜单会自动出现 3 个快捷方式：
+
+```text
+NextTest                    普通打开
+NextTest DeepSeek           使用 DeepSeek 打开
+NextTest DeepSeek Config    配置或更换 DeepSeek Key
+```
+
+以后只需要双击 **NextTest**，不需要再找文件夹、不需要命令行。
+
+如果桌面没有快捷方式，进入安装目录：
+
+```text
+%USERPROFILE%\NextTest
+```
+
+双击 `start_nexttest.cmd`；或重新运行一次 `setup_nexttest.cmd` 创建快捷方式。
+
 ---
 
 ## 二、如果电脑没有 Python
@@ -217,21 +237,39 @@ frontend\
 
 不配置 Key 也能使用本地规则解释。
 
-配置有效 Key：
+### 配置
+
+双击桌面上的：
+
+```text
+NextTest DeepSeek Config
+```
+
+输入会遮罩；只有 DeepSeek 返回 HTTP 200 才保存。Key 使用 Windows current-user DPAPI 加密，保存在仓库外。
+
+也可以打开安装目录后运行：
 
 ```powershell
 .\configure_nexttest_llm.cmd
 ```
 
-输入会遮罩；只有 DeepSeek 返回 HTTP 200 才保存。Key 使用 Windows current-user DPAPI 加密，保存在仓库外。
+### 使用 DeepSeek 启动
 
-配置后启动：
+配置成功后，双击：
+
+```text
+NextTest DeepSeek
+```
+
+或者运行：
 
 ```powershell
 .\start_nexttest_with_llm.cmd
 ```
 
-换电脑后需要重新配置自己的 Key。
+普通打开仍然双击 `NextTest`，两者使用同一份本地数据。
+
+换电脑后需要重新配置自己的 Key；Key 不在 Git 仓库里。
 
 ---
 

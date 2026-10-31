@@ -16,8 +16,18 @@ NextTest 不只预测一个结果，而是从尚未揭示的历史方案中提�
 1. 打开 [Releases](https://github.com/yeto0620/NextTest/releases/tag/v3.0.0)，下载 `Install_NextTest.cmd`。
 2. 双击它；Windows 提示时选择“更多信息 → 仍要运行”。
 3. 等安装窗口自动下载、安装依赖并启动；浏览器会打开工作台。
+4. 以后直接双击桌面的 **NextTest** 再次打开。
+5. 需要 DeepSeek 时，先双击 **NextTest DeepSeek Config** 配置 Key，再双击 **NextTest DeepSeek** 启动。
 
 不需要 Node/npm，不需要 `cd frontend`，也不要在 Desktop 下手动运行 `npm ci`。
+
+安装完成后会自动创建桌面和开始菜单快捷方式：
+
+```text
+NextTest                    普通打开
+NextTest DeepSeek           使用 DeepSeek 打开
+NextTest DeepSeek Config    配置或更换 DeepSeek Key
+```
 
 ## 不想用命令行？
 

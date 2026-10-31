@@ -80,6 +80,35 @@ else {
 $launcher = Join-Path $root 'start_nexttest.cmd'
 $launcherArgs = @()
 if ($NoBrowser) { $launcherArgs += '--no-browser' }
+function New-NextTestShortcut {
+    param([string]$Folder, [string]$Name, [string]$Script, [string]$Description)
+    if (-not (Test-Path -LiteralPath $Folder)) { return }
+    try {
+        $shell = New-Object -ComObject WScript.Shell
+        $link = $shell.CreateShortcut((Join-Path $Folder ($Name + '.lnk')))
+        $link.TargetPath = $env:ComSpec
+        $link.Arguments = '/c ""' + $Script + '""'
+        $link.WorkingDirectory = $root
+        $link.WindowStyle = 1
+        $link.Description = $Description
+        $link.IconLocation = "$env:SystemRoot\System32\shell32.dll,220"
+        $link.Save()
+    }
+    catch { Write-Host ("Shortcut could not be created: " + $Name) -ForegroundColor Yellow }
+}
+
+$desktop = [Environment]::GetFolderPath('Desktop')
+$startMenu = Join-Path $env:APPDATA 'Microsoft\Windows\Start Menu\Programs'
+$normalLauncher = Join-Path $root 'start_nexttest.cmd'
+$deepseekLauncher = Join-Path $root 'start_nexttest_with_llm.cmd'
+$deepseekConfig = Join-Path $root 'configure_nexttest_llm.cmd'
+foreach ($folder in @($desktop, $startMenu)) {
+    New-NextTestShortcut -Folder $folder -Name 'NextTest' -Script $normalLauncher -Description 'Open NextTest'
+    New-NextTestShortcut -Folder $folder -Name 'NextTest DeepSeek' -Script $deepseekLauncher -Description 'Open NextTest with DeepSeek'
+    New-NextTestShortcut -Folder $folder -Name 'NextTest DeepSeek Config' -Script $deepseekConfig -Description 'Configure DeepSeek key'
+}
+Write-Host 'Desktop and Start Menu shortcuts created.' -ForegroundColor Green
+
 Write-Host 'Starting NextTest...' -ForegroundColor Green
 & $launcher @launcherArgs
 exit $LASTEXITCODE
