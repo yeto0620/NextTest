@@ -146,9 +146,9 @@ exit 0，release_ready=true
 - 本地代码提交 SHA：`f4de1ac47069756f6646ffeaa8f590ca61d0c7ad`
 - commit message：`feat: complete NextTest research-first competition release`
 - remote：`https://github.com/yeto0620/NextTest.git`
-- 已推送分支：`master`
-- 推送时远端 HEAD：`24b1d53aaa26fc9557773a2e156471c6d3479e52`
-- push：已成功；本地 `master` 已跟踪 `origin/master`
+- 已推送分支：`main`
+- 推送时远端 HEAD：`cd102150d16b1f7966b11175217fb7f01ec34a11`
+- push：已成功；本地 `main` 已跟踪 `origin/main`，重复的 `master` 分支已删除
 - 本报告另作为文档提交追加到代码提交之后。
 
 ## 14. 科学边界
