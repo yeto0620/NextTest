@@ -97,7 +97,7 @@ npm run build
 - [ ] GitHub Actions 的 public-check 通过。
 - [ ] 前端 `npm ci` 和 `npm run build` 通过。
 - [ ] 证据助手在无 Key 时返回 503，且没有真实网络请求。
-- [ ] 许可证由项目负责人决定；不要自行添加 LICENSE。
+- [ ] 仓库未采用开源许可证，保留全部权利；不要添加 MIT、Apache、GPL 或自定义开源 LICENSE。
 
 ## 9. 不可声称的结论
 

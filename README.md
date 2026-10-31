@@ -108,7 +108,15 @@ python -m pytest -q tests/test_nexttest_project_library.py tests/test_nexttest_e
 
 ## GitHub 公开版
 
-公开提交范围、数据来源和发布前检查见 [GITHUB_RELEASE_CHECKLIST.md](docs/GITHUB_RELEASE_CHECKLIST.md)。公开发布操作步骤见 [PUBLIC_RELEASE_RUNBOOK.md](docs/PUBLIC_RELEASE_RUNBOOK.md)。最终验收记录见 [FINAL_RELEASE_REPORT.md](docs/FINAL_RELEASE_REPORT.md)。仓库不包含数据副本、运行记录、环境或密钥；许可证由项目负责人决定。
+公开提交范围、数据来源和发布前检查见 [GITHUB_RELEASE_CHECKLIST.md](docs/GITHUB_RELEASE_CHECKLIST.md)。公开发布操作步骤见 [PUBLIC_RELEASE_RUNBOOK.md](docs/PUBLIC_RELEASE_RUNBOOK.md)。最终验收记录见 [FINAL_RELEASE_REPORT.md](docs/FINAL_RELEASE_REPORT.md)。仓库不包含数据副本、运行记录、环境或密钥。
+
+## 版权与使用
+
+Copyright © 2026 Wu Yetao. All rights reserved.
+
+本仓库用于项目展示、学术交流与竞赛评审。未经作者书面许可，不得复制、修改、再发布、商业使用或将本项目及其衍生版本用于其他竞赛申报。
+
+第三方依赖分别遵循其原始许可证。本声明不改变第三方组件的许可条件。
 
 ## 验证
 
