@@ -24,51 +24,73 @@ Write-Host 'The key is masked and encrypted with Windows DPAPI for the current u
 $secureKey = Read-Host 'Paste NEXTEST_LLM_API_KEY' -AsSecureString
 
 $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureKey)
+$validationFailure = $null
 try {
     $plainKey = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr)
     if ([string]::IsNullOrWhiteSpace($plainKey)) {
-        throw 'API Key cannot be empty.'
+        $validationFailure = 'API Key cannot be empty.'
     }
 
-    Write-Host 'Validating the credential with DeepSeek before storing it...' -ForegroundColor DarkGray
-    $headers = @{
-        Authorization = "Bearer $plainKey"
-        'Content-Type' = 'application/json'
-    }
-    $payload = @{
-        model = 'deepseek-chat'
-        messages = @(@{
-            role = 'user'
-            content = 'Reply with OK only.'
-        })
-        max_tokens = 4
-        stream = $false
-    } | ConvertTo-Json -Depth 5 -Compress
+    if ($null -eq $validationFailure) {
+        Write-Host 'Validating the credential with DeepSeek before storing it...' -ForegroundColor DarkGray
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        Add-Type -AssemblyName System.Net.Http
+        $payload = @{
+            model = 'deepseek-chat'
+            messages = @(@{
+                role = 'user'
+                content = 'Reply with OK only.'
+            })
+            max_tokens = 4
+            stream = $false
+        } | ConvertTo-Json -Depth 5 -Compress
 
-    try {
-        $validation = Invoke-WebRequest `
-            -Method Post `
-            -Uri 'https://api.deepseek.com/chat/completions' `
-            -Headers $headers `
-            -Body $payload `
-            -TimeoutSec 30 `
-            -UseBasicParsing
-        if ([int]$validation.StatusCode -ne 200) {
-            throw "DeepSeek returned HTTP $([int]$validation.StatusCode)."
+        $validated = $false
+        for ($attempt = 1; $attempt -le 3 -and -not $validated; $attempt++) {
+            $client = $null
+            $content = $null
+            $response = $null
+            try {
+                $client = [Net.Http.HttpClient]::new()
+                $client.Timeout = [TimeSpan]::FromSeconds(30)
+                $client.DefaultRequestHeaders.Authorization = [Net.Http.Headers.AuthenticationHeaderValue]::new('Bearer', $plainKey)
+                $content = [Net.Http.StringContent]::new($payload, [Text.Encoding]::UTF8, 'application/json')
+                $response = $client.PostAsync('https://api.deepseek.com/chat/completions', $content).GetAwaiter().GetResult()
+                $statusCode = [int]$response.StatusCode
+                if ($statusCode -eq 200) {
+                    $validated = $true
+                }
+                else {
+                    $validationFailure = "DeepSeek credential validation failed (HTTP $statusCode). The existing stored credential was not changed."
+                    break
+                }
+            }
+            catch {
+                if ($attempt -lt 3) {
+                    Write-Host "Connection attempt $attempt failed; retrying..." -ForegroundColor DarkGray
+                    Start-Sleep -Seconds $attempt
+                }
+                else {
+                    $validationFailure = 'DeepSeek credential validation failed after 3 network attempts. The existing stored credential was not changed.'
+                }
+            }
+            finally {
+                if ($null -ne $response) { $response.Dispose() }
+                if ($null -ne $content) { $content.Dispose() }
+                if ($null -ne $client) { $client.Dispose() }
+            }
         }
-    }
-    catch {
-        $statusCode = $null
-        if ($_.Exception.Response) {
-            try { $statusCode = [int]$_.Exception.Response.StatusCode } catch {}
-        }
-        $statusText = if ($null -ne $statusCode) { "HTTP $statusCode" } else { 'network error' }
-        throw "DeepSeek credential validation failed ($statusText). The existing stored credential was not changed."
     }
 }
 finally {
     $plainKey = $null
     [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
+}
+
+if ($null -ne $validationFailure) {
+    $secureKey = $null
+    Write-Host $validationFailure -ForegroundColor Red
+    exit 1
 }
 
 [IO.Directory]::CreateDirectory($secretRoot) | Out-Null
