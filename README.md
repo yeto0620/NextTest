@@ -139,6 +139,7 @@ DeepSeek：HTTP 200，deepseek-chat 调用成功
 - [证据包契约](docs/EVIDENCE_PACKAGE_CONTRACT.md)
 - [项目库契约](docs/PROJECT_LIBRARY_CONTRACT.md)
 - [公开版检查清单](docs/GITHUB_RELEASE_CHECKLIST.md)
+- [项目方案（详细版）](docs/NextTest_项目方案_详细版.docx)
 - [最终交付报告](docs/FINAL_RELEASE_REPORT.md)
 
 ## 适用范围
