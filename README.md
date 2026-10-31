@@ -1,138 +1,149 @@
-# NextTest — 下一次先试什么
+# NextTest — 下一次，先验证什么？
 
-NextTest 是一个面向有限试验预算的**实验决策智能体工作台**：它用已知记录训练轻量模型，从尚未揭示结果的历史方案中提出下一次验证建议；用户确认后，系统才揭示这条历史实测值并更新模型。示例使用公开的 UCI 混凝土抗压强度数据，固定 28 天龄期。
+**面向有限试验预算的实验决策智能体工作台。**
 
-主界面是 React + Three.js 本地工作台，由 FastAPI 提供页面与固定 schema API；支持研究/科普双模式、数据坞、策略观测台、只读项目库、证据包和科研智能体。
+NextTest 不只预测一个结果，而是从尚未揭示的历史方案中提出“下一次最值得验证什么”，先封存预测，人工确认后再揭示历史实测，并把模型、SHA 和证据链一起更新。
 
-[▶ 查看 2 分 10 秒功能演示视频（中文配音 + 字幕）](docs/NextTest_Demo.mp4)
+[▶ 1 分 44 秒功能演示（中文配音 + 字幕）](docs/NextTest_Demo.mp4) · [快速开始](#下载与快速开始) · [DeepSeek 配置](#deepseek-配置) · [使用说明](docs/DOWNLOAD_AND_USE_CN.md)
 
-## DeepSeek / LLM 已接入
+## 这是什么
 
-当前版本已接入 DeepSeek，科研智能体可以直接调用 `deepseek-chat` 解释白名单公开证据；真实请求已通过 HTTP 200 验收。
+NextTest 是一个可本地运行的 Web 工作台，用公开历史数据做可复核的实验决策回放：
 
-- 默认使用**本地规则解释**，不联网也能完成历史回放、候选、实验、数据坞、项目库和证据包流程。
-- 配置有效 DeepSeek Key 后，自动使用 `deepseek-chat` 解释当前候选、已揭示记录、公开计数和公开 SHA。
-- 首次配置：
+- 先看已知记录和候选，再决定下一次验证；
+- 预测与实测分离，候选标签只在人工确认后揭示；
+- 研究模式服务科研审查，科普模式服务公众理解，两者共享同一事实源；
+- 所有推荐、误差和证据摘要来自固定数据与确定性计算。
+
+## 能做什么
+
+### 01 研究模式
+
+观测、候选、实验、策略、证据、档案、数据七个入口。首屏直接呈现候选表格、预测、模型分歧和审计信息。
+
+### 02 科普模式
+
+导览、航图、体验、故事四个入口，用同一套候选和历史回放解释“为什么下一次要这样选”。
+
+### 03 实验台
+
+选择候选 → 封存预测 → 人工确认 → 揭示一条历史实测 → 更新模型和证据链。关键动作可只读恢复。
+
+### 04 数据坞
+
+导入本地 CSV，检查字段角色、缺失、重复和泄漏风险，确认后冻结只读数据护照；原始文件留在本机。
+
+### 05 策略观测台
+
+固定协议、固定种子，对照随机、预测最优和模型分歧三种策略，查看预算轨迹、运行矩阵和失败单元。
+
+### 06 项目库与证据包
+
+把项目变成可复核证据：项目卡片、来源/切分可比性检查、确定性 JSON/Markdown 证据包、公开 SHA 和已揭示历史。
+
+### 07 科研智能体
+
+DeepSeek 解释白名单公开证据；没有 Key 时自动使用本地规则。LLM 不参与选点、排序、训练、阈值或科研数字生成。
+
+## 创新点
+
+1. **从“预测结果”推进到“决定下一次验证”**  
+   把有限预算花在最值得验证的一步，而不是只追求一个预测值。
+
+2. **先封存，后揭示**  
+   候选选择阶段不读取隐藏结果，人工确认后才释放一条历史实测，降低数据泄漏和事后改答案风险。
+
+3. **研究 / 科普共享同一事实源**  
+   专业用户看字段、单位、模型、SHA 和审计；公众看导览、航图和故事，底层候选与证据完全一致。
+
+4. **可审计的证据闭环**  
+   项目编号、事件记录、模型 SHA、只读恢复、证据包和项目库，让每次判断可以复盘。
+
+## 下载与快速开始
+
+### 获取代码
+
+- GitHub：点击 **Code → Download ZIP**；
+- 或下载发布附件：`NextTest_V3_GitHub_Source.zip`；
+- 解压后文件直接位于根目录。
+
+### 首次运行
+
+需要 Python 3.13 和 Node.js：
 
 ```powershell
-.\configure_nexttest_llm.cmd
+python -m pip install -r requirements-web.txt
+python -m pip install -r requirements-compute.txt
+cd frontend
+npm ci
+npm run build
+cd ..
 ```
 
-- 使用 DeepSeek 启动：
+### 启动
 
-```powershell
-.\start_nexttest_with_llm.cmd
-```
-
-- 普通本地启动：
+普通本地模式：
 
 ```powershell
 .\start_nexttest.cmd
 ```
 
-Key 使用 Windows current-user DPAPI 加密，保存在仓库外的 `%LOCALAPPDATA%\NextTest\secrets\deepseek.key`；不会写入仓库、日志或测试。换电脑后需要重新运行配置器输入自己的 Key。
-
-LLM 只做公开证据解释，不参与推荐、排序、训练、阈值、候选揭示或科研数字生成；返回内容固定带 `AI 解释，不是新增科研证据`。
-
-## 当前可做的事
-
-- 在桌面工作台查看 252 条**已知训练记录**；三维图不含待选方案或独立留出集的真实强度。
-- 导入自己的本地 CSV，检查字段和常见质量问题，确认后保存只读数据档案。
-- 从三种探索方法中选择下一组历史配方：随机对照、预测最优、模型分歧最大。
-- 先查看推荐与预测，再确认揭示该条历史实测；每次操作保留独立记录，可用项目编号只读恢复，并导出 Markdown/JSON 证据摘要。
-- 使用 Strategy Observatory 查看固定种子的配对历史回放；使用 Run Matrix 查看状态、预算和失败单元。
-- 查看固定数据切分：252 条训练、89 条待选历史方案、84 条独立留出。
-
-## 可选证据助手
-
-科研智能体是**只读解释层**，支持本地规则解释与 DeepSeek 公开证据解释，不参与推荐、排序、训练、阈值或记录修改：
-
-- 只读取当前候选、已经揭示的历史记录、公开计数和公开 SHA。
-- 不读取待揭示 candidate target、独立 test 标签、原始 CSV 全量、任意路径、环境变量或 API Key。
-- 默认使用本地规则解释，核心流程无需联网；配置有效 Key 后自动使用 `deepseek-chat` 解释公开证据。
-- 返回固定 `disclaimer`：`AI 解释，不是新增科研证据`。
-- 模型回答最多 350 汉字；不用于产生新数据、显著性、因果、成本节省或工业有效性结论。
-
-配置只从环境变量读取：
-
-```text
-NEXTEST_LLM_PROVIDER=deepseek
-NEXTEST_LLM_BASE_URL=https://api.deepseek.com
-NEXTEST_LLM_MODEL=deepseek-chat
-NEXTEST_LLM_API_KEY=
-```
-
-在启动服务的 shell 中设置这些变量；可参考 `.env.example`，真实 `.env` 不进入版本控制。默认配置下所有本地功能照常工作。
-
-## 可核验答辩证据包
-
-已通过只读审计的 `p2_` / `p3_` 项目可以导出确定性证据包：
-
-```text
-GET /api/projects/{project_id}/evidence-package
-GET /api/custom/projects/{project_id}/evidence-package
-```
-
-证据包只包含公开数据集元数据、公开快照/审计摘要、已揭示历史、确定性防御摘要和固定限制；不包含 pending target、test 标签、原始 CSV、路径、环境变量、API Key、完整事件或原始 audit 文件。审计失败时不返回部分包。格式与哈希定义见 [EVIDENCE_PACKAGE_CONTRACT.md](docs/EVIDENCE_PACKAGE_CONTRACT.md)。
-
-## 只读项目证据库
-
-项目库是**只读项目索引与可比性检查**。它列出已通过只读审计的 `p2_` / `p3_` 项目，并支持成对检查是否使用相同 source/split：
-
-```text
-GET  /api/library
-GET  /api/library/{project_id}/card
-POST /api/library/compare
-```
-
-项目库提供项目卡片和成对可比性说明，展示各自公开的 revealed_count/MAE/max_error 与数据边界；适合项目复盘和证据审查。格式见 [PROJECT_LIBRARY_CONTRACT.md](docs/PROJECT_LIBRARY_CONTRACT.md)。
-
-## 启动（Windows PowerShell）
-
-首次使用请直接看 [Windows 一键启动](docs/WINDOWS_QUICKSTART.md)。下载、首次安装和功能入口见 [下载与使用说明](docs/DOWNLOAD_AND_USE_CN.md)。
-
-在仓库根目录运行：
+DeepSeek 模式：
 
 ```powershell
-python -m pip install -r requirements-web.txt
-python -m pip install -r requirements-compute.txt
-python scripts/start_nexttest.py
+.\configure_nexttest_llm.cmd
+.\start_nexttest_with_llm.cmd
 ```
 
-服务只绑定本机 `127.0.0.1`，自动选择可用端口并打开实际地址。首次载入三维图和首次创建回放项目可能需要数秒。
+启动后浏览器打开 `127.0.0.1:8501–8510` 中自动选择的端口。
 
-前端源码开发（可选）：
+完整下载、安装、数据和故障排查说明见 [DOWNLOAD_AND_USE_CN.md](docs/DOWNLOAD_AND_USE_CN.md)。
 
-```powershell
-cd frontend
-npm ci
-npm run build
+## DeepSeek 配置
+
+当前版本已接入 DeepSeek，真实请求已通过 HTTP 200 验收。
+
+- 首次配置输入 Key 时使用遮罩；
+- 只有 DeepSeek 返回 HTTP 200 才保存；
+- 使用 Windows current-user DPAPI 加密，保存在仓库外的 `%LOCALAPPDATA%\NextTest\secrets\deepseek.key`；
+- 不会写入 `.env`、日志、测试或 Git；
+- 默认使用本地规则解释，配置 Key 后使用 `deepseek-chat`；
+- 换电脑后重新运行 `configure_nexttest_llm.cmd` 即可。
+
+## 技术结构
+
+```text
+frontend/          React + Vite + Three.js 工作台
+nexttest/          FastAPI、历史回放、数据坞、策略、项目库、证据包
+scripts/           一键启动、UI worker、公开门禁
+tests/             核心、API、UI 合同和公开发布测试
+docs/              产品、契约、下载与使用说明
 ```
 
-## 测试
+固定示例：UCI Concrete，252 条训练、89 条候选、84 条独立留出，固定 28 天龄期。
 
-在仓库根目录运行：
+## 验证
 
-```powershell
-python -m pytest -q tests/test_nexttest_project_library.py tests/test_nexttest_evidence_package.py tests/test_nexttest_llm_copilot.py tests/test_nexttest_web_api.py tests/test_nexttest_ui_worker.py tests/test_nexttest_p1_core.py tests/test_nexttest_p2_experiment_loop.py --basetemp=artifacts/nexttest_web_pytest
+```text
+Python 测试：80 passed
+前端构建：通过
+公开门禁：release_ready=true，errors=[]
+浏览器：1280 / 1440 / 1920 无横向溢出，console errors=[]
+DeepSeek：HTTP 200，deepseek-chat 调用成功
 ```
 
-测试覆盖本地规则、mock transport、证据包和项目库只读路径；真实 DeepSeek 调用单独验收。
+## 文档
 
-## 适用场景
+- [下载与使用说明](docs/DOWNLOAD_AND_USE_CN.md)
+- [Windows 快速启动](docs/WINDOWS_QUICKSTART.md)
+- [证据包契约](docs/EVIDENCE_PACKAGE_CONTRACT.md)
+- [项目库契约](docs/PROJECT_LIBRARY_CONTRACT.md)
+- [公开版检查清单](docs/GITHUB_RELEASE_CHECKLIST.md)
+- [最终交付报告](docs/FINAL_RELEASE_REPORT.md)
 
-NextTest 适合有限预算的历史数据回放、实验决策教学、科研流程审查与公众科普。系统把候选、预测、证据状态和审计信息放在同一工作台，支持项目复盘、团队讨论和“观察—比较—锁定—揭示—更新”的完整演示。用于真实实验时，由领域专家结合实验条件复核。
+## 适用范围
 
-## 结果解释
-
-- 历史回放展示已有记录，候选推荐、预测和模型分歧均来自固定数据与确定性计算。
-- 证据包、项目库和 SHA 摘要用于软件完整性、可复核性和项目复盘。
-- 科研智能体只解释白名单公开证据；科研数字由本地引擎生成。
-- 研究/科普双模式共享同一事实源，专业审查与公众理解使用同一套候选和证据。
-
-## GitHub 公开版
-
-公开提交范围、数据来源和发布前检查见 [GITHUB_RELEASE_CHECKLIST.md](docs/GITHUB_RELEASE_CHECKLIST.md)。公开发布操作步骤见 [PUBLIC_RELEASE_RUNBOOK.md](docs/PUBLIC_RELEASE_RUNBOOK.md)。最终验收记录见 [FINAL_RELEASE_REPORT.md](docs/FINAL_RELEASE_REPORT.md)。仓库不包含数据副本、运行记录、环境或密钥。
+NextTest 适合有限预算的历史数据回放、实验决策教学、科研流程审查和公众科普。推荐、预测和证据摘要用于复盘与讨论；真实实验需要领域专家结合实验条件复核。
 
 ## 版权与使用
 
@@ -141,11 +152,3 @@ Copyright © 2026 Wu Yetao. All rights reserved.
 本仓库用于项目展示、学术交流与竞赛评审。未经作者书面许可，不得复制、修改、再发布、商业使用或将本项目及其衍生版本用于其他竞赛申报。
 
 第三方依赖分别遵循其原始许可证。本声明不改变第三方组件的许可条件。
-
-## 验证
-
-```powershell
-python -m pytest -q tests/test_nexttest_llm_copilot.py tests/test_nexttest_web_api.py tests/test_nexttest_ui_worker.py --basetemp=artifacts/nexttest_web_pytest
-```
-
-竞赛定位与提交注意事项见 [contest_fit_2026.md](docs/contest_fit_2026.md)。
