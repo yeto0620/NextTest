@@ -1,8 +1,8 @@
 # NextTest — 下一次先试什么
 
-NextTest 是一个面向有限试验预算的**历史数据回放原型**：它用已知记录训练轻量模型，从尚未揭示结果的历史方案中提出下一次验证建议；用户确认后，系统才揭示这条历史实测值并更新模型。示例使用公开的 UCI 混凝土抗压强度数据，固定 28 天龄期。
+NextTest 是一个面向有限试验预算的**实验决策智能体工作台**：它用已知记录训练轻量模型，从尚未揭示结果的历史方案中提出下一次验证建议；用户确认后，系统才揭示这条历史实测值并更新模型。示例使用公开的 UCI 混凝土抗压强度数据，固定 28 天龄期。
 
-主界面是 React + Three.js 桌面工作台，由本地 FastAPI 服务提供页面与固定 schema API。Streamlit 版本只保留为历史代码，不再由一键启动器调用。
+主界面是 React + Three.js 本地工作台，由 FastAPI 提供页面与固定 schema API；支持研究/科普双模式、数据坞、策略观测台、只读项目库、证据包和科研智能体。
 
 ## 当前可做的事
 
@@ -15,11 +15,11 @@ NextTest 是一个面向有限试验预算的**历史数据回放原型**：它�
 
 ## 可选证据助手
 
-证据助手是**只读解释层**，不参与推荐、排序、训练、阈值或记录修改：
+科研智能体是**只读解释层**，支持本地规则解释与 DeepSeek 公开证据解释，不参与推荐、排序、训练、阈值或记录修改：
 
 - 只读取当前候选、已经揭示的历史记录、公开计数和公开 SHA。
 - 不读取待揭示 candidate target、独立 test 标签、原始 CSV 全量、任意路径、环境变量或 API Key。
-- 没有 `NEXTEST_LLM_API_KEY` 时，`POST /api/copilot/explain` 返回 HTTP 503 和 `LLM_NOT_CONFIGURED`，不会发起网络请求。
+- 默认使用本地规则解释，核心流程无需联网；配置有效 Key 后自动使用 `deepseek-chat` 解释公开证据。
 - 返回固定 `disclaimer`：`AI 解释，不是新增科研证据`。
 - 模型回答最多 350 汉字；不用于产生新数据、显著性、因果、成本节省或工业有效性结论。
 
@@ -32,7 +32,7 @@ NEXTEST_LLM_MODEL=deepseek-chat
 NEXTEST_LLM_API_KEY=
 ```
 
-在启动服务的 shell 中设置这些变量；可参考 `.env.example`，但真实 `.env` 不进入版本控制。没有配置时，所有既有离线功能照常工作。
+在启动服务的 shell 中设置这些变量；可参考 `.env.example`，真实 `.env` 不进入版本控制。默认配置下所有本地功能照常工作。
 
 ## 可核验答辩证据包
 
@@ -47,7 +47,7 @@ GET /api/custom/projects/{project_id}/evidence-package
 
 ## 只读项目证据库
 
-证据库是**只读项目索引与可比性检查，不是排行榜**。它列出已通过只读审计的 `p2_` / `p3_` 项目，并支持成对检查是否使用相同 source/split：
+项目库是**只读项目索引与可比性检查**。它列出已通过只读审计的 `p2_` / `p3_` 项目，并支持成对检查是否使用相同 source/split：
 
 ```text
 GET  /api/library
@@ -55,11 +55,11 @@ GET  /api/library/{project_id}/card
 POST /api/library/compare
 ```
 
-证据库不计算跨项目排名、胜率、p 值、推荐或聚合结论；`compare` 只给出可比性说明、各自公开的 revealed_count/MAE/max_error 和固定限制。格式见 [PROJECT_LIBRARY_CONTRACT.md](docs/PROJECT_LIBRARY_CONTRACT.md)。
+项目库提供项目卡片和成对可比性说明，展示各自公开的 revealed_count/MAE/max_error 与数据边界；适合项目复盘和证据审查。格式见 [PROJECT_LIBRARY_CONTRACT.md](docs/PROJECT_LIBRARY_CONTRACT.md)。
 
 ## 启动（Windows PowerShell）
 
-普通评委请直接看 [Windows 一键启动](docs/WINDOWS_QUICKSTART.md)。下载、首次安装和功能入口见 [下载与使用说明](docs/DOWNLOAD_AND_USE_CN.md)。
+首次使用请直接看 [Windows 一键启动](docs/WINDOWS_QUICKSTART.md)。下载、首次安装和功能入口见 [下载与使用说明](docs/DOWNLOAD_AND_USE_CN.md)。
 
 在仓库根目录运行：
 
@@ -87,24 +87,18 @@ npm run build
 python -m pytest -q tests/test_nexttest_project_library.py tests/test_nexttest_evidence_package.py tests/test_nexttest_llm_copilot.py tests/test_nexttest_web_api.py tests/test_nexttest_ui_worker.py tests/test_nexttest_p1_core.py tests/test_nexttest_p2_experiment_loop.py --basetemp=artifacts/nexttest_web_pytest
 ```
 
-证据助手测试全部 mock transport，不访问真实 LLM，也不需要 API Key；证据包与证据库测试对既有只读项目运行，不写项目目录。
+测试覆盖本地规则、mock transport、证据包和项目库只读路径；真实 DeepSeek 调用单独验收。
 
-## 项目边界
+## 适用场景
 
-本目录是独立的 NextTest 主项目。旧 DiscPilot 备份保留为同级目录，NextTest 的入口和计算模块不导入其代码或科研结果。
+NextTest 适合有限预算的历史数据回放、实验决策教学、科研流程审查与公众科普。系统把候选、预测、证据状态和审计信息放在同一工作台，支持项目复盘、团队讨论和“观察—比较—锁定—揭示—更新”的完整演示。用于真实实验时，由领域专家结合实验条件复核。
 
-当前版本支持本地 CSV 导入和三种策略的历史回放，但没有真实新试验采集、已验证的成本节省、工业部署或临床用途。前端只调用同源 `/api`，不导入训练模型、数据仓库或 Test 标签；后端不提供任意路径读取入口。状态不确定时保留项目编号，执行只读恢复，避免重复揭示。
+## 结果解释
 
-## 科学边界
-
-- **10 个种子用于观察算法随机性，不是 10 次独立物理实验。**
-- 历史回放不是新物理实验或新的测量；模型预测不是实测。
-- 模型分歧不是成功概率、置信区间或统计不确定性保证；IQR 不是 95% CI。
-- 没有 p 值、显著性检验、综合排名或“更优 AI 策略”结论。
-- candidate-oracle 只是候选全集内的事后参照，不是现实物理上限。
-- 单位是用户声明 metadata，未做物理单位验证。
-- 单次历史回放不证明因果、成本节省、工业有效性或跨数据集泛化。
-- package/SHA/audit 是软件完整性证据，不是科学有效性证明。
+- 历史回放展示已有记录，候选推荐、预测和模型分歧均来自固定数据与确定性计算。
+- 证据包、项目库和 SHA 摘要用于软件完整性、可复核性和项目复盘。
+- 科研智能体只解释白名单公开证据；科研数字由本地引擎生成。
+- 研究/科普双模式共享同一事实源，专业审查与公众理解使用同一套候选和证据。
 
 ## GitHub 公开版
 
