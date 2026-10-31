@@ -4,6 +4,34 @@ NextTest 是一个面向有限试验预算的**实验决策智能体工作台**�
 
 主界面是 React + Three.js 本地工作台，由 FastAPI 提供页面与固定 schema API；支持研究/科普双模式、数据坞、策略观测台、只读项目库、证据包和科研智能体。
 
+## DeepSeek / LLM 已接入
+
+当前版本已接入 DeepSeek，科研智能体可以直接调用 `deepseek-chat` 解释白名单公开证据；真实请求已通过 HTTP 200 验收。
+
+- 默认使用**本地规则解释**，不联网也能完成历史回放、候选、实验、数据坞、项目库和证据包流程。
+- 配置有效 DeepSeek Key 后，自动使用 `deepseek-chat` 解释当前候选、已揭示记录、公开计数和公开 SHA。
+- 首次配置：
+
+```powershell
+.\configure_nexttest_llm.cmd
+```
+
+- 使用 DeepSeek 启动：
+
+```powershell
+.\start_nexttest_with_llm.cmd
+```
+
+- 普通本地启动：
+
+```powershell
+.\start_nexttest.cmd
+```
+
+Key 使用 Windows current-user DPAPI 加密，保存在仓库外的 `%LOCALAPPDATA%\NextTest\secrets\deepseek.key`；不会写入仓库、日志或测试。换电脑后需要重新运行配置器输入自己的 Key。
+
+LLM 只做公开证据解释，不参与推荐、排序、训练、阈值、候选揭示或科研数字生成；返回内容固定带 `AI 解释，不是新增科研证据`。
+
 ## 当前可做的事
 
 - 在桌面工作台查看 252 条**已知训练记录**；三维图不含待选方案或独立留出集的真实强度。
