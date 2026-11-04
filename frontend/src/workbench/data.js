@@ -5,12 +5,12 @@ export const CONTROL_LABELS = {
 export const CONTROL_UNITS = { Age: 'day', default: 'kg/m³' }
 export const STRATEGY_META = {
   greedy_prediction: { label: '预测优先', short: 'PREDICTION', copy: '先试模型估计最接近目标的配方。' },
-  max_disagreement: { label: '分歧优先', short: 'DISAGREEMENT', copy: '先试树模型意见最不一致的配方。' },
+  max_disagreement: { label: '差异优先', short: 'DISAGREEMENT', copy: '先试树模型意见最不一致的配方。' },
   random: { label: '随机对照', short: 'RANDOM', copy: '用固定随机基线作对照。' },
 }
 export const STATUS_LABELS = {
   ready: '等待下一次建议', awaiting_user_confirmation: '建议已封存，等待确认',
-  budget_exhausted: '预算已用完', candidate_pool_empty: '候选池已用完',
+  budget_exhausted: '预算已用完', candidate_pool_empty: '方案池已用完',
   release_uncertain: '释放状态不确定', update_uncertain: '更新状态不确定', update_failed: '模型更新失败',
   stopped: '需要人工核查',
 }
