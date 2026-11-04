@@ -3,7 +3,7 @@ import { Archive, Beaker, CircleHelp, Database, Download, GitCompareArrows, Keyb
 
 const RESEARCH_ITEMS = [
   { id: 'mission', label: '观测', icon: ScanSearch },
-  { id: 'atlas', label: '候选', icon: Orbit },
+  { id: 'atlas', label: '方案', icon: Orbit },
   { id: 'bench', label: '实验', icon: Beaker },
   { id: 'strategy', label: '策略', icon: GitCompareArrows },
   { id: 'trail', label: '证据', icon: Radar },
@@ -48,7 +48,7 @@ export default function TopNavigation({ active, onNavigate, mode, onMode, status
         <button type="button" className={mode === 'research' ? 'is-selected' : ''} onClick={() => onMode('research')}>研究</button>
         <button type="button" className={mode === 'explore' ? 'is-selected' : ''} onClick={() => onMode('explore')}>科普</button>
       </div>
-      {mode === 'research' && <><button type="button" className="nt-topnav-icon nt-topnav-assistant" data-tour="assistant" disabled={llmReady === false} onClick={onAssistant} title={llmReady === false ? '普通模式：接入 DeepSeek 后可用' : '科研智能体'} aria-label="打开科研智能体"><MessageCircleMore size={15} /></button>
+      {mode === 'research' && <><button type="button" className="nt-topnav-icon nt-topnav-assistant" data-tour="assistant" disabled={llmReady === false} onClick={onAssistant} title={llmReady === false ? '普通模式：接入 DeepSeek 后可用' : 'AI 助手'} aria-label="打开AI 助手"><MessageCircleMore size={15} /></button>
       <button type="button" className="nt-topnav-icon" onClick={onShortcuts} title="快捷键（?）" aria-label="打开快捷键"><Keyboard size={15} /></button>
       <button type="button" className="nt-topnav-icon" disabled={!onExport} onClick={onExport} title={onExport ? '导出当前项目' : '创建项目后可导出'} aria-label="导出当前项目"><Download size={15} /></button></>}
       {mode === 'explore' && <><button type="button" className="nt-topnav-icon nt-topnav-stage" onClick={onStage} title="演示模式" aria-label="打开演示模式"><MonitorPlay size={15} /></button>

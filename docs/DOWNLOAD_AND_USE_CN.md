@@ -4,15 +4,15 @@
 
 推荐下载 **ReadyToRun** 包，已包含前端构建，不需要安装 Node。
 
-最省事：下载并双击 [Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v1.0.0/Install_NextTest.cmd)，它会自动下载、解压到 `%USERPROFILE%\NextTest` 并启动。
+最省事：下载并双击 [Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v1.1.0/Install_NextTest.cmd)，它会自动下载、解压到 `%USERPROFILE%\NextTest` 并启动。
 
 或手动下载：
 
-- [NextTest_V1_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v1.0.0/NextTest_V1_ReadyToRun.zip)
+- [NextTest_V1.1_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v1.1.0/NextTest_V1.1_ReadyToRun.zip)
 
 如果使用源码包：
 
-- `NextTest_V1_GitHub_Source.zip`
+- `NextTest_V1.1_GitHub_Source.zip`
 - 解压到任意中文或英文路径，不要放在系统受保护目录。
 - 也可以将解压后的内容直接导入 GitHub：GitHub → New repository → Upload an existing file，或使用 Git 推送到仓库。
 
@@ -115,9 +115,9 @@ Node.js 未安装或未进入 PATH。安装 [Node.js LTS](https://nodejs.org/) �
 
 ## 6. 功能入口
 
-- **研究模式（默认）**：观测、候选、实验、策略、证据、档案、数据；包含科研智能体、数据坞、项目库、审计和完整控制量。
-- **科普模式**：导览、航图、体验、故事；包含引导、教学解释、演示模式和简化控制量。
-- 两模式共享同一事实源和候选选择，但组件、导航和信息密度不同。
+- **研究模式（默认）**：观测、方案、实验、策略、证据、档案、数据；包含AI 助手、数据坞、项目库、审计和完整配方参数。
+- **科普模式**：导览、航图、体验、故事；包含引导、教学解释、演示模式和简化配方参数。
+- 两模式共享同一事实源和方案选择，但组件、导航和信息密度不同。
 
 ## 7. 停止
 
@@ -133,7 +133,7 @@ python -m pytest -q tests/test_nexttest_llm_copilot.py tests/test_nexttest_web_a
 ## 9. 边界
 
 - 本项目是**历史数据回放平台**，不是新物理实验。
-- 模型预测不是测量；模型分歧不是概率或置信区间。
+- 模型预测不是测量；预测差异不是概率或置信区间。
 - 不声称策略优越、因果、成本节省、工业/临床有效性或泛化。
 - 不是原生桌面安装包，不提供 Electron/Tauri 安装程序。
 - 未采用开源许可证，保留全部权利；公开可查看不等于授予开源许可。

@@ -2,9 +2,9 @@ import React from 'react'
 import { Feather, Info, SkipForward } from 'lucide-react'
 
 const OPTIONS = [
-  ['higher', '结果可能高于预测', '实际强度可能比封存预测更高'],
+  ['higher', '结果可能高于预测', '实际强度可能比保存预测更高'],
   ['close', '结果接近预测', '实际强度大致落在预测附近'],
-  ['lower', '结果可能低于预测', '实际强度可能比封存预测更低'],
+  ['lower', '结果可能低于预测', '实际强度可能比保存预测更低'],
 ]
 
 export default function HypothesisSlip({ hypothesis, onChange, onSkip, locked, savedWithoutLocal, nextRound = false }) {
@@ -23,10 +23,10 @@ export default function HypothesisSlip({ hypothesis, onChange, onSkip, locked, s
         </button>)}
       </div>
       <label className="nt-hypothesis-note"><span><Feather size={12} /> 可选短句：为什么这样猜？</span><textarea value={note} maxLength={120} disabled={locked} placeholder="例如：这次配方的水灰比看起来比已经试过的更低。" onChange={event => onChange({ choice, note: event.target.value, skipped: false })} /></label>
-      <div className="nt-hypothesis-foot"><span>{note.length}/120 字</span><span>{nextRound ? '上一轮预判保留在下方 Reflection Card；本轮预判只用于下一次揭示。' : locked ? '已冻结在本次浏览器会话；不写入项目 API。' : skipped ? '已跳过；仍可锁定下一实验。' : '只存浏览器内存；刷新会丢失，不影响排序。'}</span></div>
+      <div className="nt-hypothesis-foot"><span>{note.length}/120 字</span><span>{nextRound ? '上一轮预判保留在下方 Reflection Card；本轮预判只用于下一次公布。' : locked ? '已冻结在本次浏览器会话；不写入项目 API。' : skipped ? '已跳过；仍可锁定下一实验。' : '只存浏览器内存；刷新会丢失，不影响排序。'}</span></div>
     </>}
-    {!locked && skipped && <p className="nt-hypothesis-skip"><Info size={12} /> 已跳过预判。核心流程仍可继续；揭示后只显示“未填写，不影响实验”。</p>}
+    {!locked && skipped && <p className="nt-hypothesis-skip"><Info size={12} /> 已跳过预判。核心流程仍可继续；公布后只显示“未填写，不影响实验”。</p>}
     {locked && !savedWithoutLocal && !choice && skipped && <p className="nt-hypothesis-skip"><Info size={12} /> 你选择了跳过预判；这不影响实验，也不进入任何 API 请求。</p>}
-    {locked && !savedWithoutLocal && !choice && !skipped && <p className="nt-hypothesis-skip"><Info size={12} /> 未填写预判。可以继续；揭示后只显示“未填写，不影响实验”。</p>}
+    {locked && !savedWithoutLocal && !choice && !skipped && <p className="nt-hypothesis-skip"><Info size={12} /> 未填写预判。可以继续；公布后只显示“未填写，不影响实验”。</p>}
   </section>
 }

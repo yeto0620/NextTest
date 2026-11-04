@@ -15,12 +15,12 @@ https://github.com/yeto0620/NextTest
 在右侧找到 **Releases**，点击：
 
 ```text
-v1.0.0 · NextTest V1.0 · 可运行发布
+v1.1.0 · NextTest V1.1.0 · 可运行发布
 ```
 
 也可以直接打开：
 
-https://github.com/yeto0620/NextTest/releases/tag/v1.0.0
+https://github.com/yeto0620/NextTest/releases/tag/v1.1.0
 
 ### 第 2 步：下载 Install_NextTest.cmd
 
@@ -88,7 +88,7 @@ NextTest
 
 ```text
 Yes = DeepSeek 模式
-No  = 普通模式（智能体/小精灵置灰）
+No  = 普通模式（智能体/AI 助手置灰）
 ```
 
 选择 DeepSeek 且没有 Key 时，会自动打开配置窗口。
@@ -134,7 +134,7 @@ python --version
 如果不使用 Install_NextTest.cmd，也可以手动操作：
 
 1. 打开 Release 页面。
-2. 下载 `NextTest_V1_ReadyToRun.zip`。
+2. 下载 `NextTest_V1.1_ReadyToRun.zip`。
 3. 右键 → **全部解压缩**。
 4. 进入解压后的文件夹。
 5. 双击 `setup_nexttest.cmd`。
@@ -206,17 +206,17 @@ frontend\
 默认进入研究模式：
 
 ```text
-观测 / 候选 / 实验 / 策略 / 证据 / 档案 / 数据
+观测 / 方案 / 实验 / 策略 / 证据 / 档案 / 数据
 ```
 
 可以：
 
-- 查看候选表格和预测；
-- 查看模型分歧；
-- 选择候选并封存预测；
-- 人工确认后揭示一条历史实测；
+- 查看方案表格和预测；
+- 查看预测差异；
+- 选择方案并保存预测；
+- 人工确认后公布一条历史实测；
 - 查看事件、SHA 和证据状态；
-- 项目库、证据包、数据坞和科研智能体。
+- 项目库、证据包、数据坞和AI 助手。
 
 ### 科普模式
 
@@ -226,7 +226,7 @@ frontend\
 导览 / 航图 / 体验 / 故事
 ```
 
-用导览、航图和故事理解同一套候选与历史回放。
+用导览、航图和故事理解同一套方案与历史回放。
 
 ### 数据
 
@@ -242,7 +242,7 @@ frontend\
 
 ## 六、配置 DeepSeek
 
-不配置 Key 也能使用普通模式；普通模式下科研智能体和小精灵置灰。
+不配置 Key 也能使用普通模式；普通模式下AI 助手和AI 助手置灰。
 
 ### 首次配置
 
@@ -300,7 +300,7 @@ cd $env:USERPROFILE\Downloads
 
 ### 2. npm 无法识别
 
-普通使用者不需要 npm。请使用 `Install_NextTest.cmd` 或 `NextTest_V1_ReadyToRun.zip`。
+普通使用者不需要 npm。请使用 `Install_NextTest.cmd` 或 `NextTest_V1.1_ReadyToRun.zip`。
 开发者请安装 Node.js LTS，并重新打开 PowerShell。
 
 ### 3. cd frontend 找不到路径

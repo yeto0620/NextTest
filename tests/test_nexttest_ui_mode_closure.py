@@ -20,11 +20,11 @@ def test_initial_mode_is_research_and_default_view_is_table():
 
 
 def test_research_navigation_has_exact_seven_entries():
-    for label in ("观测", "候选", "实验", "策略", "证据", "档案", "数据"):
+    for label in ("观测", "方案", "实验", "策略", "证据", "档案", "数据"):
         assert f"label: '{label}'" in NAV
     research = NAV.split("const RESEARCH_ITEMS", 1)[1].split("const EXPLORE_ITEMS", 1)[0]
     assert research.count("label:") == 7
-    assert "科研智能体" in NAV
+    assert "AI 助手" in NAV
     assert "导出当前项目" in NAV
 
 
@@ -59,8 +59,8 @@ def test_shared_state_is_passed_to_both_modes():
 
 
 def test_research_language_is_compact_in_navigation_and_bench():
-    assert "观测" in NAV and "候选" in NAV and "实验" in NAV
-    assert "科研智能体" in NAV
+    assert "观测" in NAV and "方案" in NAV and "实验" in NAV
+    assert "AI 助手" in NAV
     assert "本地工具链负责流程" in (ROOT / "frontend" / "src" / "workbench" / "EvidenceAssistant.jsx").read_text(encoding="utf-8")
 
 

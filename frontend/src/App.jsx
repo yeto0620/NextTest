@@ -62,13 +62,13 @@ function report(view, meta) {
     `- 状态：${statusLabel(snapshot.status)}`,
     `- 目标：${snapshot.goal === 'maximize' ? '最大化' : '最小化'} ${meta?.target?.displayName || '目标'}`,
     `- 策略：${strategyLabel(snapshot.strategy)}`,
-    `- 预算：${snapshot.budget}；已揭示：${snapshot.revealed_count}`,
+    `- 预算：${snapshot.budget}；已公布：${snapshot.revealed_count}`,
     `- 数据 SHA：${snapshot.source_canonical_sha256}`,
     `- 切分 SHA：${snapshot.split_sha256}`,
     `- 初始模型 SHA：${snapshot.initial_model_sha}`,
     `- 当前模型 SHA：${snapshot.current_model_sha}`,
     `- 事件链 SHA：${view.audit?.event_chain_sha256 || '—'}`, '',
-    `| 轮次 | 历史方案 | 揭示前预测 ${targetUnit} | 历史实测 ${targetUnit} | 绝对误差 ${targetUnit} |`,
+    `| 轮次 | 历史方案 | 公布前预测 ${targetUnit} | 历史实测 ${targetUnit} | 绝对误差 ${targetUnit} |`,
     '|---:|---|---:|---:|---:|',
     ...(view.history || []).map(item => `| ${item.round} | ${item.row_id} | ${number(item.prediction, 3)} | ${number(item.revealed_target, 3)} | ${number(item.absolute_error, 3)} |`),
     '', '边界：固定历史数据上的探索性回放；不证明策略优越、成本节省、因果或工业部署。', '',
@@ -172,7 +172,7 @@ export default function App() {
     const body = isCustom ? { dataset_id: datasetId, goal, strategy, threshold, project_id: previewProjectId } : { goal, strategy, threshold, project_id: previewProjectId }
     request(path, 'POST', body)
       .then(data => { if (!cancelled) { setPreview(data); setError('') } })
-      .catch(err => { if (!cancelled && !String(err.message).includes('candidate preview not allowed')) setError(`候选投影不可用：${err.message}`) })
+      .catch(err => { if (!cancelled && !String(err.message).includes('candidate preview not allowed')) setError(`方案投影不可用：${err.message}`) })
       .finally(() => { if (!cancelled) setPreviewLoading(false) })
     return () => { cancelled = true }
   }, [strategy, goal, threshold, previewProjectId, snapshot?.status, datasetId, isCustom])
@@ -286,7 +286,7 @@ export default function App() {
       setView(pending)
       setReflectionHypothesis(null)
       setSelection({ kind: 'candidate', rowId: pending.pending.row_id })
-      setNotice('预测已封存。确认前，这条历史实测对浏览器仍然不可见。')
+      setNotice('预测已保存。确认前，这条历史实测对浏览器仍然不可见。')
     })
   }
 
@@ -390,7 +390,7 @@ export default function App() {
             view={view} mode={mode} hideAside loading={previewLoading} strategy={strategy} onStrategy={changeStrategy} preview={preview} />
           <SelectionDetail selection={selection} candidate={selectedCandidate} observed={selectedObserved} view={view} mode={mode}
             compareIds={compareIds} onCompare={addCompare} />
-        </div>{previewLoading && <div className="nt-inline-loading"><span className="nt-scan-line" /> 正在读取候选投影…</div>}
+        </div>{previewLoading && <div className="nt-inline-loading"><span className="nt-scan-line" /> 正在读取方案投影…</div>}
         <details className="nt-3d-details">
           <summary><Radar size={15} /><span>三维已知材料空间</span><small>现有功能 / 只显示已观测记录</small><Chevron /></summary>
           <Landscape landscape={landscape} pending={view?.pending} selectedId={selection?.kind === 'observed' ? selection.rowId : null} onSelectObserved={chooseObserved} />
@@ -409,8 +409,8 @@ export default function App() {
         <footer className="nt-footer"><span>NextTest · 实验决策工作台</span><span>历史回放 / 非生产试验 / 关联不等于因果</span><span>{snapshot ? `${strategyLabel(snapshot.strategy)} · ${snapshot.revealed_count}/${snapshot.budget}` : '尚未创建项目'}</span></footer>
       </div>
     </main>
-    <button type="button" className={`nt-sprite ${llmReady === false ? 'is-disabled' : ''}`} disabled={llmReady === false} onClick={() => setAssistantOpen(true)} title={llmReady === false ? '普通模式：接入 DeepSeek 后可用' : '打开小精灵答疑'} aria-label="打开小精灵答疑">
-      <Sparkles size={18} /><span>小精灵</span><small>问我</small>
+    <button type="button" className={`nt-sprite ${llmReady === false ? 'is-disabled' : ''}`} disabled={llmReady === false} onClick={() => setAssistantOpen(true)} title={llmReady === false ? '普通模式：接入 DeepSeek 后可用' : '打开AI 助手答疑'} aria-label="打开AI 助手答疑">
+      <Sparkles size={18} /><span>AI 助手</span><small>问我</small>
     </button>
     <NewUserTour open={tourOpen} onClose={closeTour} />
     <GuideDrawer open={guideOpen} onClose={() => setGuideOpen(false)} onNavigate={navigate} />

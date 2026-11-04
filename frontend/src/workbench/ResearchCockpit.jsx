@@ -8,8 +8,8 @@ import { number, statusLabel, strategyLabel } from './data'
 import { useDataset } from './dataset'
 
 const MODULES = [
-  { id: 'atlas', label: '候选域', detail: '筛选与双候选对比', icon: Orbit },
-  { id: 'bench', label: '实验台', detail: '封存预测并揭示结果', icon: Beaker },
+  { id: 'atlas', label: '方案域', detail: '筛选与双方案对比', icon: Orbit },
+  { id: 'bench', label: '实验台', detail: '保存预测并公布结果', icon: Beaker },
   { id: 'strategy', label: '策略场', detail: '固定协议描述性比较', icon: GitCompareArrows },
   { id: 'trail', label: '证据链', detail: '事件、SHA 与科研边界', icon: Radar },
 ]
@@ -60,8 +60,8 @@ export default function ResearchCockpit({
         </div>
         <dl className="nt-cockpit-metrics">
           <div><dt>观测</dt><dd>{landscape?.rows?.length ?? '—'}</dd><small>train rows</small></div>
-          <div><dt>候选</dt><dd>{candidateCount ?? '—'}</dd><small>target hidden</small></div>
-          <div><dt>揭示</dt><dd>{snapshot ? `${revealed}/${budget}` : '—'}</dd><small>historical replay</small></div>
+          <div><dt>方案</dt><dd>{candidateCount ?? '—'}</dd><small>target hidden</small></div>
+          <div><dt>公布</dt><dd>{snapshot ? `${revealed}/${budget}` : '—'}</dd><small>historical replay</small></div>
           <div><dt>审计</dt><dd>{snapshot?.test_count ? 'PASS' : '—'}</dd><small>read only</small></div>
         </dl>
 
@@ -70,9 +70,9 @@ export default function ResearchCockpit({
           <strong>{selectedCandidate?.row_id || '—'}</strong>
           <dl>
             <div><dt>预测</dt><dd>{number(selectedPrediction, 2)} <em>{meta.target.unit || ''}</em></dd></div>
-            <div><dt>分歧</dt><dd>{number(selectedDisagreement, 2)}</dd></div>
+            <div><dt>差异</dt><dd>{number(selectedDisagreement, 2)}</dd></div>
           </dl>
-          <small>历史实测标签在揭示前不进入浏览器</small>
+          <small>历史实测标签在公布前不进入浏览器</small>
         </div>
 
         <button type="button" className="nt-primary nt-cockpit-primary" onClick={() => onNavigate('bench')}>
@@ -93,7 +93,7 @@ export default function ResearchCockpit({
       })}
       <button type="button" onClick={onLibrary}><span><Archive size={16} /></span><strong>项目库</strong><small>证据包与项目比较</small><ArrowRight size={13} /></button>
       <button type="button" onClick={onData}><span><Database size={16} /></span><strong>数据坞</strong><small>字段角色与数据闸门</small><ArrowRight size={13} /></button>
-      <button type="button" onClick={onAssistant}><span><Bot size={16} /></span><strong>科研智能体</strong><small>任务链与受限证据解释</small><ArrowRight size={13} /></button>
+      <button type="button" onClick={onAssistant}><span><Bot size={16} /></span><strong>AI 助手</strong><small>任务链与受限证据解释</small><ArrowRight size={13} /></button>
     </div>
 
     <footer className="nt-cockpit-footer">

@@ -3,7 +3,7 @@ import { Archive, Beaker, CircleHelp, GitCompareArrows, Keyboard, MessageCircleM
 
 const shortcuts = [
   ['1', '观测', ScanSearch, '打开实验首页'],
-  ['2', '候选', Orbit, '打开候选空间'],
+  ['2', '方案', Orbit, '打开方案空间'],
   ['3', '实验', Beaker, '打开实验台'],
   ['4', '证据', Radar, '打开证据链'],
   ['S', '策略', GitCompareArrows, '打开策略台'],

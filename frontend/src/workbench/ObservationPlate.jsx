@@ -28,7 +28,7 @@ export default function ObservationPlate({ landscape, selectedCandidate, compare
   const pointRadius = strength => 1.1 + Math.max(0, Math.min(100, Number(strength))) / 48
   return <section className="nt-plate" aria-labelledby="nt-plate-title">
     <div className="nt-plate-head">
-      <div><span className="nt-kicker">{mode === 'research' ? 'OBSERVED DOMAIN / TRAIN ONLY' : 'OBSERVATION PLATE / OBSERVED ONLY'}</span><h2 id="nt-plate-title">{mode === 'research' ? '观测域' : '先看见已经知道的区域'}</h2></div>
+      <div><span className="nt-kicker">{mode === 'research' ? 'OBSERVED DOMAIN / TRAIN ONLY' : 'OBSERVATION PLATE / OBSERVED ONLY'}</span><h2 id="nt-plate-title">{mode === 'research' ? '已知数据' : '先看见已经知道的区域'}</h2></div>
       <div className="nt-plate-count"><Database size={14} /><strong>{rows.length || '—'}</strong><span>条已观测记录</span></div>
     </div>
     <div className="nt-plate-chamber">
@@ -54,17 +54,17 @@ export default function ObservationPlate({ landscape, selectedCandidate, compare
             <title>{row._row_id} · 实测 {number(row[meta.target.key], 2)} {meta.target.unit || ''}</title>
           </circle>
         })}
-        {selectedCandidate && <g className="nt-pending-marker" transform={`translate(${sx(selectedCandidate.controls[xKey])} ${sy(selectedCandidate.controls[yKey])})`} aria-label={`待验证候选 ${selectedCandidate.row_id}`}>
+        {selectedCandidate && <g className="nt-pending-marker" transform={`translate(${sx(selectedCandidate.controls[xKey])} ${sy(selectedCandidate.controls[yKey])})`} aria-label={`待验证方案 ${selectedCandidate.row_id}`}>
           <circle r="13" /><path d="M-20 0H20M0-20V20" /><text x="17" y="-12">PROPOSED / {selectedCandidate.row_id}</text>
         </g>}
-        {compareCandidate && compareCandidate.row_id !== selectedCandidate?.row_id && <g className="nt-compare-marker" transform={`translate(${sx(compareCandidate.controls[xKey])} ${sy(compareCandidate.controls[yKey])})`} aria-label={`对比候选 ${compareCandidate.row_id}`}>
+        {compareCandidate && compareCandidate.row_id !== selectedCandidate?.row_id && <g className="nt-compare-marker" transform={`translate(${sx(compareCandidate.controls[xKey])} ${sy(compareCandidate.controls[yKey])})`} aria-label={`对比方案 ${compareCandidate.row_id}`}>
           <circle r="9" /><path d="M-12 0H12M0-12V12" />
         </g>}
         <text x={PAD.left} y={H - 10} className="nt-axis-label">{labelFor(meta, xKey)} / {xKey} → {unitFor(meta, xKey)}</text>
         <text transform={`rotate(-90 ${18} ${H - PAD.bottom})`} x={18} y={H - PAD.bottom} className="nt-axis-label">{labelFor(meta, yKey)} / {yKey} → {unitFor(meta, yKey)}</text>
         <line x1={PAD.left} x2={W - PAD.right} y1={PAD.top} y2={PAD.top} className="nt-scan-line" />
       </svg> : <div className="nt-plate-empty"><Crosshair size={20} /><span>正在读取已观测记录；没有数据时不生成示例点。</span></div>}
-      <div className="nt-plate-meta"><span><i className="nt-dot nt-dot-known" />已观测实测</span><span><i className="nt-cross" />选中候选</span><span><i className="nt-cross nt-cross-muted" />对比候选</span><em>{mode === 'research' ? `size = ${meta.target.displayName} · correlation only` : `点大小 = ${meta.target.displayName} · 关联投影，不表示因果`}</em></div>
+      <div className="nt-plate-meta"><span><i className="nt-dot nt-dot-known" />已观测实测</span><span><i className="nt-cross" />选中方案</span><span><i className="nt-cross nt-cross-muted" />对比方案</span><em>{mode === 'research' ? `size = ${meta.target.displayName} · correlation only` : `点大小 = ${meta.target.displayName} · 关联投影，不表示因果`}</em></div>
     </div>
     {landscape?.split_sha256 && <div className="nt-plate-foot"><span>来源：{meta.displayName} · {meta.isCustom ? 'LOCAL DATASET' : 'DEMO'} · 仅训练记录</span><code>split {landscape.split_sha256.slice(0, 12)}…</code></div>}
   </section>

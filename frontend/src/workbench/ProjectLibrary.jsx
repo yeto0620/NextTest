@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Archive, ChevronRight, CircleAlert, FileCheck2, GitCompareArrows, LoaderCircle, ShieldCheck, X } from 'lucide-react'
 
-const strategyNames = { greedy_prediction: '最高预测', max_disagreement: '最大分歧', random: '随机' }
+const strategyNames = { greedy_prediction: '最高预测', max_disagreement: '最大差异', random: '随机' }
 const compareCopy = {
   comparable_same_source_and_split: { title: '可描述比较', text: '来源与切分一致。仍只显示描述性事实，不生成排名。', tone: 'is-ready' },
   same_dataset_but_different_split: { title: '不可直接比较', text: '数据集相同，但数据切分不同。', tone: 'is-caution' },
@@ -17,25 +17,25 @@ async function api(path, method = 'GET', body) {
 }
 function short(value) { return typeof value === 'string' && value ? value : '—' }
 function metric(value) { return typeof value === 'number' ? String(value) : '—' }
-function status(value) { return value === 'ready' ? '可继续' : value === 'pending' ? '待揭示' : value || '—' }
+function status(value) { return value === 'ready' ? '可继续' : value === 'pending' ? '待公布' : value || '—' }
 
 function ProjectCard({ item, selected, onClick }) {
   return <button type="button" className={`nt-library-card ${selected ? 'is-selected' : ''}`} onClick={onClick}>
     <span className="nt-library-card-head"><Archive size={15} /><code>{item.project_id}</code><ChevronRight size={15} /></span>
     <strong>{item.dataset_display_name || item.dataset_short_id || '已核验项目'}</strong>
-    <span className="nt-library-card-meta"><em>{strategyNames[item.strategy] || item.strategy || '—'}</em><em>{status(item.status)}</em><em>{metric(item.revealed_count)}/{metric(item.budget)} 已揭示</em></span>
+    <span className="nt-library-card-meta"><em>{strategyNames[item.strategy] || item.strategy || '—'}</em><em>{status(item.status)}</em><em>{metric(item.revealed_count)}/{metric(item.budget)} 已公布</em></span>
     <span className="nt-library-card-fingerprint"><i />{short(item.source_sha256_short)} <b>·</b> {short(item.split_sha256_short)}</span>
   </button>
 }
 
 function CardDetail({ card, loading, error, onCompare }) {
-  if (loading) return <div className="nt-library-detail nt-library-empty"><LoaderCircle className="nt-spin" size={20} /><strong>正在核验公开证据</strong><span>只读取 P5-B 已封存的公开字段。</span></div>
+  if (loading) return <div className="nt-library-detail nt-library-empty"><LoaderCircle className="nt-spin" size={20} /><strong>正在核验公开证据</strong><span>只读取 P5-B 已保存的公开字段。</span></div>
   if (error) return <div className="nt-library-detail nt-library-empty is-error"><CircleAlert size={21} /><strong>档案不可用</strong><span>{error}</span></div>
   if (!card) return <div className="nt-library-detail nt-library-empty"><FileCheck2 size={22} /><strong>选择一份档案</strong><span>查看已核验的公开摘要与边界。</span></div>
   const summary = card.summary || {}; const brief = card.defense_brief || {}; const snapshot = card.snapshot_public || {}
   return <article className="nt-library-detail">
     <header><div><span className="nt-kicker">PUBLIC EVIDENCE CARD</span><h3>{card.dataset_public_metadata?.display_name || summary.dataset_display_name || '项目档案'}</h3><code>{card.project_id}</code></div><button type="button" className="nt-secondary-button" onClick={() => onCompare(card.project_id)}><GitCompareArrows size={14} />加入比较</button></header>
-    <div className="nt-library-detail-grid"><div><span>策略</span><strong>{strategyNames[summary.strategy] || summary.strategy || '—'}</strong></div><div><span>已揭示</span><strong>{metric(brief.revealed_count ?? summary.revealed_count)} / {metric(summary.budget)}</strong></div><div><span>MAE</span><strong>{metric(brief.mae)}</strong></div><div><span>最大误差</span><strong>{metric(brief.max_absolute_error)}</strong></div></div>
+    <div className="nt-library-detail-grid"><div><span>策略</span><strong>{strategyNames[summary.strategy] || summary.strategy || '—'}</strong></div><div><span>已公布</span><strong>{metric(brief.revealed_count ?? summary.revealed_count)} / {metric(summary.budget)}</strong></div><div><span>MAE</span><strong>{metric(brief.mae)}</strong></div><div><span>最大误差</span><strong>{metric(brief.max_absolute_error)}</strong></div></div>
     <section className="nt-library-fingerprint-block"><span>SOURCE / SPLIT</span><code>{short(snapshot.source_canonical_sha256)}</code><code>{short(snapshot.split_sha256)}</code></section>
     <p className="nt-library-detail-boundary">{Array.isArray(card.limitations) ? card.limitations[0] : '仅显示公开、已核验事实。'}</p>
   </article>
@@ -43,11 +43,11 @@ function CardDetail({ card, loading, error, onCompare }) {
 
 function CompareSurface({ result, loading, error, selection, onRemove }) {
   if (selection.length < 2) return <section className="nt-library-compare nt-library-compare-empty"><GitCompareArrows size={19} /><div><strong>选择两份档案</strong><span>比较只检查数据来源与切分是否一致，不生成胜负。</span></div></section>
-  if (loading) return <section className="nt-library-compare nt-library-compare-empty"><LoaderCircle className="nt-spin" size={19} /><div><strong>正在检查可比性</strong><span>核验两侧已封存的公开摘要。</span></div></section>
+  if (loading) return <section className="nt-library-compare nt-library-compare-empty"><LoaderCircle className="nt-spin" size={19} /><div><strong>正在检查可比性</strong><span>核验两侧已保存的公开摘要。</span></div></section>
   if (error) return <section className="nt-library-compare nt-library-compare-empty is-error"><CircleAlert size={19} /><div><strong>比较不可用</strong><span>{error}</span></div></section>
   if (!result) return null
   const kind = compareCopy[result.comparability] || compareCopy.audit_failed
-  const fields = [['策略', 'strategy'], ['已揭示', 'revealed_count'], ['MAE', 'mae'], ['最大误差', 'max_error'], ['来源指纹', 'source_sha256_short'], ['切分指纹', 'split_sha256_short']]
+  const fields = [['策略', 'strategy'], ['已公布', 'revealed_count'], ['MAE', 'mae'], ['最大误差', 'max_error'], ['来源指纹', 'source_sha256_short'], ['切分指纹', 'split_sha256_short']]
   return <section className="nt-library-compare"><header><div><span className="nt-kicker">COMPARABILITY CHECK</span><h3>{kind.title}</h3><p>{kind.text}</p></div><span className={`nt-library-compare-seal ${kind.tone}`}><ShieldCheck size={15} />{result.comparability}</span></header><div className="nt-library-compare-ids">{selection.map(id => <button type="button" key={id} onClick={() => onRemove(id)}><code>{id}</code><X size={13} /></button>)}</div><div className="nt-library-compare-table" role="table" aria-label="项目公开证据比较"><div role="row" className="nt-library-compare-head"><span>字段</span><code>{result.left?.project_id}</code><code>{result.right?.project_id}</code></div>{fields.map(([label, key]) => <div role="row" key={key}><span>{label}</span><strong>{metric(result.left?.[key])}</strong><strong>{metric(result.right?.[key])}</strong></div>)}</div><footer>{result.shared_facts?.disclaimer || '描述性比较，不构成策略优越结论。'}</footer></section>
 }
 

@@ -44,6 +44,6 @@ def test_p2_components_and_boundary_copy_are_present():
     reflection = (ROOT / "frontend" / "src" / "workbench" / "ReflectionCard.jsx").read_text(encoding="utf-8")
     assert "只存浏览器内存" in hypothesis
     assert "fetch(" not in hypothesis and "CompressiveStrength" not in hypothesis
-    assert "尚未揭示" in prism
+    assert "尚未公布" in prism
     assert "不证明策略整体更优" in reflection
     assert "概率" in reflection and "置信区间" in reflection

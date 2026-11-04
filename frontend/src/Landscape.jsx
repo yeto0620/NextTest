@@ -128,11 +128,11 @@ export default function Landscape({ landscape, pending, selectedId, onSelectObse
       <div className="scene-topline"><span className="live-dot" /> OBSERVED DATA ONLY <span className="scene-separator">/</span> AGE 28 DAYS</div>
       <div className="scene-axes">X · {labelFor(meta, xKey)} <span>Y · {meta.target.displayName}</span> Z · {labelFor(meta, zKey)}</div>
       <div className="scene-legend"><span><i className="legend-cyan" />历史实测</span><span><i className="legend-amber" />待验证预测</span></div>
-      {pendingPoint && <div className="prediction-flag">待验证方案 · {pending.row_id}<strong>{Number(pending.prediction).toFixed(1)} {meta.target.unit || ''}</strong><small>模型预测，实测未揭示</small></div>}
+      {pendingPoint && <div className="prediction-flag">待验证方案 · {pending.row_id}<strong>{Number(pending.prediction).toFixed(1)} {meta.target.unit || ''}</strong><small>模型预测，实测未公布</small></div>}
       {selected && <div className="point-readout"><small>历史实测 / {selected.id}</small><strong>{selected.strength.toFixed(2)} <em>{meta.target.unit || ''}</em></strong><span>{CONTROLS[xKey]} {selected.xValue.toFixed(1)} · {CONTROLS[zKey]} {selected.zValue.toFixed(1)} kg/m³</span></div>}
       {!rows.length && <div className="scene-fallback">正在加载已知材料记录…</div>}
       {rows.length > 0 && points.length === 0 && <div className="scene-fallback">这个筛选值下没有已知记录。请调低强度门槛。</div>}
     </div>
-    <div className="plot-note"><Maximize2 size={16} /><span>三维位置只展示配方与强度的关联，不代表因果关系。琥珀色柱是尚未揭示结果的<strong>预测</strong>；候选集和独立留出集的真实强度不进入此图。</span></div>
+    <div className="plot-note"><Maximize2 size={16} /><span>三维位置只展示配方与强度的关联，不代表因果关系。琥珀色柱是尚未公布结果的<strong>预测</strong>；方案集和独立留出集的真实强度不进入此图。</span></div>
   </section>
 }

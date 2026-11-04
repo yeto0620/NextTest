@@ -13,7 +13,7 @@ def read(path):
 
 def test_observatory_structure_and_fairness_copy():
     text = read("frontend/src/workbench/StrategyObservatory.jsx")
-    for fragment in ("STRATEGY INTERFEROMETER", "FAIRNESS RAIL", "RUN FOUNDRY", "BUDGET LENS", "RUN MATRIX", "PAIRED EVIDENCE PLATE", "候选全集事后最优", "IQR", "不是 95% CI", "不生成优胜结论"):
+    for fragment in ("STRATEGY INTERFEROMETER", "FAIRNESS RAIL", "RUN FOUNDRY", "BUDGET LENS", "RUN MATRIX", "PAIRED EVIDENCE PLATE", "方案全集事后最优", "IQR", "不是 95% CI", "不生成优胜结论"):
         assert fragment in text, fragment
     assert "seed 输入" not in text
     assert "seed_list" not in text

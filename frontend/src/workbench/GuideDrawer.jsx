@@ -5,9 +5,9 @@ import { useDataset } from './dataset'
 const STEPS = [
   ['01', '准备数据', '确认来源、目标列、可控制变量和潜在泄漏。单位由用户声明，未经自动验证。', '查看数据契约', 'mission', Database],
   ['02', '观察空间', '在航图中寻找已知区域、空白区域和仍未被验证的材料配方。', '打开可能性航图', 'atlas', Radar],
-  ['03', '比较策略', '切换预测优先、分歧优先和随机对照，先看它们为什么指向不同候选。', '进入下一实验台', 'bench', Beaker],
-  ['04', '锁定预测', '在揭示结果前保存候选与预测。锁定后，历史实测仍然保持隐藏。', '锁定下一次实验', 'bench', LockKeyhole],
-  ['05', '揭示证据', '人工确认后才释放这一条历史实测，并把新记录追加到训练集。', '查看证据河流', 'trail', GitBranch],
+  ['03', '比较策略', '切换预测优先、差异优先和随机对照，先看它们为什么指向不同方案。', '进入下一实验台', 'bench', Beaker],
+  ['04', '锁定预测', '在公布结果前保存方案与预测。锁定后，历史实测仍然保持隐藏。', '锁定下一次实验', 'bench', LockKeyhole],
+  ['05', '公布证据', '人工确认后才释放这一条历史实测，并把新记录追加到训练集。', '查看证据河流', 'trail', GitBranch],
   ['06', '导出证据', '导出可复核的记录；不是保存一张截图，也不把回放说成新实验。', '导出或核查', 'trail', Download],
 ]
 
@@ -44,7 +44,7 @@ export default function GuideDrawer({ open, onClose, onNavigate }) {
       <div className="nt-guide-boundary">
         <strong>当前版本的边界</strong>
         <span>✓ 当前数据集的完整历史回放</span>
-        <span>✓ 三种策略 · 预测先封存 · 事件可核验</span>
+        <span>✓ 三种策略 · 预测先保存 · 事件可核验</span>
         <span>✓ 自定义 CSV：Data Dock</span>
         <span>— 真实新实验录入：尚未开放</span>
       </div>
