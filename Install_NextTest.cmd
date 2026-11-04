@@ -17,7 +17,7 @@ powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command ^
   "  New-Item -ItemType Directory -Force -Path $downloads | Out-Null;" ^
   "  $zip=Join-Path $downloads ('NextTest_' + [guid]::NewGuid().ToString('N') + '.zip');" ^
   "  Write-Host ('Download destination: ' + $zip) -ForegroundColor DarkGray;" ^
-  "  Invoke-WebRequest -Uri 'https://github.com/yeto0620/NextTest/releases/download/v3.0.0/NextTest_V3_ReadyToRun.zip' -OutFile $zip -UseBasicParsing;" ^
+  "  Invoke-WebRequest -Uri 'https://github.com/yeto0620/NextTest/releases/download/v1.0.0/NextTest_V1_ReadyToRun.zip' -OutFile $zip -UseBasicParsing;" ^
   "  Unblock-File -LiteralPath $zip -ErrorAction SilentlyContinue;" ^
   "  if ((Get-Item -LiteralPath $zip).Length -lt 1000000) { throw 'Downloaded package is too small.' }" ^
   "  Write-Host ('Extract destination: ' + $target) -ForegroundColor DarkGray;" ^

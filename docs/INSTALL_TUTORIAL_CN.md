@@ -20,7 +20,7 @@ v1.0.0 · NextTest V1.0 · 可运行发布
 
 也可以直接打开：
 
-https://github.com/yeto0620/NextTest/releases/tag/v3.0.0
+https://github.com/yeto0620/NextTest/releases/tag/v1.0.0
 
 ### 第 2 步：下载 Install_NextTest.cmd
 
@@ -134,7 +134,7 @@ python --version
 如果不使用 Install_NextTest.cmd，也可以手动操作：
 
 1. 打开 Release 页面。
-2. 下载 `NextTest_V3_ReadyToRun.zip`。
+2. 下载 `NextTest_V1_ReadyToRun.zip`。
 3. 右键 → **全部解压缩**。
 4. 进入解压后的文件夹。
 5. 双击 `setup_nexttest.cmd`。
@@ -300,7 +300,7 @@ cd $env:USERPROFILE\Downloads
 
 ### 2. npm 无法识别
 
-普通使用者不需要 npm。请使用 `Install_NextTest.cmd` 或 `NextTest_V3_ReadyToRun.zip`。
+普通使用者不需要 npm。请使用 `Install_NextTest.cmd` 或 `NextTest_V1_ReadyToRun.zip`。
 开发者请安装 Node.js LTS，并重新打开 PowerShell。
 
 ### 3. cd frontend 找不到路径
@@ -324,7 +324,7 @@ ReadyToRun 包已包含该文件；源码包需要执行 `npm run build`。
 
 GitHub 代码页不播放 MP4。请使用 Release 里的视频：
 
-https://github.com/yeto0620/NextTest/releases/download/v3.0.0/NextTest_Demo.mp4
+docs/NextTest_Demo.mp4
 
 ---
 
