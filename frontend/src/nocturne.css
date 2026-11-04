@@ -537,4 +537,24 @@ html[data-theme="light"] .nt-assistant-panel .nt-agent-link.is-online { color:#0
 .nt-sprite.is-disabled { opacity:.45; cursor:not-allowed; filter:grayscale(.7); }
 .nt-sprite.is-disabled:hover { transform:none; box-shadow:none; }
 .nt-topnav-assistant:disabled { opacity:.35; cursor:not-allowed; }
+/* Guided onboarding: paged, keyboard, spotlight */
+.nt-tour-card { width:min(660px,94vw); padding:26px 30px 18px; }
+.nt-tour-topline { display:flex; justify-content:space-between; margin:-4px 34px 12px 0; color:#7f9f9a; font:9px var(--nt-mono); letter-spacing:.06em; }
+.nt-tour-card h2 { font-size:29px; margin:8px 0 9px; }
+.nt-tour-card p { min-height:58px; font-size:13px; }
+.nt-tour-action { margin-top:12px; padding:9px 11px; border-left:2px solid #5eead4; background:rgba(94,234,212,.07); color:#bfe8e1; font-size:11px; }
+.nt-tour-progress { display:flex; gap:6px; margin:16px 0 14px; }
+.nt-tour-progress button { width:26px; height:4px; padding:0; border:0; border-radius:4px; background:rgba(157,195,192,.24); cursor:pointer; }
+.nt-tour-progress button.is-active { background:#5eead4; box-shadow:0 0 10px rgba(94,234,212,.6); }
+.nt-tour-nav { display:flex; align-items:center; gap:7px; }
+.nt-tour-back { display:inline-flex; align-items:center; gap:5px; padding:10px 12px; border:1px solid rgba(157,195,192,.25); border-radius:10px; background:transparent; color:#a9c4c0; font-size:11px; }
+.nt-tour-back:disabled { opacity:.35; cursor:not-allowed; }
+.nt-tour-next { min-width:110px; justify-content:center; }
+.nt-tour-layer { align-items:center; }
+html[data-theme=light] .nt-tour-card { background:#fff; border-color:#b9ddd5; box-shadow:0 28px 80px rgba(18,65,56,.25); }
+html[data-theme=light] .nt-tour-topline, html[data-theme=light] .nt-tour-foot { color:#6c8780; }
+html[data-theme=light] .nt-tour-action { color:#345c52; background:#eaf7f3; border-left-color:#0f766e; }
+html[data-theme=light] .nt-tour-back { color:#4f6d64; border-color:#cfdfda; }
+html[data-theme=light] .nt-tour-progress button { background:#d3e3de; }
+html[data-theme=light] .nt-tour-progress button.is-active { background:#0f766e; }
 
