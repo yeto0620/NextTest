@@ -1,4 +1,4 @@
-# NextTest V1.1 — 下一次，先验证什么？
+# NextTest V1.2 — 下一次，先验证什么？
 
 **面向有限试验预算的实验决策智能体工作台。**
 
@@ -13,7 +13,7 @@ NextTest 不只预测一个结果，而是从尚未公布的历史方案中提�
 
 完整图文步骤见 [安装与使用教程](docs/INSTALL_TUTORIAL_CN.md)。
 
-1. 打开 [Releases](https://github.com/yeto0620/NextTest/releases/tag/v1.1.0)，下载 `Install_NextTest.cmd`。
+1. 打开 [Releases](https://github.com/yeto0620/NextTest/releases/tag/v1.2.0)，下载 `Install_NextTest.cmd`。
 2. 双击它；Windows 提示时选择“更多信息 → 仍要运行”。
 3. 等安装窗口自动下载、安装依赖并启动；浏览器会打开工作台。
 4. 以后直接双击桌面的 **NextTest**，在弹窗中选择 **普通模式** 或 **DeepSeek 模式**。
@@ -35,7 +35,7 @@ NextTest    打开后选择普通模式或 DeepSeek 模式
 
 直接下载并双击：
 
-[Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v1.1.0/Install_NextTest.cmd)
+[Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v1.2.0/Install_NextTest.cmd)
 
 它会自动下载 ReadyToRun 包、解压到 `%USERPROFILE%\NextTest`、安装 Python 依赖并启动。**不需要 Node/npm，也不需要手动 cd。**
 
@@ -101,7 +101,7 @@ DeepSeek 解释白名单公开证据；没有 Key 时自动使用本地规则。
 
 ### 最快方式：ReadyToRun
 
-1. 下载 [NextTest_V1.1_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v1.1.0/NextTest_V1.1_ReadyToRun.zip)（已包含前端构建，不需要 Node/npm）。
+1. 下载 [NextTest_V1.2_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v1.2.0/NextTest_V1.2_ReadyToRun.zip)（已包含前端构建，不需要 Node/npm）。
 2. **解压**到本地目录，不要直接在压缩包里运行。
 3. 进入解压后的文件夹，确认能看到 `setup_nexttest.cmd`、`start_nexttest.cmd`、`frontend`。
 4. 双击 `setup_nexttest.cmd`。
