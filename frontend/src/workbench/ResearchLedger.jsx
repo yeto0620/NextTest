@@ -41,7 +41,7 @@ export default function ResearchLedger({ view, preview, landscape, selectedCandi
         <Row label="当前方案"><code>{selectedCandidate?.row_id || pending?.row_id || '—'}</code></Row>
         <Row label="方案配方">{controlEntries(controls, true).length ? <span className="nt-ledger-recipe">{controlEntries(controls, true).map(([key, value]) => <span key={key}><b>{labelFor(meta, key)}</b> {number(value, 2)} <small>{unitFor(meta, key)}</small></span>)}</span> : '—'}</Row>
         <Row label="预测 / 差异">{Number.isFinite(Number(selectedCandidate?.prediction ?? pending?.prediction)) ? <span>{number(selectedCandidate?.prediction ?? pending?.prediction, 2)} {meta.target.unit || ''} / {number(selectedCandidate?.disagreement ?? pending?.disagreement, 2)} {meta.target.unit || ''}</span> : '—'}<small className="nt-ledger-inline">差异是树间标准差，不是概率</small></Row>
-        <Row label="已公布实测">{last ? `${number(last.revealed_target, 2)} ${meta.target.unit || ''}（${last.row_id}）` : '—'}<small className="nt-ledger-inline">{last ? `绝对误差 ${number(last.absolute_error, 2)} ${meta.target.unit || ''}` : '尚未公布'}</small></Row>
+        <Row label="已查看结果">{last ? `${number(last.revealed_target, 2)} ${meta.target.unit || ''}（${last.row_id}）` : '—'}<small className="nt-ledger-inline">{last ? `绝对误差 ${number(last.absolute_error, 2)} ${meta.target.unit || ''}` : '尚未查看'}</small></Row>
         <Row label="时间戳 / 字段确认表单">—<small className="nt-ledger-inline">当前 API 未提供，不补造</small></Row>
         <Row label="完整训练参数">—<small className="nt-ledger-inline">当前 API 未提供</small></Row>
       </dl>

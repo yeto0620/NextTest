@@ -42,7 +42,7 @@ export default function PossibilityAtlas({ observedRows = [], candidates = [], s
   }
   return <section className="nt-atlas" id="atlas" aria-labelledby="nt-atlas-title">
     <header className="nt-section-head">
-      <div><span className="nt-kicker">A2 / POSSIBILITY ATLAS</span><h2 id="nt-atlas-title">{mode === 'research' ? '方案' : '未知不在空白里，而在选择里'}</h2>{mode !== 'research' && <p>同一组方案事实，两种读法：航图看结构，表格读精确数值。选择在这两处保持同步。</p>}</div>
+      <div><h2 id="nt-atlas-title">方案</h2></div>
       <div className="nt-segmented" role="group" aria-label="航图或表格">
         <button type="button" className={viewMode === 'atlas' ? 'is-selected' : ''} onClick={() => onViewMode('atlas')}><Radar size={14} /> 航图</button>
         <button type="button" className={viewMode === 'table' ? 'is-selected' : ''} onClick={() => onViewMode('table')}><List size={14} /> 表格</button>
@@ -109,21 +109,26 @@ export default function PossibilityAtlas({ observedRows = [], candidates = [], s
 
 function CandidateTable({ rows, selectedId, compareIds, onSelect, onCompare, mode, view, onFocusRow }) {
   const meta = useDataset()
-  if (!rows.length) return <div className="nt-unavailable"><ShieldAlert size={16} /> 方案表格不可用：后端没有返回方案数据，不显示占位行。</div>
-  const columns = mode === 'research' ? meta.features.map(item => item.key) : meta.features.slice(0, 3).map(item => item.key)
-  return <div className="nt-table-wrap" role="region" aria-label="方案表格" tabIndex={0}>
+  const [expanded, setExpanded] = useState(false)
+  if (!rows.length) return <div className="nt-unavailable nt-unavailable-guided"><ShieldAlert size={16} /><div><strong>暂时没有可比较方案</strong><span>先确认数据已经载入；仍为空时，打开“数据”检查字段与闸门。</span></div></div>
+  const compactColumns = meta.features.slice(0, 3).map(item => item.key)
+  const columns = mode === 'research' && expanded ? meta.features.map(item => item.key) : compactColumns
+  return <div className="nt-table-shell">
+    {mode === 'research' && <div className="nt-table-toolbar"><div><strong>字段</strong></div><button type="button" onClick={() => setExpanded(value => !value)} aria-expanded={expanded}>{expanded ? '收起' : `全部 ${meta.features.length} 列`}</button></div>}
+    <div className="nt-table-wrap" role="region" aria-label="方案表格" tabIndex={0}>
     <table className="nt-candidate-table">
-      <thead><tr><th>方案</th>{columns.map(key => <th key={key}>{labelFor(meta, key)} <small>{unitFor(meta, key)}</small></th>)}<th>预测 {meta.target.unit || ''}</th><th>差异 {meta.target.unit || ''}</th><th>状态</th><th><span className="nt-sr">操作</span></th></tr></thead>
+      <thead><tr><th>方案</th>{columns.map(key => <th key={key}>{labelFor(meta, key)} <small>{unitFor(meta, key)}</small></th>)}<th>预测 {meta.target.unit || ''}</th><th>模型分歧 {meta.target.unit || ''}</th><th>状态</th><th><span className="nt-sr">操作</span></th></tr></thead>
       <tbody>{rows.map((row, index) => {
         const state = candidateState(row.row_id, view, selectedId, compareIds)
         return <tr key={row.row_id} id={`nt-candidate-${row.row_id}`} tabIndex="0" aria-selected={selectedId === row.row_id}
           className={selectedId === row.row_id ? 'is-selected' : ''} onClick={() => onSelect(row.row_id)} onKeyDown={event => onFocusRow(event, index)}>
           <td><code>{row.row_id}</code></td>{columns.map(key => <td key={key}>{number(row.controls[key], 1)}</td>)}
           <td>{number(row.prediction, 2)}</td><td>{row.disagreement == null ? '—' : number(row.disagreement, 2)}</td>
-          <td><span className={`nt-table-state nt-table-${state}`}>{state === 'pending' ? '已保存' : state === 'selected' ? '当前' : state === 'compare' ? '对比' : state === 'revealed' ? '已公布' : '未公布'}</span></td>
+          <td><span className={`nt-table-state nt-table-${state}`}>{state === 'pending' ? '预测已锁' : state === 'selected' ? '当前' : state === 'compare' ? '对比' : state === 'revealed' ? '结果已看' : '结果未看'}</span></td>
           <td>{mode === 'research' && <button type="button" className="nt-link-button" onClick={event => { event.stopPropagation(); onCompare(row.row_id) }}><Columns2 size={12} /> 对比</button>}</td>
         </tr>
       })}</tbody>
     </table>
+    </div>
   </div>
 }

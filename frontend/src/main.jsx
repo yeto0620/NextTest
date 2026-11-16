@@ -1,10 +1,15 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
+import '@astryxdesign/core/astryx.css'
+import '@astryxdesign/theme-neutral/theme.css'
 import './styles.css'
 import './journey.css'
 import './observatory.css'
 import './workbench.css'
 import './nocturne.css'
+import './nexttest-system.css'
+import './replay-redesign.css'
+import './workspace-redesign.css'
 
 createRoot(document.getElementById('root')).render(<React.StrictMode><App /></React.StrictMode>)

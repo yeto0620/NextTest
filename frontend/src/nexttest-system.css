@@ -1,0 +1,418 @@
+/* NextTest visual system. Astryx supplies accessible controls and base theme;
+   these tokens preserve the project's scientific, data-bound visual language. */
+:root {
+  --nt-space-1: 6px;
+  --nt-space-2: 12px;
+  --nt-space-3: 18px;
+  --nt-space-4: 26px;
+  --nt-space-5: 38px;
+  --nt-radius-control: 13px;
+  --nt-radius-card: 22px;
+  --nt-radius-stage: 30px;
+  --nt-surface: #0c151e;
+  --nt-surface-raised: #14232d;
+  --nt-line-strong: rgba(145, 209, 209, .28);
+  --nt-text-strong: #effaf8;
+  --nt-text-soft: #b4c8c8;
+  --nt-accent: #72e4d1;
+  --nt-accent-warm: #efba6d;
+  --nt-focus-ring: 0 0 0 3px rgba(114, 228, 209, .45);
+}
+
+html[data-theme="light"] {
+  --nt-surface: #f7fbf9;
+  --nt-surface-raised: #fff;
+  --nt-line-strong: rgba(27, 94, 83, .22);
+  --nt-text-strong: #163b35;
+  --nt-text-soft: #526e67;
+  --nt-accent: #0c7469;
+  --nt-accent-warm: #955723;
+}
+
+.nt-app { font-family: var(--nt-body); }
+.nt-app button, .nt-app input, .nt-app select, .nt-app textarea { font-family: var(--nt-body); }
+.nt-app button:focus-visible, .nt-app input:focus-visible,
+.nt-app select:focus-visible, .nt-app textarea:focus-visible,
+.nt-app summary:focus-visible { outline: 2px solid var(--nt-accent); outline-offset: 3px; }
+
+/* A single navigation spine replaces the narrow, card-like command strip. */
+.nt-topnav {
+  height: 76px;
+  padding-inline: clamp(22px, 3.4vw, 66px);
+  gap: clamp(18px, 2.4vw, 42px);
+  border-bottom-color: var(--nt-line-strong);
+  background: rgba(7, 15, 23, .94);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, .17);
+}
+.nt-topnav-brand { gap: 12px; font-size: 20px; letter-spacing: -.055em; }
+.nt-topnav-brand small { color: #789a9c; font-size: 9px; letter-spacing: .13em; }
+.nt-topnav-mark { width: 34px; height: 34px; }
+.nt-topnav-links { align-items: center; align-self: auto; gap: 3px; }
+.nt-topnav-links button {
+  min-height: 40px;
+  padding-inline: 13px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: #9cb3b5;
+}
+.nt-topnav-links button.is-active {
+  color: #e9fff9;
+  background: rgba(95, 205, 191, .15);
+  box-shadow: inset 0 0 0 1px rgba(114, 228, 209, .2);
+}
+.nt-topnav-links button::after { bottom: 4px; right: 20px; left: 20px; height: 1px; }
+.nt-topnav-icon { width: 36px; height: 36px; border-radius: 12px; }
+.nt-topnav .nt-mode { padding: 3px; border-radius: 13px; }
+.nt-topnav .nt-mode button { min-height: 31px; padding-inline: 11px; border-radius: 9px; font-size: 12px; }
+.nt-topnav-dataset, .nt-topnav-status { font-size: 10px; }
+.nt-topnav-status { padding-left: 9px; }
+.nt-content { max-width: 1740px; padding: 32px clamp(22px, 3.4vw, 66px) 82px; }
+
+/* The home page has one dominant data instrument and one clear action rail. */
+.nt-research-cockpit {
+  border: 1px solid var(--nt-line-strong);
+  border-radius: var(--nt-radius-stage);
+  background:
+    radial-gradient(720px 430px at 38% 27%, rgba(45, 150, 157, .19), transparent 70%),
+    radial-gradient(460px 300px at 100% 0%, rgba(154, 99, 42, .08), transparent 75%),
+    #09131c;
+  box-shadow: 0 34px 90px rgba(0, 0, 0, .3), inset 0 1px 0 rgba(255, 255, 255, .06);
+}
+.nt-research-cockpit::before { right: 6%; top: 160px; color: rgba(124, 225, 214, .025); }
+.nt-cockpit-head { min-height: 132px; padding: 28px clamp(26px, 3vw, 48px) 22px; border-bottom: 0; }
+.nt-cockpit-head h1 { margin-top: 10px; font-size: clamp(36px, 3.5vw, 58px); line-height: 1.07; letter-spacing: -.065em; }
+.nt-cockpit-thesis { margin-top: 12px; color: var(--nt-text-soft); font-size: 14px; line-height: 1.6; }
+.nt-cockpit-headline { gap: 12px; font-size: 10px; }
+.nt-head-action { display: inline-flex; align-items: center; gap: 7px; min-height: 38px; padding-inline: 15px; border-radius: 11px; background: #78e0cf; color: #09201f; font-size: 12px; font-weight: 700; }
+.nt-head-action:hover { background: #9af2e2; }
+.nt-cockpit-headline > span { padding: 7px 9px; border: 1px solid rgba(125, 185, 190, .16); border-radius: 999px; background: rgba(8, 25, 31, .5); }
+
+.nt-flowline {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 clamp(26px, 3vw, 48px) 22px;
+}
+.nt-flowline button {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 27px minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  gap: 2px 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(126, 185, 190, .17);
+  border-radius: 14px;
+  background: rgba(6, 18, 26, .56);
+  color: #8da9ac;
+  text-align: left;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.nt-flowline button:hover { transform: translateY(-2px); border-color: rgba(114, 228, 209, .55); }
+.nt-flowline button > span { grid-row: 1 / 3; color: #77bcb6; font: 12px var(--nt-mono); }
+.nt-flowline button strong { color: #daeeea; font-size: 13px; letter-spacing: .015em; }
+.nt-flowline button small { overflow: hidden; color: #7d999e; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.nt-flowline button svg { grid-column: 3; grid-row: 1 / 3; color: #7ea9a7; }
+.nt-flowline button.is-current { border-color: rgba(114, 228, 209, .52); background: rgba(55, 143, 136, .18); box-shadow: inset 0 0 30px rgba(74, 185, 174, .08); }
+.nt-flowline button.is-current > span, .nt-flowline button.is-current svg { color: var(--nt-accent); }
+.nt-flowline button.is-done > span { color: var(--nt-accent-warm); }
+
+.nt-cockpit-main { grid-template-columns: minmax(0, 1fr) minmax(315px, 26%); min-height: 550px; border-top: 1px solid rgba(135, 183, 190, .14); }
+.nt-cockpit-visual { padding: clamp(18px, 2.2vw, 34px); }
+.nt-cockpit-visual .nt-plate {
+  min-height: 500px;
+  border: 1px solid rgba(105, 216, 207, .18);
+  border-radius: 24px;
+  background: radial-gradient(590px 320px at 45% 40%, rgba(39, 112, 131, .2), transparent 75%), #07141e;
+}
+.nt-cockpit-visual .nt-plate-head h2 { font-size: 23px; }
+.nt-cockpit-visual .nt-plate-chamber svg { min-height: 375px; }
+.nt-cockpit-rail { padding: 26px; background: linear-gradient(155deg, rgba(20, 43, 52, .86), rgba(7, 17, 25, .88) 68%); }
+.nt-cockpit-task { padding: 2px 0 20px; }
+.nt-cockpit-task > strong { font-size: 24px; letter-spacing: -.035em; }
+.nt-cockpit-task dl { margin-top: 22px; }
+.nt-cockpit-task dt { font-size: 10px; }
+.nt-cockpit-task dd { font-size: 21px; }
+.nt-cockpit-candidate header small, .nt-cockpit-candidate dt { font-size: 9px; }
+.nt-cockpit-candidate > strong, .nt-cockpit-candidate.is-empty > small { font-size: 11px; }
+.nt-cockpit-candidate dd { font-size: 15px; }
+.nt-cockpit-compare { border-radius: 18px; }
+.nt-cockpit-candidate { border-radius: 12px; }
+.nt-cockpit-primary.nt-primary { display: flex; min-height: 50px; justify-content: center; gap: 13px; border-radius: 13px; font-size: 13px; font-weight: 700; }
+.nt-cockpit-strategy { min-height: 43px; font-size: 12px; }
+.nt-cockpit-boundary { padding-block: 13px; color: #a8bcb9; font-size: 11px; }
+.nt-cockpit-more { border-top-color: rgba(133, 186, 189, .16); }
+
+/* Controls inherit a shared size, radius, and state language. */
+.nt-primary { min-height: 44px; border-radius: var(--nt-radius-control); background: #78e0cf; color: #09201f; }
+.nt-primary:hover:not(:disabled) { background: #9af2e2; }
+.nt-primary-amber { background: #e8b468; color: #25180b; }
+.nt-primary-amber:hover:not(:disabled) { background: #ffd298; }
+.nt-bench, .nt-atlas, .nt-trail, .nt-ledger, .nt-detail { border-radius: var(--nt-radius-card); }
+.nt-bench { padding: clamp(22px, 2.6vw, 38px); }
+.nt-bench-grid { grid-template-columns: minmax(300px, 30%) minmax(0, 1fr); gap: 26px; }
+.nt-control-block, .nt-compare-card, .nt-prism, .nt-reflection, .nt-hypothesis { border-radius: 17px; }
+.nt-control-title strong, .nt-compare-number > span { font-size: 13px; }
+.nt-strategy-stack button { min-height: 48px; border-radius: 11px; }
+.nt-bench-action .nt-primary { display: flex; justify-content: center; align-items: center; gap: 8px; min-height: 48px; font-size: 13px; font-weight: 700; }
+.nt-compare-number strong { font-size: clamp(24px, 2.3vw, 36px); }
+.nt-compare-facts > div { padding: 9px 10px; border: 1px solid rgba(128, 185, 190, .17); border-radius: 9px; background: rgba(49, 108, 114, .12); }
+.nt-compare-facts span { color: #90abad; font-size: 10px; }
+.nt-compare-facts strong { margin-top: 4px; color: #e4f2ee; font-size: 11px; }
+.nt-compare-card dt { color: #91a9ab; font-size: 9px; }
+.nt-compare-card dd { color: #d9edeb; font-size: 11px; }
+.nt-compare-card footer { font-size: 10px; }
+.nt-compare-card .nt-state { padding: 4px 7px; border: 1px solid rgba(114, 228, 209, .25); border-radius: 999px; background: rgba(53, 128, 122, .2); color: #b8e9df; font-size: 9px; }
+.nt-compare-card { transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.nt-compare-card:hover { transform: translateY(-3px); }
+.nt-assistant-panel { width: min(540px, calc(100vw - 48px)); }
+.nt-assistant-modes button { min-height: 44px; font-size: 12px; }
+.nt-assistant-question textarea { min-height: 118px; font-size: 14px; line-height: 1.5; }
+.nt-assistant-prompts button { font-size: 11px; }
+.nt-kicker { font-size: 10px; }
+.nt-plate-meta, .nt-plate-foot { font-size: 10px; }
+.nt-plate-count { font-size: 11px; }
+.nt-flowline button:focus-visible { outline-offset: 2px; }
+
+html[data-theme="light"] .nt-topnav { background: rgba(248, 252, 250, .96); }
+html[data-theme="light"] .nt-topnav-links button.is-active { background: #def3ed; box-shadow: inset 0 0 0 1px #b4dcd1; color: #16473d; }
+html[data-theme="light"] .nt-research-cockpit { border-color: #bed9d0; background: radial-gradient(720px 430px at 38% 27%, rgba(66, 186, 173, .13), transparent 70%), #fff; }
+html[data-theme="light"] .nt-flowline button { background: #f6faf8; border-color: #d1e3dd; }
+html[data-theme="light"] .nt-flowline button strong { color: #214d42; }
+html[data-theme="light"] .nt-flowline button small { color: #607c72; }
+html[data-theme="light"] .nt-flowline button.is-current { background: #e4f5ee; border-color: #65b7a7; }
+html[data-theme="light"] .nt-cockpit-visual .nt-plate { background: #f3faf7; border-color: #d2e6de; }
+html[data-theme="light"] .nt-cockpit-rail { background: #f2f9f6; }
+html[data-theme="light"] .nt-cockpit-headline > span { background: #f5faf8; border-color: #d2e6de; }
+html[data-theme="light"] .nt-compare-facts > div { background: #eff8f5; border-color: #d2e6de; }
+html[data-theme="light"] .nt-compare-facts strong { color: #254b43; }
+html[data-theme="light"] .nt-compare-card .nt-state { background: #e4f5ef; border-color: #aed9cb; color: #28594d; }
+html[data-theme="light"] .nt-cockpit-primary.nt-primary,
+html[data-theme="light"] .nt-bench-action .nt-primary,
+html[data-theme="light"] .nt-head-action { background: #0e766a; color: #fff; }
+
+@media (max-width: 1370px) {
+  .nt-topnav { gap: 15px; padding-inline: 23px; }
+  .nt-topnav-brand small, .nt-topnav-dataset { display: none; }
+  .nt-topnav-links button { padding-inline: 9px; }
+  .nt-content { padding-inline: 23px; }
+  .nt-cockpit-main { grid-template-columns: minmax(0, 1fr) 310px; }
+  .nt-flowline button small { font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nt-flowline button, .nt-compare-card { transition-duration: .01ms !important; }
+}
+
+/* V2 research home: one data constellation, a clear first action, and a quiet desk below. */
+.nt-research-cockpit-v2 {
+  overflow: hidden;
+  border-color: rgba(115, 180, 187, .24);
+  background: #07121b;
+}
+.nt-research-cockpit-v2::before { display: none; }
+.nt-lab-stage {
+  display: grid;
+  grid-template-columns: minmax(390px, 39%) minmax(0, 61%);
+  min-height: 610px;
+  background:
+    radial-gradient(900px 590px at 72% 46%, rgba(30, 111, 139, .24), transparent 72%),
+    linear-gradient(115deg, #091722 0%, #07121b 43%, #0b1925 100%);
+}
+.nt-density-research .nt-research-cockpit-v2 .nt-cockpit-head {
+  display: flex;
+  min-height: 610px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0;
+  padding: clamp(40px, 4.8vw, 82px) 24px 32px clamp(38px, 4.4vw, 74px);
+  border: 0;
+}
+.nt-research-cockpit-v2 .nt-cockpit-head .nt-kicker {
+  color: #88d8dd;
+  font: 600 11px var(--nt-mono);
+  letter-spacing: .2em;
+}
+.nt-density-research .nt-research-cockpit-v2 .nt-cockpit-head h1 {
+  max-width: 520px;
+  margin: 30px 0 19px;
+  color: #f5f9f8;
+  font: 680 clamp(49px, 4.7vw, 79px)/1.12 var(--nt-display);
+  letter-spacing: -.085em;
+  text-wrap: balance;
+}
+.nt-research-cockpit-v2 .nt-cockpit-thesis {
+  max-width: 390px;
+  margin: 0;
+  color: #b3c9ca;
+  font-size: 15px;
+  line-height: 1.75;
+}
+.nt-research-cockpit-v2 .nt-cockpit-headline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 34px;
+}
+.nt-research-cockpit-v2 .nt-head-action {
+  min-width: 152px;
+  min-height: 50px;
+  justify-content: center;
+  border: 1px solid rgba(160, 247, 231, .38);
+  border-radius: 13px;
+  background: #78e0cf;
+  color: #09201f;
+  box-shadow: 0 14px 42px rgba(66, 216, 197, .2);
+  font-size: 13px;
+}
+.nt-head-secondary {
+  display: inline-flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 18px;
+  border: 1px solid rgba(147, 197, 202, .3);
+  border-radius: 13px;
+  background: rgba(14, 40, 52, .4);
+  color: #cde8e7;
+  font-size: 13px;
+  transition: border-color .2s ease, background .2s ease;
+}
+.nt-head-secondary:hover { border-color: rgba(115, 222, 211, .62); background: rgba(51, 130, 132, .21); }
+.nt-lab-intro-stats {
+  display: grid;
+  width: min(100%, 400px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: auto;
+  padding-top: 30px;
+  border-top: 1px solid rgba(145, 193, 199, .18);
+}
+.nt-lab-intro-stats div { min-width: 0; }
+.nt-lab-intro-stats small { display: block; color: #86a6ad; font-size: 11px; }
+.nt-lab-intro-stats strong { display: block; margin-top: 6px; color: #f1f9f7; font: 650 27px var(--nt-display); }
+.nt-lab-proof { display: flex; align-items: center; gap: 7px; margin: 23px 0 0; color: #a5babe; font-size: 11px; line-height: 1.4; }
+.nt-lab-proof svg { flex: 0 0 auto; color: #e7b66e; }
+.nt-density-research .nt-research-cockpit-v2 .nt-cockpit-visual {
+  position: relative;
+  min-width: 0;
+  padding: 28px 36px 22px 6px;
+  border: 0;
+}
+.nt-lab-visual-bar {
+  position: absolute;
+  z-index: 4;
+  top: 28px;
+  right: 36px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  color: #7da3ae;
+  font: 10px var(--nt-mono);
+}
+.nt-lab-visual-bar > span { display: inline-flex; align-items: center; gap: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nt-lab-visual-bar > span i { width: 6px; height: 6px; border-radius: 50%; background: #75e6d6; box-shadow: 0 0 12px #75e6d6; }
+.nt-lab-visual-bar > div { display: inline-flex; flex: 0 0 auto; gap: 2px; padding: 3px; border: 1px solid rgba(135, 189, 195, .21); border-radius: 11px; background: rgba(4, 17, 26, .62); }
+.nt-lab-visual-bar button { min-height: 29px; padding: 0 11px; border: 0; border-radius: 8px; background: transparent; color: #9bb7bc; font-size: 11px; }
+.nt-lab-visual-bar button.is-selected { background: #254753; color: #e8faf7; }
+.nt-lab-visual-bar button:hover { color: #fff; }
+
+.nt-constellation { position: relative; min-height: 558px; margin-top: 9px; }
+.nt-constellation-head { position: absolute; z-index: 2; top: 61px; left: 18px; }
+.nt-constellation-head span { color: #5f9aa4; font: 9px var(--nt-mono); letter-spacing: .12em; }
+.nt-constellation-head h2 { margin: 8px 0 0; color: #d9f6f2; font: 600 20px var(--nt-display); letter-spacing: -.04em; }
+.nt-constellation-head strong { display: block; margin-top: 10px; color: #8fe5d8; font: 610 27px var(--nt-display); }
+.nt-constellation-head strong small { color: #86a9af; font: 10px var(--nt-body); }
+.nt-constellation-canvas { position: relative; height: 520px; overflow: hidden; }
+.nt-constellation-canvas::before {
+  content: "";
+  position: absolute;
+  inset: 9% 3% 0 5%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 44%, rgba(85, 202, 201, .14), transparent 50%);
+  filter: blur(22px);
+  pointer-events: none;
+}
+.nt-constellation-canvas > svg { position: relative; display: block; width: 100%; height: 100%; outline-offset: -9px; }
+.nt-orbit-guides ellipse, .nt-orbit-guides path { fill: none; stroke: rgba(99, 172, 188, .18); stroke-width: 1; }
+.nt-orbit-guides ellipse:nth-child(2) { stroke: rgba(129, 222, 217, .28); stroke-dasharray: 4 12; }
+.nt-orbit-guides ellipse:nth-child(4) { stroke: rgba(221, 169, 94, .18); }
+.nt-orbit-guides path { stroke: rgba(155, 219, 216, .22); stroke-dasharray: 2 8; }
+.nt-orb-stars circle { fill: #9df3e6; cursor: pointer; filter: drop-shadow(0 0 4px rgba(98, 226, 215, .65)); transition: r .2s ease, fill .2s ease; }
+.nt-orb-stars circle.is-far { fill: #5aa3b4; filter: none; }
+.nt-orb-stars circle:hover, .nt-orb-stars circle.is-selected { fill: #fff5d6; stroke: #ffd083; stroke-width: 2; }
+.nt-orb-marker { fill: none; stroke-width: 1.5; }
+.nt-orb-marker.is-primary { stroke: #ffc270; filter: drop-shadow(0 0 9px rgba(245, 179, 95, .64)); }
+.nt-orb-marker.is-compare { stroke: #6ed5e5; }
+.nt-orb-marker text { stroke: none; fill: #f3d6a7; font: 600 12px var(--nt-mono); letter-spacing: .07em; }
+.nt-orb-marker.is-compare text { fill: #9adce6; }
+.nt-orb-pulse { opacity: .58; animation: nt-orb-breathe 3.8s ease-in-out infinite; }
+.nt-orb-axis, .nt-orb-coordinate { fill: #6e9da6; font: 10px var(--nt-mono); letter-spacing: .06em; }
+.nt-orb-coordinate { fill: #4d7680; letter-spacing: .18em; }
+.nt-constellation-ledger { position: absolute; right: 11px; bottom: 12px; display: flex; align-items: center; gap: 14px; color: #83b1b7; font: 10px var(--nt-mono); letter-spacing: .05em; }
+.nt-constellation-ledger svg { color: #d2ad7d; }
+.nt-constellation-empty { display: flex; height: 100%; align-items: center; justify-content: center; gap: 10px; color: #a3c2c2; font-size: 13px; }
+.nt-constellation footer { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 18px; padding: 12px 18px 0; border-top: 1px solid rgba(126, 178, 190, .14); color: #a4bec0; font-size: 10px; }
+.nt-constellation footer span { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.nt-constellation footer p { margin: 0 0 0 auto; color: #789aa2; font-size: 10px; }
+.nt-orb-legend-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #8cebdc; box-shadow: 0 0 8px #8cebdc; }
+.nt-orb-legend-cross { display: inline-block; width: 9px; height: 9px; border: 1px solid #f6bf77; transform: rotate(45deg); }
+.nt-research-cockpit-v2 .nt-cockpit-visual .nt-plate { margin-top: 50px; min-height: 495px; }
+.nt-research-cockpit-v2 .nt-cockpit-visual .nt-plate-chamber svg { min-height: 342px; }
+.nt-research-cockpit-v2 .nt-flowline { padding: 21px clamp(25px, 3vw, 46px); border-top: 1px solid rgba(132, 185, 193, .15); background: #091721; }
+.nt-research-cockpit-v2 .nt-flowline button { background: rgba(22, 47, 58, .42); }
+.nt-research-cockpit-v2 .nt-lab-desk {
+  display: grid;
+  grid-template-columns: minmax(200px, .9fr) minmax(360px, 1.9fr) minmax(190px, .75fr);
+  gap: 26px;
+  align-items: stretch;
+  padding: 24px clamp(25px, 3vw, 46px) 29px;
+  border-top: 1px solid rgba(132, 185, 193, .15);
+  background: #0e1c26;
+}
+.nt-research-cockpit-v2 .nt-cockpit-task { padding: 0 24px 0 0; border: 0; border-right: 1px solid rgba(132, 185, 193, .15); }
+.nt-research-cockpit-v2 .nt-cockpit-task > strong { margin: 12px 0 4px; font-size: 21px; }
+.nt-research-cockpit-v2 .nt-cockpit-task dl { margin-top: 17px; }
+.nt-research-cockpit-v2 .nt-cockpit-task dd { font-size: 16px; }
+.nt-research-cockpit-v2 .nt-cockpit-compare { min-width: 0; margin-top: 0; }
+.nt-research-cockpit-v2 .nt-cockpit-candidate-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.nt-research-cockpit-v2 .nt-cockpit-candidate { min-height: 126px; }
+.nt-research-cockpit-v2 .nt-cockpit-candidate > strong { margin: 7px 0; }
+.nt-research-cockpit-v2 .nt-cockpit-delta { margin-top: 5px; }
+.nt-research-cockpit-v2 .nt-cockpit-compare > small { margin-top: 4px; }
+.nt-lab-actions { display: flex; min-width: 0; flex-direction: column; justify-content: center; gap: 9px; }
+.nt-density-research .nt-research-cockpit-v2 .nt-cockpit-primary { margin-top: 0; }
+.nt-research-cockpit-v2 .nt-cockpit-strategy { justify-content: center; margin-top: 0; }
+.nt-research-cockpit-v2 .nt-cockpit-strategy span { display: none; }
+.nt-research-cockpit-v2 .nt-cockpit-boundary { min-height: 48px; }
+@keyframes nt-orb-breathe { 50% { opacity: .18; transform: scale(1.4); } }
+
+html[data-theme="light"] .nt-lab-stage { background: radial-gradient(900px 590px at 72% 46%, rgba(112, 210, 204, .2), transparent 72%), #f7fbfa; }
+html[data-theme="light"] .nt-density-research .nt-research-cockpit-v2 .nt-cockpit-head h1 { color: #163e39; }
+html[data-theme="light"] .nt-research-cockpit-v2 .nt-cockpit-thesis { color: #416860; }
+html[data-theme="light"] .nt-lab-intro-stats { border-color: #d0e5dd; }
+html[data-theme="light"] .nt-lab-intro-stats strong { color: #1a483e; }
+html[data-theme="light"] .nt-lab-proof { color: #567a73; }
+html[data-theme="light"] .nt-head-secondary { background: #fff; border-color: #c1dcd3; color: #2a6053; }
+html[data-theme="light"] .nt-constellation-head h2, html[data-theme="light"] .nt-constellation-head strong { color: #19564f; }
+html[data-theme="light"] .nt-constellation-canvas::before { background: radial-gradient(circle, rgba(72, 190, 182, .21), transparent 55%); }
+html[data-theme="light"] .nt-orbit-guides ellipse, html[data-theme="light"] .nt-orbit-guides path { stroke: rgba(35, 126, 132, .22); }
+html[data-theme="light"] .nt-orb-stars circle { fill: #087b80; }
+html[data-theme="light"] .nt-orb-stars circle.is-far { fill: #79b9c0; }
+html[data-theme="light"] .nt-orb-axis, html[data-theme="light"] .nt-orb-coordinate { fill: #4f858b; }
+html[data-theme="light"] .nt-research-cockpit-v2 .nt-flowline, html[data-theme="light"] .nt-research-cockpit-v2 .nt-lab-desk { background: #f7fbfa; border-color: #d8e9e3; }
+html[data-theme="light"] .nt-research-cockpit-v2 .nt-flowline button { background: #fff; }
+html[data-theme="light"] .nt-research-cockpit-v2 .nt-cockpit-task { border-color: #d8e9e3; }
+
+@media (max-width: 1330px) {
+  .nt-lab-stage { grid-template-columns: minmax(365px, 40%) minmax(0, 60%); }
+  .nt-density-research .nt-research-cockpit-v2 .nt-cockpit-head { padding-left: 38px; }
+  .nt-research-cockpit-v2 .nt-lab-desk { grid-template-columns: minmax(170px, .8fr) minmax(330px, 1.8fr) minmax(165px, .7fr); gap: 15px; }
+  .nt-constellation footer p { flex-basis: 100%; margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nt-orb-pulse { animation-duration: .01ms !important; }
+}

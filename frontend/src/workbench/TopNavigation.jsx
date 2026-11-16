@@ -1,59 +1,47 @@
-import React from 'react'
-import { Archive, Beaker, CircleHelp, Database, Download, GitCompareArrows, Keyboard, MessageCircleMore, MonitorPlay, Moon, Orbit, Radar, ScanSearch, Sparkles, Sun } from 'lucide-react'
+import React, { useState } from 'react'
+import { Archive, Beaker, ChevronRight, CircleHelp, Database, Download, GitCompareArrows, Keyboard, MonitorPlay, Moon, Orbit, PanelLeftClose, Radar, ScanSearch, Sparkles, Sun } from 'lucide-react'
 
-const RESEARCH_ITEMS = [
-  { id: 'mission', label: '观测', icon: ScanSearch },
+const PAGES = [
+  { id: 'mission', label: '开始', icon: ScanSearch },
   { id: 'atlas', label: '方案', icon: Orbit },
-  { id: 'bench', label: '实验', icon: Beaker },
-  { id: 'strategy', label: '策略', icon: GitCompareArrows },
-  { id: 'trail', label: '证据', icon: Radar },
-  { id: 'library', label: '档案', icon: Archive },
-  { id: 'data', label: '数据', icon: Database },
-]
-
-const EXPLORE_ITEMS = [
-  { id: 'mission', label: '导览', icon: ScanSearch },
-  { id: 'atlas', label: '航图', icon: Orbit },
-  { id: 'bench', label: '体验', icon: Beaker },
-  { id: 'trail', label: '故事', icon: Radar },
+  { id: 'bench', label: '回放', icon: Beaker },
+  { id: 'trail', label: '结果', icon: Radar },
 ]
 
 export default function TopNavigation({ active, onNavigate, mode, onMode, status, datasetName, onStrategy, onData, onLibrary, onGuide, onExport, onShortcuts, onStage, onAssistant, theme, onTheme, onTour, llmReady }) {
-  const items = mode === 'research' ? RESEARCH_ITEMS : EXPLORE_ITEMS
-  function select(item) {
-    if (item.id === 'strategy') return onStrategy()
-    if (item.id === 'library') return onLibrary()
-    if (item.id === 'data') return onData()
-    onNavigate(item.id)
-  }
-  return <header className="nt-topnav">
-    <div className="nt-topnav-brand" aria-label="NextTest 实验决策工作台">
-      <img className="nt-topnav-mark" src="/nexttest-mark.svg" alt="" width="30" height="30" />
-      <span>NextTest</span><small>EXPERIMENTAL STUDIO</small>
+  const [compact, setCompact] = useState(false)
+  return <aside className={`nt-topnav nt-sidebar ${compact ? 'is-compact' : ''}`} aria-label="工作区导航">
+    <div className="nt-sidebar-head">
+      <button type="button" className="nt-sidebar-brand" onClick={() => onNavigate('mission')} aria-label="NextTest 首页" title="NextTest 首页">
+        <img src="/nexttest-mark.svg" alt="" width="32" height="32" />
+        <span>NextTest</span>
+      </button>
+      <button type="button" className="nt-sidebar-collapse" onClick={() => setCompact(value => !value)} aria-label={compact ? '展开导航' : '收起导航'} title={compact ? '展开导航' : '收起导航'}>{compact ? <ChevronRight size={17} /> : <PanelLeftClose size={17} />}</button>
     </div>
-    <nav className="nt-topnav-links" aria-label="主功能" data-tour="nav">
-      {items.map(item => {
-        const Icon = item.icon
-        const selected = active === item.id
-        return <button type="button" key={item.id} data-tour={item.id} className={selected ? 'is-active' : ''} onClick={() => select(item)}>
-          <Icon size={14} /><span>{item.label}</span>
-        </button>
-      })}
+    <nav className="nt-topnav-links nt-sidebar-nav" aria-label="主功能" data-tour="nav">
+      <span className="nt-sidebar-label">工作区</span>
+      {PAGES.map(({ id, label, icon: Icon }) => <button type="button" key={id} data-tour={id} className={active === id ? 'is-active' : ''} aria-current={active === id ? 'page' : undefined} title={label} onClick={() => onNavigate(id)}>
+        <Icon size={19} strokeWidth={1.8} /><span>{label}</span>
+      </button>)}
+      <span className="nt-sidebar-label nt-sidebar-label-secondary">工具</span>
+      <button type="button" className={active === 'library' ? 'is-active' : ''} title="档案" onClick={onLibrary}><Archive size={18} strokeWidth={1.8} /><span>档案</span></button>
+      <button type="button" className={active === 'strategy' ? 'is-active' : ''} title="比较" onClick={onStrategy}><GitCompareArrows size={18} strokeWidth={1.8} /><span>比较</span></button>
+      <button type="button" className={active === 'data' ? 'is-active' : ''} title="数据" onClick={onData}><Database size={18} strokeWidth={1.8} /><span>数据</span></button>
+      <button type="button" title="导出" disabled={!onExport} onClick={onExport}><Download size={18} strokeWidth={1.8} /><span>导出</span></button>
     </nav>
-    <div className="nt-topnav-tools">
-      {mode === 'research' && <span className="nt-topnav-dataset" title={datasetName || '当前数据集'}><i />{datasetName || '数据集'}</span>}
-      <button type="button" className="nt-topnav-icon" onClick={onTour} title="新手引导" aria-label="打开新手引导"><Sparkles size={15} /></button>
-      <button type="button" className="nt-topnav-icon" onClick={onTheme} title={theme === 'light' ? '切换到深色主题' : '切换到亮色主题'} aria-label={theme === 'light' ? '切换到深色主题' : '切换到亮色主题'}>{theme === 'light' ? <Moon size={15} /> : <Sun size={15} />}</button>
-      <div className="nt-mode" role="group" aria-label="信息密度" data-tour="mode">
-        <button type="button" className={mode === 'research' ? 'is-selected' : ''} onClick={() => onMode('research')}>研究</button>
-        <button type="button" className={mode === 'explore' ? 'is-selected' : ''} onClick={() => onMode('explore')}>科普</button>
+    <div className="nt-sidebar-bottom">
+      <button type="button" className="nt-sidebar-assistant" onClick={onAssistant} title="打开 AI 助手"><Sparkles size={18} /><span>AI 助手<small>{llmReady === false ? '本地帮助可用' : '解释公开证据'}</small></span><ChevronRight size={15} /></button>
+      <div className="nt-sidebar-context"><strong>{datasetName || '演示数据'}</strong><small><i /> {status || '待开始'}</small></div>
+      <div className="nt-mode nt-sidebar-mode" role="group" aria-label="信息密度" data-tour="mode">
+        <button type="button" className={mode === 'research' ? 'is-selected' : ''} aria-pressed={mode === 'research'} title="研究：精简操作、完整字段" onClick={() => onMode('research')}>研究</button>
+        <button type="button" className={mode === 'explore' ? 'is-selected' : ''} aria-pressed={mode === 'explore'} title="科普：逐步解释、图形引导" onClick={() => onMode('explore')}>科普</button>
       </div>
-      {mode === 'research' && <><button type="button" className="nt-topnav-icon nt-topnav-assistant" data-tour="assistant" disabled={llmReady === false} onClick={onAssistant} title={llmReady === false ? '普通模式：接入 DeepSeek 后可用' : 'AI 助手'} aria-label="打开AI 助手"><MessageCircleMore size={15} /></button>
-      <button type="button" className="nt-topnav-icon" onClick={onShortcuts} title="快捷键（?）" aria-label="打开快捷键"><Keyboard size={15} /></button>
-      <button type="button" className="nt-topnav-icon" disabled={!onExport} onClick={onExport} title={onExport ? '导出当前项目' : '创建项目后可导出'} aria-label="导出当前项目"><Download size={15} /></button></>}
-      {mode === 'explore' && <><button type="button" className="nt-topnav-icon nt-topnav-stage" onClick={onStage} title="演示模式" aria-label="打开演示模式"><MonitorPlay size={15} /></button>
-      <button type="button" className="nt-topnav-icon" onClick={onGuide} title="使用方法" aria-label="使用方法"><CircleHelp size={16} /></button></>}
-      <span className={`nt-topnav-status ${status ? 'is-live' : ''}`} title={status || '尚未创建项目'}><i />{status || 'READY'}</span>
+      <div className="nt-sidebar-utilities">
+        <button type="button" onClick={mode === 'research' ? onTour : onGuide} title="使用方法"><CircleHelp size={17} /><span>帮助</span></button>
+        <button type="button" onClick={onShortcuts} title="快捷键"><Keyboard size={17} /><span>快捷键</span></button>
+        {mode === 'explore' && <button type="button" onClick={onStage} title="演示"><MonitorPlay size={17} /><span>演示</span></button>}
+        <button type="button" onClick={onTheme} title={theme === 'light' ? '深色主题' : '亮色主题'}>{theme === 'light' ? <Moon size={17} /> : <Sun size={17} />}<span>主题</span></button>
+      </div>
     </div>
-  </header>
+  </aside>
 }

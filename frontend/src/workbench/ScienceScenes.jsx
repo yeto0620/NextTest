@@ -23,8 +23,8 @@ export default function ScienceScenes({ view, preview, pending, last, transition
   return <section className="nt-scenes" id="scenes" aria-labelledby="nt-scenes-title">
     <header className="nt-section-head"><div><span className="nt-kicker">E1—E3 / SCIENCE SCENES</span><h2 id="nt-scenes-title">三个最容易混淆的问题</h2><p>每张场景都绑定当前项目或当前方案的真实字段；没有真实例子时明确标为概念说明。</p></div><Lightbulb size={22} /></header>
     <div className="nt-scenes-grid">
-      <Scene code="E1" title="预测不是测量" one="模型先给出估计，真实结果要等公布后才知道。" concept={!e1Real && !pending} action="seal" onFocus={onFocus}>
-        {last ? <><b>{number(last.prediction, 2)} {unit}</b><span>预测 → </span><b>{number(last.revealed_target, 2)} {unit}</b><span>历史实测；差 {number(last.absolute_error, 2)} {unit}。</span></> : pending ? <><b>{number(pending.prediction, 2)} {unit}</b><span>是当前保存预测；历史实测仍未公布。</span></> : <span>预测和实测是两种不同的事实层级。</span>}
+      <Scene code="E1" title="预测不是测量" one="模型先给出估计，历史结果要等锁定预测后才能查看。" concept={!e1Real && !pending} action="seal" onFocus={onFocus}>
+        {last ? <><b>{number(last.prediction, 2)} {unit}</b><span>预测 → </span><b>{number(last.revealed_target, 2)} {unit}</b><span>历史实测；差 {number(last.absolute_error, 2)} {unit}。</span></> : pending ? <><b>{number(pending.prediction, 2)} {unit}</b><span>是当前保存预测；历史实测仍未查看。</span></> : <span>预测和实测是两种不同的事实层级。</span>}
       </Scene>
       <Scene code="E2" title="最高预测 ≠ 最值得测" one="追最高预测可能只重复模型已经熟悉的方向；测差异更大的点可能得到更多信息。" concept={!e2Real} action="compare" onFocus={onFocus}>
         {e2Real ? <><span><Ruler size={12} /> 最高预测：{greedy.row_id} · {number(greedy.prediction, 2)} {unit}</span><span><GitBranch size={12} /> 最大差异：{disagreement.row_id} · 差异 {number(disagreement.disagreement, 2)} {unit}</span></> : <span>需要当前方案投影中的 prediction / disagreement 才能展示真实对照。</span>}

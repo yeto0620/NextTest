@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Radar, Sparkles } from 'lucide-react'
-import Landscape from './Landscape'
+import { Theme } from '@astryxdesign/core/theme'
+import { neutralTheme } from '@astryxdesign/theme-neutral/built'
+import { CircleAlert, Database, Radar, RefreshCw, Sparkles } from 'lucide-react'
 import TopNavigation from './workbench/TopNavigation'
 import WorkspaceShortcuts from './workbench/WorkspaceShortcuts'
 import PresentationStage from './workbench/PresentationStage'
@@ -23,6 +24,7 @@ import { CONCRETE_META, DatasetMetaProvider, metaFromView } from './workbench/da
 import { STRATEGY_META, comparePair, controlEntries, number, statusLabel, strategyLabel } from './workbench/data'
 
 const PROJECT_KEY = 'nexttest_v3_project_id'
+const Landscape = React.lazy(() => import('./Landscape'))
 const CUSTOM_DATASET_KEY = 'nexttest.customDataset'
 const STATUS_ORDER = ['mission', 'atlas', 'bench', 'trail']
 
@@ -62,13 +64,13 @@ function report(view, meta) {
     `- 状态：${statusLabel(snapshot.status)}`,
     `- 目标：${snapshot.goal === 'maximize' ? '最大化' : '最小化'} ${meta?.target?.displayName || '目标'}`,
     `- 策略：${strategyLabel(snapshot.strategy)}`,
-    `- 预算：${snapshot.budget}；已公布：${snapshot.revealed_count}`,
+    `- 查看次数：${snapshot.budget}；已查看：${snapshot.revealed_count}`,
     `- 数据 SHA：${snapshot.source_canonical_sha256}`,
     `- 切分 SHA：${snapshot.split_sha256}`,
     `- 初始模型 SHA：${snapshot.initial_model_sha}`,
     `- 当前模型 SHA：${snapshot.current_model_sha}`,
     `- 事件链 SHA：${view.audit?.event_chain_sha256 || '—'}`, '',
-    `| 轮次 | 历史方案 | 公布前预测 ${targetUnit} | 历史实测 ${targetUnit} | 绝对误差 ${targetUnit} |`,
+    `| 轮次 | 历史方案 | 封存预测 ${targetUnit} | 历史结果 ${targetUnit} | 绝对误差 ${targetUnit} |`,
     '|---:|---|---:|---:|---:|',
     ...(view.history || []).map(item => `| ${item.round} | ${item.row_id} | ${number(item.prediction, 3)} | ${number(item.revealed_target, 3)} | ${number(item.absolute_error, 3)} |`),
     '', '边界：固定历史数据上的探索性回放；不证明策略优越、成本节省、因果或工业部署。', '',
@@ -88,11 +90,12 @@ export default function App() {
   const [compareIds, setCompareIds] = useState([])
   const [mode, setMode] = useState('research')
   const [theme, setTheme] = useState(() => localStorage.getItem('nexttest.theme') || 'dark')
-  const [tourOpen, setTourOpen] = useState(() => localStorage.getItem('nexttest.tourSeen') !== '1')
+  const [tourOpen, setTourOpen] = useState(false)
   const [llmReady, setLlmReady] = useState(null)
   const [viewMode, setViewMode] = useState('table')
   const [active, setActive] = useState('mission')
   const [workspace, setWorkspace] = useState('mission')
+  const [landscapeOpen, setLandscapeOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
   const [presentationOpen, setPresentationOpen] = useState(false)
   const [assistantOpen, setAssistantOpen] = useState(false)
@@ -141,6 +144,10 @@ export default function App() {
     setWorkspace(id)
     window.setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0)
   }
+
+  useEffect(() => {
+    if (workspace !== 'atlas') setLandscapeOpen(false)
+  }, [workspace])
 
   useEffect(() => {
     const stored = localStorage.getItem(PROJECT_KEY)
@@ -351,6 +358,14 @@ export default function App() {
     window.setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0)
   }
   function openResearch() { setMode('research'); setWorkspace('trail'); setActive('trail'); window.setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0) }
+  function openRecovery() {
+    navigate('mission')
+    window.setTimeout(() => {
+      const details = document.querySelector('.nt-cockpit-more')
+      if (details) details.open = true
+      document.getElementById('nt-research-resume')?.focus()
+    }, 0)
+  }
 
   async function openEvidencePackage() {
     if (!projectId) return
@@ -367,14 +382,19 @@ export default function App() {
 
   const onDownload = snapshot ? openEvidencePackage : null
 
-  return <DatasetMetaProvider meta={datasetMeta}><div className={`nt-app nt-density-${mode}`}>
+  return <DatasetMetaProvider meta={datasetMeta}><Theme theme={neutralTheme} mode={theme}><div className={`nt-app nt-density-${mode}`}>
     <main className="nt-main">
-      <TopNavigation active={libraryOpen ? 'library' : observatoryOpen ? 'strategy' : dockOpen ? 'data' : active} onNavigate={navigate} mode={mode} onMode={changeMode} status={snapshot?.status} theme={theme} onTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')} onTour={() => setTourOpen(true)} llmReady={llmReady}
+      <TopNavigation active={libraryOpen ? 'library' : observatoryOpen ? 'strategy' : dockOpen ? 'data' : active} onNavigate={navigate} mode={mode} onMode={changeMode} status={snapshot ? snapshot.status === 'ready' ? snapshot.revealed_count > 0 ? '本轮完成' : '待选择' : snapshot.status === 'awaiting_user_confirmation' ? '待查看' : statusLabel(snapshot.status) : null} theme={theme} onTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')} onTour={() => setTourOpen(true)} llmReady={llmReady}
         datasetName={datasetMeta.name} onStrategy={() => { setActive('strategy'); setObservatoryOpen(true) }} onData={() => { setActive('data'); setDockOpen(true) }}
         onLibrary={() => { setActive('library'); setLibraryOpen(true) }} onGuide={() => setGuideOpen(true)} onExport={onDownload} onShortcuts={() => setShortcutsOpen(true)} onStage={() => setPresentationOpen(true)} onAssistant={() => setAssistantOpen(true)} />
 
+      <header className="nt-workspace-header">
+        <strong>{{ mission: '开始', atlas: '方案', bench: '回放', trail: '结果' }[workspace]}</strong>
+        <span className="nt-workspace-header-status"><i />{snapshot ? statusLabel(snapshot.status) : '历史回放'}</span>
+      </header>
+
       <div className={`nt-content nt-workspace nt-workspace-${workspace}`}>
-        {(error || notice) && <div role="alert" className={`nt-message ${error ? 'is-error' : ''}`}>{error || notice}</div>}
+        {(error || notice) && <WorkbenchMessage error={error} notice={notice} onRetry={() => window.location.reload()} onData={() => { setActive('data'); setDockOpen(true) }} onRecover={openRecovery} />}
         {workspace === 'mission' && mode === 'research' && <ResearchCockpit landscape={landscape} preview={preview} view={view} strategy={strategy}
           selectedCandidate={selectedCandidate} compareCandidate={compareCandidate} selection={selection} onSelectObserved={chooseObserved}
           onNavigate={navigate} onStrategy={() => { setActive('strategy'); setObservatoryOpen(true) }}
@@ -391,9 +411,9 @@ export default function App() {
           <SelectionDetail selection={selection} candidate={selectedCandidate} observed={selectedObserved} view={view} mode={mode}
             compareIds={compareIds} onCompare={addCompare} />
         </div>{previewLoading && <div className="nt-inline-loading"><span className="nt-scan-line" /> 正在读取方案投影…</div>}
-        <details className="nt-3d-details">
-          <summary><Radar size={15} /><span>三维已知材料空间</span><small>现有功能 / 只显示已观测记录</small><Chevron /></summary>
-          <Landscape landscape={landscape} pending={view?.pending} selectedId={selection?.kind === 'observed' ? selection.rowId : null} onSelectObserved={chooseObserved} />
+        <details className="nt-3d-details" onToggle={event => setLandscapeOpen(event.currentTarget.open)}>
+          <summary><Radar size={15} /><span>三维视图</span><Chevron /></summary>
+          {landscapeOpen && <React.Suspense fallback={<div className="nt-inline-loading">正在打开三维视图…</div>}><Landscape landscape={landscape} pending={view?.pending} selectedId={selection?.kind === 'observed' ? selection.rowId : null} onSelectObserved={chooseObserved} /></React.Suspense>}
         </details></>}
 
         {workspace === 'bench' && <ExperimentBench preview={preview} view={view} candidates={candidates} selectedId={benchSelectedId}
@@ -406,12 +426,9 @@ export default function App() {
 
         {workspace === 'trail' && <><EvidenceTrail view={view} landscape={landscape} preview={preview} mode={mode} scanning={scanning} onDownload={onDownload} transition={view?.transition} />
         {mode === 'research' && <ResearchLedger view={view} preview={preview} landscape={landscape} selectedCandidate={selectedCandidate} mode={mode} />}</>}
-        <footer className="nt-footer"><span>NextTest · 实验决策工作台</span><span>历史回放 / 非生产试验 / 关联不等于因果</span><span>{snapshot ? `${strategyLabel(snapshot.strategy)} · ${snapshot.revealed_count}/${snapshot.budget}` : '尚未创建项目'}</span></footer>
+        <footer className="nt-footer">历史回放 · 预测不是实测 · 关联不是因果</footer>
       </div>
     </main>
-    <button type="button" className={`nt-sprite ${llmReady === false ? 'is-disabled' : ''}`} disabled={llmReady === false} onClick={() => setAssistantOpen(true)} title={llmReady === false ? '普通模式：接入 DeepSeek 后可用' : '打开AI 助手答疑'} aria-label="打开AI 助手答疑">
-      <Sparkles size={18} /><span>AI 助手</span><small>问我</small>
-    </button>
     <NewUserTour open={tourOpen} onClose={closeTour} />
     <GuideDrawer open={guideOpen} onClose={() => setGuideOpen(false)} onNavigate={navigate} />
     <WorkspaceShortcuts open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} onNavigate={navigate}
@@ -419,6 +436,7 @@ export default function App() {
     <PresentationStage open={presentationOpen} onClose={() => setPresentationOpen(false)} landscape={landscape} view={view} preview={preview}
       selectedCandidate={selectedCandidate} compareCandidate={compareCandidate} selection={selection} onSelectObserved={chooseObserved} onNavigate={navigate} />
     <EvidenceAssistant open={assistantOpen} onClose={() => setAssistantOpen(false)} view={view} selectedCandidate={selectedCandidate}
+      onGuide={() => setGuideOpen(true)}
       onNavigate={id => { setAssistantOpen(false); navigate(id) }} onData={() => { setAssistantOpen(false); setActive('data'); setDockOpen(true) }} />
     <EvidencePackageDrawer open={packageOpen} onClose={() => setPackageOpen(false)} busy={packageBusy} error={packageError} packageData={evidencePackage}
       onMarkdown={() => evidencePackage && download(`NextTest_${evidencePackage.project_id}_evidence.md`, evidencePackage.markdown, 'text/markdown;charset=utf-8')}
@@ -427,7 +445,27 @@ export default function App() {
     {dockOpen && <DataDock onClose={() => { setDockOpen(false); setActive(workspace) }} onUseDemo={useDemo} onComplete={completeDock} mode={mode} />}
     <DatasetPassport open={passportOpen} dataset={customDataset || view?.dataset || null} onCompare={() => { setPassportOpen(false); setObservatoryOpen(true) }} onClose={() => setPassportOpen(false)} />
     <StrategyObservatory open={observatoryOpen} datasetId={customDataset?.dataset_id || view?.dataset?.dataset_id || 'demo-concrete'} onClose={() => { setObservatoryOpen(false); setActive(workspace) }} onPassport={() => { setObservatoryOpen(false); setPassportOpen(true) }} mode={mode} onMode={changeMode} />
-  </div></DatasetMetaProvider>
+  </div></Theme></DatasetMetaProvider>
 }
 
 function Chevron() { return <span className="nt-chevron" aria-hidden="true">＋</span> }
+
+function WorkbenchMessage({ error, notice, onRetry, onData, onRecover }) {
+  if (!error) return <div role="status" className="nt-message"><span>{notice}</span></div>
+  const uncertain = /只读恢复|不确定|人工核查|不要重试/.test(error)
+  const dataIssue = /数据|字段|图层|CSV/.test(error)
+  const advice = uncertain
+    ? '不要重新提交。使用项目编号打开只读恢复，检查已经保存到哪一步。'
+    : dataIssue
+      ? '打开数据检查，确认字段角色和质量闸门；原始记录不会被自动修改。'
+      : '重新读取页面；如果问题仍然存在，保留当前项目编号再进行核查。'
+  return <div role="alert" className="nt-message is-error nt-action-message">
+    <CircleAlert size={17} />
+    <div><strong>当前步骤没有完成</strong><span>{error}</span><small>{advice}</small></div>
+    {uncertain
+      ? <button type="button" onClick={onRecover}>只读恢复</button>
+      : dataIssue
+        ? <button type="button" onClick={onData}><Database size={13} /> 检查数据</button>
+        : <button type="button" onClick={onRetry}><RefreshCw size={13} /> 重新读取</button>}
+  </div>
+}

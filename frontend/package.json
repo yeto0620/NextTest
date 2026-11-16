@@ -9,8 +9,11 @@
     "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {
+    "@astryxdesign/core": "^0.7.16",
+    "@astryxdesign/theme-neutral": "^0.7.16",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.4.0",
+    "@stylexjs/stylex": "^0.19.2",
     "lucide-react": "^0.468.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

@@ -1,109 +1,76 @@
-import React from 'react'
-import {
-  Archive, ArrowRight, Beaker, Bot, Database, GitCompareArrows,
-  History, LockKeyhole, Orbit, Radar, RotateCcw, ShieldCheck,
-} from 'lucide-react'
+import React, { useState } from 'react'
+import { ArrowRight, ChevronDown, ShieldCheck } from 'lucide-react'
 import ObservationPlate from './ObservationPlate'
-import { number, statusLabel, strategyLabel } from './data'
+import ObservationConstellation from './ObservationConstellation'
+import { number } from './data'
 import { useDataset } from './dataset'
 
-const MODULES = [
-  { id: 'atlas', label: '方案域', detail: '筛选与双方案对比', icon: Orbit },
-  { id: 'bench', label: '实验台', detail: '保存预测并公布结果', icon: Beaker },
-  { id: 'strategy', label: '策略场', detail: '固定协议描述性比较', icon: GitCompareArrows },
-  { id: 'trail', label: '证据链', detail: '事件、SHA 与科研边界', icon: Radar },
-]
-
 export default function ResearchCockpit({
-  landscape, preview, view, strategy, selectedCandidate, compareCandidate,
-  selection, onSelectObserved, onNavigate, onStrategy, onLibrary, onData,
-  onAssistant, resumeId, setResumeId, onResume, busy,
+  landscape, view, selectedCandidate, compareCandidate,
+  selection, onSelectObserved, onNavigate,
+  resumeId, setResumeId, onResume, busy,
 }) {
   const meta = useDataset()
+  const [visualMode, setVisualMode] = useState('chart')
   const snapshot = view?.snapshot
-  const candidateCount = snapshot?.candidate_count ?? preview?.candidate_count
+  const pending = snapshot?.status === 'awaiting_user_confirmation'
   const revealed = snapshot?.revealed_count ?? 0
-  const budget = snapshot?.budget ?? 0
-  const projectStatus = snapshot ? statusLabel(snapshot.status) : '待创建'
-  const selectedPrediction = selectedCandidate?.prediction
-  const selectedDisagreement = selectedCandidate?.disagreement
+  const completed = revealed > 0 && snapshot?.status === 'ready'
+  const ended = ['budget_exhausted', 'candidate_pool_empty'].includes(snapshot?.status)
+  const stopped = ['release_uncertain', 'update_uncertain', 'update_failed', 'stopped'].includes(snapshot?.status)
+  const currentStep = pending || stopped ? 2 : completed || ended ? 3 : 1
+  const nextAction = pending ? '查看已锁预测' : ended ? '查看本次结果' : stopped ? '查看停止原因' : completed ? '继续下一轮' : '开始一次回放'
+  const predicted = pending ? view?.pending?.prediction : selectedCandidate?.prediction
+  const candidateId = pending ? view?.pending?.row_id : selectedCandidate?.row_id
 
-  return <section className="nt-research-cockpit" id="mission" aria-labelledby="nt-cockpit-title">
-    <header className="nt-cockpit-head">
-      <div>
-        <span className="nt-kicker">RESEARCH CONSOLE / HISTORICAL REPLAY</span>
-        <h1 id="nt-cockpit-title">实验控制台</h1>
-      </div>
-      <div className="nt-cockpit-headline">
-        <span><i className="is-live" /> 数据就绪</span>
-        <span><i className={snapshot ? 'is-live' : ''} /> {projectStatus}</span>
-        <code>{meta.shortId || meta.id}</code>
-      </div>
-    </header>
-
-    <div className="nt-cockpit-main">
-      <div className="nt-cockpit-visual">
-        <ObservationPlate mode="research" landscape={landscape} selectedCandidate={selectedCandidate}
-          compareCandidate={compareCandidate} selection={selection} onSelectObserved={onSelectObserved} />
-        <div className="nt-cockpit-signal" aria-hidden="true"><i /><i /><i /><i /><i /><i /><i /><i /><i /></div>
-      </div>
-
-      <aside className="nt-cockpit-rail" aria-label="当前实验状态">
-        <div className="nt-cockpit-rail-head">
-          <span className="nt-kicker">ACTIVE STUDY</span>
-          <ShieldCheck size={15} />
-        </div>
-        <div className="nt-cockpit-study">
-          <small>当前策略</small>
-          <strong>{strategyLabel(snapshot?.strategy || strategy)}</strong>
-          <span>{snapshot ? projectStatus : '尚未冻结实验项目'}</span>
-        </div>
-        <dl className="nt-cockpit-metrics">
-          <div><dt>观测</dt><dd>{landscape?.rows?.length ?? '—'}</dd><small>train rows</small></div>
-          <div><dt>方案</dt><dd>{candidateCount ?? '—'}</dd><small>target hidden</small></div>
-          <div><dt>公布</dt><dd>{snapshot ? `${revealed}/${budget}` : '—'}</dd><small>historical replay</small></div>
-          <div><dt>审计</dt><dd>{snapshot?.test_count ? 'PASS' : '—'}</dd><small>read only</small></div>
-        </dl>
-
-        <div className="nt-cockpit-selection">
-          <div><span className="nt-kicker">SELECTED CANDIDATE</span><LockKeyhole size={13} /></div>
-          <strong>{selectedCandidate?.row_id || '—'}</strong>
-          <dl>
-            <div><dt>预测</dt><dd>{number(selectedPrediction, 2)} <em>{meta.target.unit || ''}</em></dd></div>
-            <div><dt>差异</dt><dd>{number(selectedDisagreement, 2)}</dd></div>
-          </dl>
-          <small>历史实测标签在公布前不进入浏览器</small>
-        </div>
-
-        <button type="button" className="nt-primary nt-cockpit-primary" onClick={() => onNavigate('bench')}>
-          进入实验台 <ArrowRight size={15} />
+  return <section className="nt-replay-home" id="mission" aria-labelledby="nt-replay-title">
+    <div className="nt-replay-hero">
+      <div className="nt-replay-intro">
+        <h1 id="nt-replay-title">先看预测，<br /><em>再看答案。</em></h1>
+        <button type="button" className="nt-replay-cta nt-head-action" onClick={() => onNavigate(ended ? 'trail' : 'bench')}>
+          {nextAction}<ArrowRight size={20} />
         </button>
-        <button type="button" className="nt-cockpit-strategy" onClick={onStrategy}>
-          <GitCompareArrows size={14} /> 策略观测 <span>3 strategies</span>
-        </button>
-      </aside>
+        <span className="nt-replay-under-cta">历史回放 · 非真实实验</span>
+      </div>
+      <div className="nt-replay-preview" aria-label="当前方案预览">
+        <div className="nt-replay-preview-head"><span>本轮方案</span><strong>{candidateId || (ended ? '已结束' : '正在读取')}</strong></div>
+        <div className="nt-replay-prediction"><span>模型预测 · {meta.target.displayName}</span><strong>{predicted == null ? '—' : number(predicted, 2)} <small>{predicted == null ? '' : meta.target.unit || ''}</small></strong></div>
+        <div className="nt-replay-answer"><span>历史实测</span><strong>{pending ? '本条尚未揭晓' : revealed > 0 ? '最近结果见回放页' : '锁定后揭晓'}</strong><i /></div>
+        <div className="nt-replay-preview-foot"><ShieldCheck size={15} /> {pending ? '已锁定 · 结果隐藏' : '仅预览 · 尚未锁定'}</div>
+      </div>
     </div>
-
-    <div className="nt-cockpit-modules" aria-label="研究模块">
-      {MODULES.map(module => {
-        const Icon = module.icon
-        return <button type="button" key={module.id} onClick={() => module.id === 'strategy' ? onStrategy() : onNavigate(module.id)}>
-          <span><Icon size={16} /></span><strong>{module.label}</strong><small>{module.detail}</small><ArrowRight size={13} />
-        </button>
-      })}
-      <button type="button" onClick={onLibrary}><span><Archive size={16} /></span><strong>项目库</strong><small>证据包与项目比较</small><ArrowRight size={13} /></button>
-      <button type="button" onClick={onData}><span><Database size={16} /></span><strong>数据坞</strong><small>字段角色与数据闸门</small><ArrowRight size={13} /></button>
-      <button type="button" onClick={onAssistant}><span><Bot size={16} /></span><strong>AI 助手</strong><small>任务链与受限证据解释</small><ArrowRight size={13} /></button>
+    <div className="nt-replay-path" aria-label="完成一次回放的步骤">
+      {[
+        ['1', '选方法'],
+        ['2', '锁预测'],
+        ['3', '看答案'],
+      ].map(([step, title], index) => <button type="button" key={step}
+        className={currentStep === index + 1 ? 'is-current' : ''}
+        onClick={() => onNavigate(index === 2 && revealed > 0 ? 'trail' : 'bench')}>
+        <b>{step}</b><span><strong>{title}</strong></span>
+      </button>)}
     </div>
-
-    <footer className="nt-cockpit-footer">
-      <div><ShieldCheck size={13} /> 历史回放 ≠ 新物理实验 · 模型预测 ≠ 实测</div>
-      <form onSubmit={event => { event.preventDefault(); onResume(resumeId.trim()) }}>
-        <RotateCcw size={13} /><label htmlFor="nt-research-resume">只读恢复</label>
-        <input id="nt-research-resume" value={resumeId} onChange={event => setResumeId(event.target.value)} placeholder="p2_ / p3_ 项目编号" />
+    <div className="nt-replay-lower">
+      <button type="button" className="nt-replay-link" onClick={() => onNavigate('atlas')}>浏览全部方案 <ArrowRight size={14} /></button>
+    </div>
+    <details className="nt-replay-explore"><summary><span>数据预览</span><ChevronDown size={15} /></summary>
+      <div className="nt-replay-view-toggle" role="group" aria-label="观测图视图">
+        <button type="button" aria-pressed={visualMode === 'chart'} className={visualMode === 'chart' ? 'is-selected' : ''} onClick={() => setVisualMode('chart')}>二维图</button>
+        <button type="button" aria-pressed={visualMode === 'constellation'} className={visualMode === 'constellation' ? 'is-selected' : ''} onClick={() => setVisualMode('constellation')}>星图</button>
+      </div>
+      <div className="nt-replay-observation">
+        {visualMode === 'chart'
+          ? <ObservationPlate mode="research" landscape={landscape} selectedCandidate={selectedCandidate} compareCandidate={compareCandidate} selection={selection} onSelectObserved={onSelectObserved} />
+          : <ObservationConstellation landscape={landscape} selectedCandidate={selectedCandidate} compareCandidate={compareCandidate} selection={selection} onSelectObserved={onSelectObserved} />}
+      </div>
+      <p>图中的点来自已知训练记录。分布表示关联，不证明原因。</p>
+    </details>
+    <details className="nt-cockpit-more nt-replay-more"><summary><span>恢复项目</span><ChevronDown size={15} /></summary>
+      <form className="nt-replay-resume" onSubmit={event => { event.preventDefault(); onResume(resumeId.trim()) }}>
+        <label htmlFor="nt-research-resume">继续旧项目</label>
+        <input id="nt-research-resume" value={resumeId} onChange={event => setResumeId(event.target.value)} placeholder="粘贴项目编号" />
         <button type="submit" disabled={busy || !resumeId.trim()}>打开</button>
       </form>
-      {snapshot && <span><History size={13} /> {snapshot.project_id}</span>}
-    </footer>
+    </details>
   </section>
 }

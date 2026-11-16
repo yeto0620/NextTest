@@ -12,21 +12,22 @@ export default function MissionDeck({ landscape, preview, view, strategy, select
   const research = mode === 'research'
   return <section className="nt-mission-deck" id="mission" aria-labelledby="nt-mission-title">
     <div className="nt-mission-copy">
-      <div className="nt-mission-eyebrow"><span className="nt-signal" /> {research ? 'OBSERVATION / REPLAY' : 'NEXTTEST / EXPERIMENT OBSERVATORY'} <span>HISTORICAL REPLAY</span></div>
-      <h1 id="nt-mission-title">{research ? '观测' : <>下一次，<br /><span>先验证哪一组？</span></>}</h1>
-      {!research && <p className="nt-mission-lead">把有限的实验预算，投向最值得验证的一步。<br />先保存预测，再公布历史结果，让证据改变下一次判断。</p>}
-      {!research && <QuestionRibbon view={view} strategy={strategy} />}
+      <h1 id="nt-mission-title">先预测，<span>再揭晓。</span></h1>
+      <p className="nt-mission-lead">用已完成的实验练习做选择。</p>
+      <ol className="nt-explore-steps"><li><b>01</b><span>选一条方案</span></li><li><b>02</b><span>保存预测</span></li><li><b>03</b><span>揭晓实测</span></li></ol>
       <div className="nt-mission-actions">
-        <button type="button" className="nt-primary" onClick={() => onNavigate('bench')} aria-label="进入实验台"><Play size={15} fill="currentColor" /> {research ? '实验' : '开始下一次实验'} <ArrowRight size={15} /></button>
+        <button type="button" className="nt-primary" onClick={() => onNavigate('bench')} aria-label="开始历史回放"><Play size={15} fill="currentColor" /> 开始回放 <ArrowRight size={15} /></button>
         <button type="button" className="nt-secondary-button" onClick={() => onNavigate('atlas')} aria-label="查看方案空间"><Radar size={15} /> {research ? '方案' : '查看方案'}</button>
         <button type="button" className="nt-link-button" onClick={onGuide} aria-label="打开使用方法"><CircleHelp size={14} /> {research ? '指南' : '使用方法'}</button>
       </div>
-      <div className="nt-mission-boundary"><ShieldCheck size={13} /> 关联投影不等于因果 · 历史回放不等于新实验</div>
+      <div className="nt-mission-boundary"><ShieldCheck size={13} /> 历史回放 · 不是新实验</div>
+      {!research && <details className="nt-mission-question"><summary>为什么先锁预测？</summary><QuestionRibbon view={view} strategy={strategy} /></details>}
     </div>
     <ObservationPlate landscape={landscape} selectedCandidate={selectedCandidate} compareCandidate={compareCandidate} selection={selection} onSelectObserved={onSelectObserved} />
+    <details className="nt-mission-extra"><summary>数据与项目</summary>
     <div className="nt-mission-facts">
       <div><span><Database size={14} /> {research ? '观测' : '已知记录'}</span><strong>{landscape?.rows?.length ?? '—'}</strong><small>{research ? '训练实测' : `条训练实测 · ${contextNames.join(' / ') || `${meta.features.length} 个特征`}`}</small></div>
-      <div><span><LockKeyhole size={14} /> {research ? '方案' : '未公布方案'}</span><strong>{snapshot?.candidate_count ?? preview?.candidate_count ?? '—'}</strong><small>{research ? '标签隔离' : '历史结果不进入浏览器'}</small></div>
+      <div><span><LockKeyhole size={14} /> {research ? '方案' : '未查看方案'}</span><strong>{snapshot?.candidate_count ?? preview?.candidate_count ?? '—'}</strong><small>{research ? '标签隔离' : '历史结果不进入浏览器'}</small></div>
       <div><span><History size={14} /> {research ? '回放' : '当前回放'}</span><strong>{snapshot ? `${snapshot.revealed_count} / ${snapshot.budget}` : '—'}</strong><small>{snapshot ? statusLabel(snapshot.status) : '尚未创建项目'}</small></div>
       <button type="button" className="nt-fact-action" onClick={() => onNavigate('trail')}><ShieldCheck size={14} /><span>{research ? '证据' : '证据状态'}</span><strong>{snapshot ? (snapshot.test_count ? '可核验' : '—') : '—'}</strong><small>{research ? '事件链' : <>查看事件与边界 <ArrowRight size={12} /></>}</small></button>
     </div>
@@ -38,5 +39,6 @@ export default function MissionDeck({ landscape, preview, view, strategy, select
       </form>
       {snapshot && <span className="nt-recovery-current">当前：{snapshot.project_id} · {strategyLabel(snapshot.strategy)}</span>}
     </div>
+    </details>
   </section>
 }

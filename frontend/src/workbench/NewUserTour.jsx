@@ -1,62 +1,46 @@
 import React, { useEffect, useState } from 'react'
-import { ArrowLeft, ArrowRight, Bot, Compass, Database, FlaskConical, Orbit, ScanSearch, Sparkles, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Bot, Eye, LockKeyhole, Orbit, Sparkles, X } from 'lucide-react'
 
 const STEPS = [
   {
-    icon: Compass,
+    icon: Sparkles,
     target: '[data-tour="nav"]',
-    eyebrow: '01 / 研究导航',
-    title: '先看导航：七条研究路径',
-    body: '观测、方案、实验、策略、证据、档案、数据。研究模式先看证据，再决定下一次；每个入口对应一个明确任务。',
-    action: '高亮的是导航；点任意入口切换工作区。',
+    eyebrow: '01 / 这是做什么的',
+    title: '从已有实验里，挑出下一组值得验证的方案',
+    body: 'NextTest 不替你做真实实验。它用过去的数据模拟一次选择：先看推荐，再保存预测，最后查看一条历史结果。',
+    action: '整个平台只有一条主线：看数据 → 比方案 → 锁预测 → 看结果。',
   },
   {
     icon: Orbit,
     target: '[data-tour="atlas"]',
-    eyebrow: '02 / 方案',
-    title: '方案：先比较，不读答案',
-    body: '方案页只展示配方、预测和预测差值异；历史实测标签在你锁定并确认公布前不会出现。',
-    action: '先看方案，不要急着找“正确答案”。',
+    eyebrow: '02 / 比方案',
+    title: '先比较推荐，不提前看答案',
+    body: '方案页展示配方、预测值和模型分歧。模型分歧只表示多个模型意见不一致，不是风险、概率或置信度。',
+    action: '系统预览只帮助比较；真正的决定从“锁定预测”开始。',
   },
   {
-    icon: FlaskConical,
+    icon: LockKeyhole,
     target: '[data-tour="bench"]',
-    eyebrow: '03 / 实验台',
-    title: '实验：先保存，后公布',
-    body: '选择策略、目标和预算，锁定当前预测；确认后只公布一条历史实测，再更新模型与证据链。',
-    action: '锁定和公布是两个独立动作。',
+    eyebrow: '03 / 锁预测',
+    title: '先保存预测，再看历史结果',
+    body: '锁定后，平台会保存当前方案和预测，不能根据答案反向修改。预算表示本轮最多查看几条历史记录，不是真实实验次数。',
+    action: '锁定预测和查看结果是两个独立动作。',
   },
   {
-    icon: Database,
-    target: '[data-tour="data"]',
-    eyebrow: '04 / 数据坞',
-    title: '自己的数据先过闸门',
-    body: '导入 CSV，确认字段角色、缺失、重复和泄漏风险；冻结只读数据护照后，才进入同一套方案与实验流程。',
-    action: '原始文件只在本机处理，不进入模型上下文。',
-  },
-  {
-    icon: Sparkles,
-    target: '[data-tour="mode"]',
-    eyebrow: '05 / 研究 + 科普',
-    title: '同一事实，两种讲法',
-    body: '研究模式看配方参数、审计和 SHA；科普模式看导览、航图、体验和故事。两个模式共享方案与历史回放。',
-    action: '切换模式时，导航、组件和信息密度一起变化。',
+    icon: Eye,
+    target: '[data-tour="bench"]',
+    eyebrow: '04 / 看结果',
+    title: '查看一条结果，完成一轮回放',
+    body: '平台依次展示封存预测、历史结果、误差和模型更新。看到“本轮完成”后，你可以结束并看总结，或继续下一轮。',
+    action: '单条结果只说明这一条记录，不证明某种策略整体更好。',
   },
   {
     icon: Bot,
     target: '[data-tour="assistant"]',
-    eyebrow: '06 / AI 助手',
-    title: '不懂就直接问',
-    body: '点AI 助手或右下角AI 助手，询问当前方案、预测差值异或页面含义。普通模式下入口置灰，选择 DeepSeek 模式后可用。',
-    action: '没有 Key 时使用本地规则；有 Key 时解释公开证据。',
-  },
-  {
-    icon: ScanSearch,
-    target: '[data-tour="nav"]',
-    eyebrow: '07 / 开始',
-    title: '建议从“方案”或“实验”开始',
-    body: '如果只想快速体验：观测 → 方案 → 实验 → 锁定 → 公布。每一步都有 ? 和说明；需要完整操作表可打开桌面说明书。',
-    action: '点击“开始使用”关闭引导，随时可按顶栏 ✦ 重开。',
+    eyebrow: '05 / 随时求助',
+    title: '术语不懂，就打开助手',
+    body: '没有 DeepSeek Key 时，本地帮助仍可解释流程和下一步；配置 Key 后，助手可以解释当前项目的公开证据。',
+    action: '助手不参与推荐，也不能读取隐藏结果。现在可以开始第一次回放。',
   },
 ]
 
@@ -116,7 +100,7 @@ export default function NewUserTour({ open, onClose }) {
           <button type="button" className="nt-tour-next" onClick={next}>{last ? '开始使用' : '下一步'} <ArrowRight size={15} /></button>
         </div>
       </div>
-      <div className="nt-tour-foot">关闭后再点顶栏 ✦，会从第 1 步重新开始</div>
+      <div className="nt-tour-foot">关闭后点击左侧“帮助”，可以重新查看引导</div>
     </div>
   </div>
 }

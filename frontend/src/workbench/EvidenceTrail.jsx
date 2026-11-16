@@ -10,7 +10,7 @@ const STAGES = [
   ['training', '模型训练', 'TRAIN'],
   ['compare', '方案比较', 'COMPARE'],
   ['seal', '预测保存', 'SEAL'],
-  ['reveal', '结果公布', 'REVEAL'],
+  ['reveal', '查看结果', 'RESULT'],
   ['update', '判断更新', 'UPDATE'],
 ]
 
@@ -48,15 +48,15 @@ function buildNodes(view, landscape, preview, meta) {
     } else if (id === 'seal') {
       status = pending || history.length ? 'done' : 'waiting'
       value = pending ? `${number(pending.prediction, 2)} ${meta.target.unit || ''}` : lastHistory ? `${number(lastHistory.prediction, 2)} ${meta.target.unit || ''}` : '—'
-      detail = pending ? `${pending.row_id} 的预测已写入项目事件；真实值仍隐藏。` : lastHistory ? `最近一轮 ${lastHistory.row_id} 的预测已先于公布保存。` : '预测只在项目事件中保存。'
+      detail = pending ? `${pending.row_id} 的预测已写入项目事件；历史结果仍隐藏。` : lastHistory ? `最近一轮 ${lastHistory.row_id} 的预测已先于查看结果保存。` : '预测只在项目事件中保存。'
     } else if (id === 'reveal') {
       status = history.length ? 'done' : 'waiting'
-      value = history.length ? `${history.length} 条历史实测` : '尚未公布'
-      detail = lastHistory ? `最近 ${lastHistory.row_id}：${number(lastHistory.revealed_target, 2)} ${meta.target.unit || ''}；绝对误差 ${number(lastHistory.absolute_error, 2)} ${meta.target.unit || ''}。` : '确认前不会出现真实目标值。'
+      value = history.length ? `${history.length} 条历史结果` : '尚未查看'
+      detail = lastHistory ? `最近 ${lastHistory.row_id}：${number(lastHistory.revealed_target, 2)} ${meta.target.unit || ''}；绝对误差 ${number(lastHistory.absolute_error, 2)} ${meta.target.unit || ''}。` : '锁定预测前不会出现历史结果。'
     } else if (id === 'update') {
       status = history.length ? 'done' : 'waiting'
       value = snapshot?.current_model_sha ? `${snapshot.current_model_sha.slice(0, 12)}…` : '—'
-      detail = history.length ? `已追加 ${history.length} 条历史记录并重训；test 视图保持不变。` : '尚未发生判断更新。'
+      detail = history.length ? `已追加 ${history.length} 条历史记录并更新模型；独立留出数据保持不变。` : '尚未发生判断更新。'
     }
     return { id, title, code, index: index + 1, status, value, detail, record: pendingRecord || lastHistory }
   })
@@ -102,7 +102,7 @@ export default function EvidenceTrail({ view, landscape, preview, mode, scanning
   }
   return <section className={`nt-trail ${scanning ? 'is-scanning' : ''}`} id="trail" aria-labelledby="nt-trail-title">
     <header className="nt-section-head">
-      <div><span className="nt-kicker">{research ? '核验' : 'C1 / EVIDENCE TRAIL'}</span><h2 id="nt-trail-title">{research ? '证据链' : '预测如何被新证据改变'}</h2>{!research && <p>这条时间轴只读取项目已有记录；不重算、不补写、不修改历史。</p>}</div>
+      <div><h2 id="nt-trail-title">证据链</h2></div>
       <div className="nt-trail-actions">{onDownload && <button type="button" className="nt-secondary-button" onClick={onDownload}><Download size={14} /> 导出证据摘要</button>}<span className="nt-scan-status"><ScanLine size={14} /> {scanning ? '只读核验中…' : '只读记录'}</span></div>
     </header>
     <div className="nt-trail-scroller" ref={scroller} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp}>
@@ -129,11 +129,11 @@ export default function EvidenceTrail({ view, landscape, preview, mode, scanning
         <span>事件链</span><code>{audit?.event_chain_sha256 ? `${audit.event_chain_sha256.slice(0, 24)}…` : '—'}</code>
         {mode === 'research' && <><span>test SHA</span><code>{snapshot?.test_sha256 || '—'}</code><span>模型 SHA</span><code>{snapshot?.current_model_sha || '—'}</code></>}
       </div>
-      <p className="nt-trail-boundary"><LockKeyhole size={13} /> 时间戳和字段确认表单不在当前 API 响应中；此处按事件顺序显示，不虚构时间。{!snapshot && ' 创建项目后才会出现方案、保存、公布和更新记录。'}</p>
+      <p className="nt-trail-boundary"><LockKeyhole size={13} /> 按事件顺序展示；没有时间戳。{!snapshot && ' 创建项目后显示记录。'}</p>
       {active.id === 'update' && <StateDiff transition={transition} />}
     </div>
     {!research && <ScienceScenes view={view} preview={preview} pending={view?.pending} last={view?.history?.at(-1)} transition={transition} onFocus={focusNode} />}
-    <footer className="nt-trail-foot"><span><GitBranch size={14} /> {snapshot ? `${snapshot.revealed_count} 次公布 · 剩余预算 ${snapshot.remaining_budget}` : '尚未开始回放'}</span><span><ShieldAlert size={13} /> 历史回放，不是现场新试验</span><button type="button" className="nt-link-button" onClick={() => setSelectedNode(nodes.at(-1).id)}>展开最近的判断 <ArrowRight size={12} /></button></footer>
+    <footer className="nt-trail-foot"><span><GitBranch size={14} /> {snapshot ? `已查看 ${snapshot.revealed_count} 条 · 剩余 ${snapshot.remaining_budget} 条` : '尚未开始回放'}</span><span><ShieldAlert size={13} /> 历史回放，不是现场新试验</span><button type="button" className="nt-link-button" onClick={() => setSelectedNode(nodes.at(-1).id)}>展开最近的判断 <ArrowRight size={12} /></button></footer>
   </section>
 }
 
@@ -147,5 +147,5 @@ function StateDiff({ transition }) {
     ['observed / candidate', `${transition.before.observed_count} / ${transition.before.candidate_count}`, `${transition.after.observed_count} / ${transition.after.candidate_count}`],
     ['pending / latest row', transition.before.pending_row, transition.after.latest_revealed_row],
   ]
-  return <div className="nt-state-diff"><div className="nt-diff-head"><span>前后状态对照 / STATE DIFF</span><span>公布前 → 公布后</span></div><div className="nt-diff-rows">{rows.map(([label, before, after]) => <div key={label}><span>{label}</span><code title={String(before)}>{before ? `${String(before).slice(0, 18)}${String(before).length > 18 ? '…' : ''}` : '—'}</code><b>→</b><code title={String(after)}>{after ? `${String(after).slice(0, 18)}${String(after).length > 18 ? '…' : ''}` : '—'}</code></div>)}</div></div>
+  return <div className="nt-state-diff"><div className="nt-diff-head"><span>前后状态对照 / STATE DIFF</span><span>查看前 → 查看后</span></div><div className="nt-diff-rows">{rows.map(([label, before, after]) => <div key={label}><span>{label}</span><code title={String(before)}>{before ? `${String(before).slice(0, 18)}${String(before).length > 18 ? '…' : ''}` : '—'}</code><b>→</b><code title={String(after)}>{after ? `${String(after).slice(0, 18)}${String(after).length > 18 ? '…' : ''}` : '—'}</code></div>)}</div></div>
 }

@@ -1,14 +1,19 @@
 import React, { useEffect, useRef } from 'react'
-import { ArrowRight, Beaker, Database, Download, GitBranch, LockKeyhole, Radar } from 'lucide-react'
+import { ArrowRight, Database, Eye, LockKeyhole, Orbit } from 'lucide-react'
 import { useDataset } from './dataset'
 
 const STEPS = [
-  ['01', '准备数据', '确认来源、目标列、可控制变量和潜在泄漏。单位由用户声明，未经自动验证。', '查看数据契约', 'mission', Database],
-  ['02', '观察空间', '在航图中寻找已知区域、空白区域和仍未被验证的材料配方。', '打开可能性航图', 'atlas', Radar],
-  ['03', '比较策略', '切换预测优先、差异优先和随机对照，先看它们为什么指向不同方案。', '进入下一实验台', 'bench', Beaker],
-  ['04', '锁定预测', '在公布结果前保存方案与预测。锁定后，历史实测仍然保持隐藏。', '锁定下一次实验', 'bench', LockKeyhole],
-  ['05', '公布证据', '人工确认后才释放这一条历史实测，并把新记录追加到训练集。', '查看证据河流', 'trail', GitBranch],
-  ['06', '导出证据', '导出可复核的记录；不是保存一张截图，也不把回放说成新实验。', '导出或核查', 'trail', Download],
+  ['01', '看数据', '先认识当前数据描述什么、目标是什么，以及已经有多少条实验记录。', '回到数据概览', 'mission', Database],
+  ['02', '比方案', '比较配方、预测值和模型分歧。模型分歧只表示模型意见不一致，不是置信度。', '打开方案', 'atlas', Orbit],
+  ['03', '锁预测', '选择策略、目标和查看次数，保存当前预测。保存后不能根据答案反向修改。', '进入实验', 'bench', LockKeyhole],
+  ['04', '看结果', '打开一条过去已经完成的实验记录，对照预测、结果和误差，完成本轮。', '查看本轮证据', 'trail', Eye],
+]
+
+const TERMS = [
+  ['历史回放', '用过去的实验，模拟一次“选方案—看结果—再学习”。'],
+  ['模型分歧', '多个模型对同一方案意见有多不一致；不是概率或风险。'],
+  ['锁定预测', '先把预测保存下来，之后不能根据结果修改。'],
+  ['查看次数', '本轮最多打开几条历史结果，不是真实实验次数。'],
 ]
 
 export default function GuideDrawer({ open, onClose, onNavigate }) {
@@ -28,10 +33,10 @@ export default function GuideDrawer({ open, onClose, onNavigate }) {
     <button type="button" className="nt-guide-backdrop" aria-label="关闭使用方法" onClick={onClose} />
     <aside className="nt-guide-drawer">
       <header className="nt-guide-head">
-        <div><span className="nt-kicker">OPERATION MAP / NEXTEST</span><h2 id="nt-guide-title">六步走完一次<br />历史实验回放</h2></div>
+        <div><span className="nt-kicker">QUICK START / NEXTEST</span><h2 id="nt-guide-title">四步完成一次<br />历史实验回放</h2></div>
         <button ref={closeRef} type="button" className="nt-icon-button" onClick={onClose} aria-label="关闭使用方法">×</button>
       </header>
-      <p className="nt-guide-lead">这不是自动替你做实验。它帮助你在有限预算下决定下一条值得验证的历史方案，并把“预测”和“已经发生的结果”分开保存。</p>
+      <p className="nt-guide-lead">NextTest 用已有实验数据，帮助你选择下一组值得验证的方案。先锁定模型预测，再查看一条历史结果，观察证据如何改变下一步。</p>
       <div className="nt-guide-steps">
         {STEPS.map(([index, title, detail, action, target, Icon]) => <article className="nt-guide-step" key={index}>
           <span className="nt-guide-index">{index}</span>
@@ -41,11 +46,15 @@ export default function GuideDrawer({ open, onClose, onNavigate }) {
           </div>
         </article>)}
       </div>
+      <div className="nt-guide-terms" aria-label="常用术语白话解释">
+        <strong>四个常用词</strong>
+        <dl>{TERMS.map(([term, meaning]) => <div key={term}><dt>{term}</dt><dd>{meaning}</dd></div>)}</dl>
+      </div>
       <div className="nt-guide-boundary">
         <strong>当前版本的边界</strong>
-        <span>✓ 当前数据集的完整历史回放</span>
-        <span>✓ 三种策略 · 预测先保存 · 事件可核验</span>
-        <span>✓ 自定义 CSV：Data Dock</span>
+        <span>✓ 当前数据集的历史回放</span>
+        <span>✓ 三种选择方法 · 预测先保存 · 记录可核验</span>
+        <span>✓ 可导入自己的 CSV 数据</span>
         <span>— 真实新实验录入：尚未开放</span>
       </div>
       <footer><span>ESC 关闭</span><span>所有计算均在本机完成</span></footer>
