@@ -27,7 +27,7 @@ def test_main_flow_is_visible_without_duplicate_progress_bars():
     nav = read("frontend/src/workbench/TopNavigation.jsx")
     assert "<JourneyProgress" not in app
     assert "完成一次回放的步骤" in home
-    for label in ("开始", "方案", "回放", "结果"):
+    for label in ("数据", "方案", "实验", "结果"):
         assert f"label: '{label}'" in nav
     assert "查看结果" not in home
 

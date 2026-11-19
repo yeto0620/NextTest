@@ -172,8 +172,12 @@ export default function App() {
   }, [datasetId])
 
   useEffect(() => {
-    if (view && snapshot?.status !== 'ready') return undefined
+    if (view && snapshot?.status !== 'ready') {
+      if (['budget_exhausted', 'candidate_pool_empty'].includes(snapshot?.status)) setPreview(null)
+      return undefined
+    }
     let cancelled = false
+    setPreview(null)
     setPreviewLoading(true)
     const path = isCustom ? '/api/custom/preview' : '/api/preview'
     const body = isCustom ? { dataset_id: datasetId, goal, strategy, threshold, project_id: previewProjectId } : { goal, strategy, threshold, project_id: previewProjectId }
@@ -182,7 +186,7 @@ export default function App() {
       .catch(err => { if (!cancelled && !String(err.message).includes('candidate preview not allowed')) setError(`方案投影不可用：${err.message}`) })
       .finally(() => { if (!cancelled) setPreviewLoading(false) })
     return () => { cancelled = true }
-  }, [strategy, goal, threshold, previewProjectId, snapshot?.status, datasetId, isCustom])
+  }, [strategy, goal, threshold, previewProjectId, snapshot?.status, snapshot?.current_model_sha, datasetId, isCustom])
 
   useEffect(() => {
     const sections = STATUS_ORDER.map(id => document.getElementById(id)).filter(Boolean)
@@ -389,7 +393,7 @@ export default function App() {
         onLibrary={() => { setActive('library'); setLibraryOpen(true) }} onGuide={() => setGuideOpen(true)} onExport={onDownload} onShortcuts={() => setShortcutsOpen(true)} onStage={() => setPresentationOpen(true)} onAssistant={() => setAssistantOpen(true)} />
 
       <header className="nt-workspace-header">
-        <strong>{{ mission: '开始', atlas: '方案', bench: '回放', trail: '结果' }[workspace]}</strong>
+        <strong>{{ mission: '数据', atlas: '方案', bench: '实验', trail: '结果' }[workspace]}</strong>
         <span className="nt-workspace-header-status"><i />{snapshot ? statusLabel(snapshot.status) : '历史回放'}</span>
       </header>
 
@@ -416,7 +420,7 @@ export default function App() {
           {landscapeOpen && <React.Suspense fallback={<div className="nt-inline-loading">正在打开三维视图…</div>}><Landscape landscape={landscape} pending={view?.pending} selectedId={selection?.kind === 'observed' ? selection.rowId : null} onSelectObserved={chooseObserved} /></React.Suspense>}
         </details></>}
 
-        {workspace === 'bench' && <ExperimentBench preview={preview} view={view} candidates={candidates} selectedId={benchSelectedId}
+        {workspace === 'bench' && <ExperimentBench preview={preview} previewLoading={previewLoading} view={view} candidates={candidates} selectedId={benchSelectedId}
           compareIds={compareIds} strategy={strategy} goal={goal} threshold={threshold} budget={budget} busy={busy} mode={mode}
           hypothesis={hypothesis} hypothesisLocal={hypothesisLocal} reflectionHypothesis={reflectionHypothesis} transition={view?.transition}
           onHypothesisChange={value => { setHypothesis(value); setHypothesisLocal(true) }} onHypothesisSkip={() => { setHypothesis({ choice: null, note: '', skipped: true }); setHypothesisLocal(true) }}

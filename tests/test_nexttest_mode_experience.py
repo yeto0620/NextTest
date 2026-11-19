@@ -14,10 +14,10 @@ def read(relative: str) -> str:
 
 def test_home_has_one_plain_language_path():
     cockpit = read("frontend/src/workbench/ResearchCockpit.jsx")
-    for label in ("选方法", "锁预测", "看答案"):
+    for label in ("选方法", "锁预测", "看结果"):
         assert label in cockpit
     assert 'className="nt-replay-cta nt-head-action"' in cockpit
-    assert "先看预测" in cockpit and "再看答案" in cockpit
+    assert "下一批实验" in cockpit and "先做哪几组" in cockpit
 
 
 def test_app_removes_duplicate_journey_and_does_not_force_tour():
@@ -39,8 +39,8 @@ def test_research_home_shows_prediction_without_pretending_it_is_measured():
     assert "模型预测" in cockpit and "历史实测" in cockpit
     assert "锁定后揭晓" in cockpit
     assert "仅预览 · 尚未锁定" in cockpit
-    assert "view?.pending?.prediction" in cockpit
-    assert "revealed_target" not in cockpit
+    assert "current?.prediction" in cockpit and "pending ? view?.pending" in cockpit
+    assert "pending?.revealed_target" not in cockpit
     assert "pending ? '本条尚未揭晓'" in cockpit
     assert "ended ? '查看本次结果'" in cockpit
 

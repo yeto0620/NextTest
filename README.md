@@ -1,116 +1,163 @@
-# NextTest V1.2 — 下一次，先验证什么？
+# NextTest 智试 V1.2 — 下一批实验，先做哪几组？
 
-**面向有限试验预算的实验决策智能体工作台。**
+> **面向新材料与配方研发的实验决策智能体。**
+>
+> 输入历史实验、候选配方、成本约束和研发目标；输出下一批最值得做的实验，并留下可审计的证据链。
 
-NextTest 不只预测一个结果，而是从尚未公布的历史方案中提出“下一次最值得验证什么”，先保存预测，人工确认后再公布历史实测，并把模型、SHA 和证据链一起更新。
+[▶ 功能演示](docs/NextTest_Demo.mp4) · [快速开始](#快速开始) · [使用说明](docs/DOWNLOAD_AND_USE_CN.md) · [图文说明书](docs/NextTest_使用说明书_图文版.docx)
 
-[▶ 1 分 44 秒功能演示（中文配音 + 字幕）](docs/NextTest_Demo.mp4) · [快速开始](#下载与快速开始) · [DeepSeek 配置](#deepseek-配置) · [使用说明](docs/DOWNLOAD_AND_USE_CN.md)
+---
 
+## 一句话
 
-> **普通访客请先看这里：** 不要直接点 `Code → Download ZIP` 后运行，源码包需要 Node/npm 构建。最简单的使用方式是下载下面 Release 里的 `Install_NextTest.cmd`，双击即可，不需要命令行、Node 或 cd。
+**让每一次实验，都做在信息量最大的地方。**
 
-## 普通用户：3 步使用
-
-完整图文步骤见 [安装与使用教程](docs/INSTALL_TUTORIAL_CN.md)。
-
-1. 打开 [Releases](https://github.com/yeto0620/NextTest/releases/tag/v1.2.0)，下载 `Install_NextTest.cmd`。
-2. 双击它；Windows 提示时选择“更多信息 → 仍要运行”。
-3. 等安装窗口自动下载、安装依赖并启动；浏览器会打开工作台。
-4. 以后直接双击桌面的 **NextTest**，在弹窗中选择 **普通模式** 或 **DeepSeek 模式**。
-5. 选择 DeepSeek 模式时，如果没有 Key，会自动打开配置窗口；配置成功后直接启动。
-
-不需要 Node/npm，不需要 `cd frontend`，也不要在 Desktop 下手动运行 `npm ci`。
-
-以后更新时重新双击 `Install_NextTest.cmd` 即可；它会原地更新现有目录，Python 依赖和 DeepSeek Key 会保留。
-
-安装完成后只创建一个快捷方式：
+NextTest 不只是一个预测模型。它把研发团队每天面对的问题变成一个可执行流程：
 
 ```text
-NextTest    打开后选择普通模式或 DeepSeek 模式
+已有实验记录 + 候选配方 + 预算/成本 + 目标
+        ↓
+预测性能、估计不确定性、比较候选
+        ↓
+推荐下一批最值得做的实验
+        ↓
+先锁定预测，再查看历史结果
+        ↓
+更新模型、留下证据
 ```
 
-普通模式下 AI 助手和右下角提问入口置灰；DeepSeek 模式可用。
+混凝土只是当前**可复现的公开案例**。同一套决策引擎面向的是材料、化工、电池、建材等配方研发场景。
 
-## 不想用命令行？
+---
 
-直接下载并双击：
+## 具体应用场景
 
-[Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v1.2.0/Install_NextTest.cmd)
+| 场景 | 输入变量 | 优化目标 | 当前状态 |
+|---|---|---|---|
+| 电池电极/浆料配方 | 导电剂、粘结剂、固含量、压实密度 | 容量、内阻、循环寿命 | 目标场景 |
+| 化工涂料/胶粘剂 | 树脂、固化剂、填料、助剂 | 附着力、耐候、VOC、成本 | 目标场景 |
+| 混凝土/建材 | 水泥、矿渣、粉煤灰、水胶比 | 强度、耐久、成本 | 可复现案例 |
+| 合金/热处理 | 成分、温度、时间、冷却速率 | 硬度、韧性、成本 | 扩展方向 |
 
-它会自动下载 ReadyToRun 包、解压到 `%USERPROFILE%\NextTest`、安装 Python 依赖并启动。**不需要 Node/npm，也不需要手动 cd。**
+**首选落地场景：新材料/配方研发。**
+不是因为“所有实验都能做”，而是因为这类实验同时具备三个特征：
 
-## 这是什么
+1. 候选空间大，但每次实验很贵；
+2. 有历史实验记录，但样本量有限；
+3. 目标、约束和成本可以明确表达。
 
-NextTest 是一个可本地运行的 Web 工作台，用公开历史数据做可复核的实验决策回放：
+---
 
-- 先看已知记录和方案，再决定下一次验证；
-- 预测与实测分离，方案标签只在人工确认后公布；
-- 研究模式服务科研审查，科普模式服务公众理解，两者共享同一事实源；
-- 所有推荐、误差和证据摘要来自固定数据与确定性计算。
+## 它到底解决什么问题
 
-## 能做什么
+研发团队通常不缺一个“预测值”，缺的是：
 
-### 01 研究模式
+- 下一批实验应该做哪几组？
+- 在预算只够做 10 次时，哪几次信息量最大？
+- 预测不确定性高的方案，值不值得优先验证？
+- 为什么推荐它？出了问题能不能复盘？
 
-观测、方案、实验、策略、证据、档案、数据七个入口。首屏直接呈现方案表格、预测、预测差异和审计信息。
+NextTest 的输出不是一张预测图，而是：
 
-### 02 科普模式
+```text
+下一批建议实验（排序 + 理由 + 不确定性）
++ 预测值与历史结果的分开记录
++ 可带走的证据报告
+```
 
-导览、航图、体验、故事四个入口，用同一套方案和历史回放解释“为什么下一次要这样选”。
+---
 
-### 03 实验台
+## 输入 / 输出 / 指标
 
-选择方案 → 保存预测 → 人工确认 → 公布一条历史实测 → 更新模型和证据链。关键动作可只读恢复。
+| 维度 | NextTest |
+|---|---|
+| 输入 | 历史实验表、候选配方/工艺参数、目标列、约束、实验预算 |
+| 输出 | 下一批推荐实验、预测值、模型分歧/不确定性、推荐理由、证据包 |
+| 评价 | Top-k 命中率、达到目标所需实验次数、累计 regret、单次有效提升成本 |
+| 部署 | 本地 Web / 实验室内网；Python + FastAPI + React，无需云端上传原始数据 |
 
-### 04 数据坞
+这与人脸检测的“输入图像 → 输出人脸框 → mAP/FPS”是同一类产品逻辑：
 
-导入本地 CSV，检查字段角色、缺失、重复和泄漏风险，确认后冻结只读数据护照；原始文件留在本机。
+```text
+固定输入 → 固定输出 → 固定指标 → 固定部署位置
+```
 
-### 05 策略观测台
+---
 
-固定协议、固定种子，对照随机、预测最优和预测差异三种策略，查看预算轨迹、运行矩阵和失败单元。
+## 技术架构
 
-### 06 项目库与证据包
+### 已实现
 
-把项目变成可复核证据：项目卡片、来源/切分可比性检查、确定性 JSON/Markdown 证据包、公开 SHA 和已公布历史。
+- **代理模型**：随机森林回归，对候选配方做性能预测；
+- **候选排序**：按预测目标、模型分歧和随机基线生成推荐；
+- **决策回放**：固定历史数据上先锁定预测、再查看历史结果；
+- **证据链**：项目状态、模型 SHA、事件记录、只读取回、证据包；
+- **数据坞**：本地 CSV 字段角色、质量闸门、只读数据护照；
+- **研究/科普双模式**：同一事实源，不同信息密度；
+- **受限 LLM**：DeepSeek 只解释公开证据，不参与推荐、排序、训练或数字生成。
 
-### 07 AI 助手
+### 下一阶段接入
 
-DeepSeek 解释白名单公开证据；没有 Key 时自动使用本地规则。LLM 不参与选点、排序、训练、阈值或科研数字生成。
+- XGBoost / LightGBM / Gaussian Process 多代理模型；
+- Expected Improvement、UCB、PI 等采集函数；
+- q-EI / batch selection，成本约束下的批量推荐；
+- Pareto 前沿与 NSGA-II 多目标优化；
+- 电池、化工、建材领域模板与单位/约束配置；
+- Top-k 命中率、experiments-to-target 等应用指标。
 
-### 08 新手引导与亮色主题
+> 当前版本不把“路线图”冒充“已实现”。现有演示的可复现案例是 UCI Concrete：252 条训练记录、89 个候选、84 条独立留出。
 
-首次进入会自动打开 4 步新手引导；顶栏的 ✦ 可随时重开。顶栏太阳/月亮按钮切换亮色/深色主题，选择会保存在本机。
+---
 
+## 产品界面
 
-## 创新点
+### 研究模式
 
-1. **从“预测结果”推进到“决定下一次验证”**
-   把有限预算花在最值得验证的一步，而不是只追求一个预测值。
+面向研发工程师：候选方案、预测、模型分歧、实验预算、先锁定后查看、证据记录。
 
-2. **先保存，后公布**
-   方案选择阶段不读取隐藏结果，人工确认后才释放一条历史实测，降低数据泄漏和事后改答案风险。
+### 科普模式
 
-3. **研究 / 科普共享同一事实源**
-   专业用户看字段、单位、模型、SHA 和审计；公众看导览、航图和故事，底层方案与证据完全一致。
+面向评委/公众：用同一套数据解释“为什么要先锁定预测”“为什么历史回放不是新实验”。
 
-4. **可审计的证据闭环**
-   项目编号、事件记录、模型 SHA、只读恢复、证据包和项目库，让每次判断可以复盘。
+### 实验台
 
-## 下载与快速开始
+```text
+选择方法 → 比较方案 → 锁定预测 → 查看历史结果 → 本轮完成
+```
 
-### 最快方式：ReadyToRun
+### 证据包
 
-1. 下载 [NextTest_V1.2_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v1.2.0/NextTest_V1.2_ReadyToRun.zip)（已包含前端构建，不需要 Node/npm）。
-2. **解压**到本地目录，不要直接在压缩包里运行。
-3. 进入解压后的文件夹，确认能看到 `setup_nexttest.cmd`、`start_nexttest.cmd`、`frontend`。
-4. 双击 `setup_nexttest.cmd`。
+项目摘要、来源/切分、已查看历史、模型 SHA、固定限制、payload SHA；可导出 JSON/Markdown。
 
-首次会自动安装 Python 依赖并启动；浏览器打开 `127.0.0.1:8501–8510`。
+---
 
-### 从 GitHub 源码运行
+## 为什么不是“又一个预测工具”
 
-需要 Python 3.13 和 Node.js LTS：
+1. **决策而不是预测**：输出下一批实验，而不是只给一个数值。
+2. **先锁定，后查看**：预测先保存，避免看到结果后改答案。
+3. **不确定性可见**：模型分歧不是置信度，但它告诉你哪里值得多看一眼。
+4. **证据可审计**：推荐、结果、误差和模型版本都能复盘。
+5. **本地部署**：原始实验数据不必上传云端。
+6. **可复制**：从混凝土案例抽象出配方研发的通用流程。
+
+---
+
+## 快速开始
+
+### 普通用户：一键安装
+
+1. 打开 [Releases v1.2.0](https://github.com/yeto0620/NextTest/releases/tag/v1.2.0)，下载 `Install_NextTest.cmd`；
+2. 双击运行；Windows 提示时选择“更多信息 → 仍要运行”；
+3. 等待安装完成，浏览器自动打开工作台。
+
+不需要 Node/npm，不需要 `cd frontend`。
+
+### 直接下载
+
+- [Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v1.2.0/Install_NextTest.cmd)
+- [NextTest_V1.2_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v1.2.0/NextTest_V1.2_ReadyToRun.zip)
+
+### 从源码运行
 
 ```powershell
 python -m pip install -r requirements-web.txt
@@ -122,91 +169,39 @@ cd ..
 .\setup_nexttest.cmd
 ```
 
-### 常见错误
+需要 Python 3.13 和 Node.js LTS。
 
-**`npm` 不是内部或外部命令**
+---
 
-说明 Node.js 没有安装或没有进入 PATH。安装 Node.js LTS 后，**关闭并重新打开 PowerShell**，再运行 `npm -v`。如果不想安装 Node，请使用 ReadyToRun 压缩包。
+## 当前边界
 
-**`cd frontend` 找不到路径**
+- 这是**历史数据上的决策回放**，不是新的物理实验；
+- 预测不是实测，模型分歧不是置信区间/成功概率；
+- 当前单故障/单目标假设，未知故障、复合故障尚未覆盖；
+- 直接物理索引不等于故障类别，类别映射需要单独校准；
+- 混凝土是公开可复现案例，电池/化工场景需要企业数据接入和领域验证。
 
-说明当前目录不是解压后的 NextTest 根目录。请先 `cd` 到包含 `start_nexttest.cmd` 的文件夹，或在文件资源管理器中进入该文件夹后再打开 PowerShell。
+---
 
-**不要这样做**
-
-不要在自己的 `Desktop` 目录直接运行 `npm ci` 或 `cd frontend`；要先解压并进入项目根目录。
-
-### 启动
-
-普通本地模式：
-
-```powershell
-.\start_nexttest.cmd
-```
-
-DeepSeek 模式：
-
-```powershell
-.\configure_nexttest_llm.cmd
-.\start_nexttest_with_llm.cmd
-```
-
-启动后浏览器打开 `127.0.0.1:8501–8510` 中自动选择的端口。
-
-完整下载、安装、数据和故障排查说明见 [INSTALL_TUTORIAL_CN.md](docs/INSTALL_TUTORIAL_CN.md)；技术环境说明见 [DOWNLOAD_AND_USE_CN.md](docs/DOWNLOAD_AND_USE_CN.md)。
-
-## DeepSeek 配置
-
-当前版本已接入 DeepSeek，真实请求已通过 HTTP 200 验收。
-
-- 首次配置输入 Key 时使用遮罩；
-- 只有 DeepSeek 返回 HTTP 200 才保存；
-- 使用 Windows current-user DPAPI 加密，保存在仓库外的 `%LOCALAPPDATA%\NextTest\secrets\deepseek.key`；
-- 不会写入 `.env`、日志、测试或 Git；
-- 默认使用本地规则解释，配置 Key 后使用 `deepseek-chat`；
-- 换电脑后重新运行 `configure_nexttest_llm.cmd` 即可。
-
-## 技术结构
+## 目录
 
 ```text
-frontend/          React + Vite + Three.js 工作台
-nexttest/          FastAPI、历史回放、数据坞、策略、项目库、证据包
-scripts/           一键启动、UI worker、公开门禁
-tests/             核心、API、UI 合同和公开发布测试
-docs/              产品、契约、下载与使用说明
+frontend/          React + Vite 工作台
+nexttest/          FastAPI、实验回放、证据包
+scripts/           启动、安装、公开门禁
+tests/             API、UI、可用性、公开边界
+docs/              安装、说明书、证据契约
 ```
-
-固定示例：UCI Concrete，252 条训练、89 条方案、84 条独立留出，固定 28 天龄期。
 
 ## 验证
 
 ```text
 Python 测试：80 passed
 前端构建：通过
-公开门禁：release_ready=true，errors=[]
-浏览器：1280 / 1440 / 1920 无横向溢出，console errors=[]
-DeepSeek：HTTP 200，deepseek-chat 调用成功
+公开门禁：release_ready = true
 ```
 
-## 文档
-
-- [下载与使用说明](docs/DOWNLOAD_AND_USE_CN.md)
-- [Windows 快速启动](docs/WINDOWS_QUICKSTART.md)
-- [证据包契约](docs/EVIDENCE_PACKAGE_CONTRACT.md)
-- [项目库契约](docs/PROJECT_LIBRARY_CONTRACT.md)
-- [公开版检查清单](docs/GITHUB_RELEASE_CHECKLIST.md)
-- [项目方案（详细版）](docs/NextTest_项目方案_详细版.docx)
-- [图文使用说明书](docs/NextTest_使用说明书_图文版.docx)
-- [最终交付报告](docs/FINAL_RELEASE_REPORT.md)
-
-## 适用范围
-
-NextTest 适合有限预算的历史数据回放、实验决策教学、科研流程审查和公众科普。推荐、预测和证据摘要用于复盘与讨论；真实实验需要领域专家结合实验条件复核。
-
-## 版权与使用
+## 版权
 
 Copyright © 2026 Wu Yetao. All rights reserved.
-
-本仓库用于项目展示、学术交流与竞赛评审。未经作者书面许可，不得复制、修改、再发布、商业使用或将本项目及其衍生版本用于其他竞赛申报。
-
-第三方依赖分别遵循其原始许可证。本声明不改变第三方组件的许可条件。
+未采用开源许可证，保留全部权利。

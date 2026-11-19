@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { Archive, Beaker, ChevronRight, CircleHelp, Database, Download, GitCompareArrows, Keyboard, MonitorPlay, Moon, Orbit, PanelLeftClose, Radar, ScanSearch, Sparkles, Sun } from 'lucide-react'
 
 const PAGES = [
-  { id: 'mission', label: '开始', icon: ScanSearch },
+  { id: 'mission', label: '数据', icon: ScanSearch },
   { id: 'atlas', label: '方案', icon: Orbit },
-  { id: 'bench', label: '回放', icon: Beaker },
+  { id: 'bench', label: '实验', icon: Beaker },
   { id: 'trail', label: '结果', icon: Radar },
 ]
 
