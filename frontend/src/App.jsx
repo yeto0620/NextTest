@@ -412,8 +412,8 @@ export default function App() {
           <PossibilityAtlas observedRows={landscape?.rows || []} candidates={candidates} selectedId={selection?.kind === 'candidate' ? selection.rowId : null}
             compareIds={compareIds} onSelect={chooseCandidate} onCompare={addCompare} viewMode={viewMode} onViewMode={setViewMode}
             view={view} mode={mode} hideAside loading={previewLoading} strategy={strategy} onStrategy={changeStrategy} preview={preview} />
-          <SelectionDetail selection={selection} candidate={selectedCandidate} observed={selectedObserved} view={view} mode={mode}
-            compareIds={compareIds} onCompare={addCompare} />
+          {(!['budget_exhausted', 'candidate_pool_empty'].includes(view?.snapshot?.status) || selectedObserved) && <SelectionDetail selection={selection} candidate={selectedCandidate} observed={selectedObserved} view={view} mode={mode}
+            compareIds={compareIds} onCompare={addCompare} />}
         </div>{previewLoading && <div className="nt-inline-loading"><span className="nt-scan-line" /> 正在读取方案投影…</div>}
         <details className="nt-3d-details" onToggle={event => setLandscapeOpen(event.currentTarget.open)}>
           <summary><Radar size={15} /><span>三维视图</span><Chevron /></summary>

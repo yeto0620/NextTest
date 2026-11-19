@@ -31,19 +31,21 @@ function HistoryOutcome({ item }) {
 export default function ExperimentBench(props) {
   const [helpTopic, setHelpTopic] = useState(null)
   const meta = useDataset()
-  const { preview, view, candidates, selectedId, compareIds, strategy, goal, threshold, budget, busy, mode,
+  const { preview, previewLoading, view, candidates, selectedId, compareIds, strategy, goal, threshold, budget, busy, mode,
     hypothesis, hypothesisLocal, reflectionHypothesis, onHypothesisChange, onHypothesisSkip, transition, onNavigate, onResearch,
     onSelect, onCompare, onStrategy, onGoal, onThreshold, onBudget, onLock, onReveal, onRecommend, onRefresh, onReset } = props
   const snapshot = view?.snapshot
   const research = mode === 'research'
   const pending = view?.pending
   const last = view?.history?.at(-1)
+  const recommended = preview?.selected || null
   const selected = candidates.find(row => row.row_id === selectedId) || null
   const compareRow = candidates.find(row => compareIds.includes(row.row_id) && row.row_id !== selectedId) || candidates.find(row => row.row_id !== selectedId) || null
   const lockedStrategy = snapshot?.strategy || strategy
-  const canLock = !busy && Boolean(selected || pending)
+  const canLock = !busy && !previewLoading && Boolean(recommended?.row_id)
   const isReady = !snapshot || snapshot.status === 'ready'
   const roundComplete = Boolean(last && snapshot?.status === 'ready')
+  const ended = ['budget_exhausted', 'candidate_pool_empty'].includes(snapshot?.status)
   const help = {
     strategy: '这是挑选下一条历史方案的方法：按预测值、按模型分歧，或随机选作参照。选法不同，推荐顺序可能不同；这里不证明哪一种整体更好。',
     goal: '选择优先查看预测强度较高或较低的方案。参考线只是你设定的目标，不是模型保证，也不改变历史实测。',
@@ -52,6 +54,12 @@ export default function ExperimentBench(props) {
   const helpButton = topic => <button type="button" className="nt-help" title={`解释${topic === 'strategy' ? '策略' : topic === 'goal' ? '目标' : '查看次数'}`} aria-label={`解释${topic === 'strategy' ? '策略' : topic === 'goal' ? '目标' : '查看次数'}`} aria-expanded={helpTopic === topic} aria-controls={`nt-help-${topic}`} onClick={() => setHelpTopic(current => current === topic ? null : topic)}>?</button>
   const helpText = topic => helpTopic === topic && <p id={`nt-help-${topic}`} className="nt-control-help" role="status">{help[topic]}</p>
   const actionLabel = pending ? '揭晓历史结果' : roundComplete ? '继续下一轮' : '锁定预测'
+  if (ended) return <section className="nt-bench nt-bench-ended" id="bench" aria-labelledby="nt-bench-title">
+    <header className="nt-section-head"><div><span className="nt-kicker">历史回放 · 已结束</span><h2 id="nt-bench-title">本次回放完成</h2></div><div className="nt-bench-status"><span className="nt-signal" />{statusLabel(snapshot.status)}</div></header>
+    <div className="nt-bench-focus nt-bench-end-summary"><div><span className="nt-bench-focus-step">已查看 {snapshot.revealed_count ?? 0} / {snapshot.budget ?? 0} 条</span><strong>预测和历史结果已完成对照</strong><small>本次没有下一轮。可在「结果」核对证据链，或新建一次回放。</small></div><div className="nt-bench-focus-action"><button type="button" className="nt-primary" onClick={() => onNavigate('trail')}>查看结果 <ArrowRight size={16} /></button><button type="button" className="nt-secondary-button" onClick={onReset}><PlusIcon /> 新建项目</button></div></div>
+    {last && <HistoryOutcome item={last} />}
+    <div className="nt-bench-foot"><span><History size={13} /> 项目 {snapshot.project_id} · 剩余预算 {snapshot.remaining_budget ?? 0} / {snapshot.budget ?? 0}</span>{snapshot.current_model_sha && <code>model {snapshot.current_model_sha.slice(0, 12)}…</code>}</div>
+  </section>
   return <section className="nt-bench" id="bench" aria-labelledby="nt-bench-title">
     <header className="nt-section-head">
       <div><span className="nt-kicker">第 {snapshot?.revealed_count ? snapshot.revealed_count + 1 : 1} 轮</span><h2 id="nt-bench-title">{pending ? '看结果' : roundComplete ? '本轮完成' : '锁定预测'}</h2></div>
@@ -61,11 +69,11 @@ export default function ExperimentBench(props) {
     <div className="nt-bench-focus">
       <div><span className="nt-bench-focus-step">{pending ? '第 2 步 / 2' : '第 1 步 / 2'}</span>
         <strong>{pending ? '查看真实记录' : '先保存模型的预测'}</strong>
-        <small>{pending ? '揭晓前，实测值不会出现在页面或请求中。' : selected ? `当前预览：${selected.row_id} · 预测 ${number(selected.prediction, 2)} ${meta.target.unit || ''}` : '正在读取方案，读完后即可继续。'}</small>
+        <small>{pending ? '揭晓前，实测值不会出现在页面或请求中。' : recommended ? `方法推荐：${recommended.row_id} · 预测 ${number(recommended.prediction, 2)} ${meta.target.unit || ''}` : '正在读取方法推荐，读完后即可继续。'}</small>
       </div>
       <div className="nt-bench-focus-action">
         {!snapshot && <Button label={busy ? '正在锁定…' : actionLabel} variant="primary" size="lg" className="nt-primary" isDisabled={!canLock} onClick={onLock}><LockKeyhole size={17} /> {busy ? '正在锁定…' : actionLabel}<ArrowRight size={17} /></Button>}
-        {snapshot?.status === 'ready' && <Button label={busy ? '正在保存…' : actionLabel} variant="primary" size="lg" className="nt-primary" isDisabled={busy} onClick={onRecommend}><LockKeyhole size={17} /> {busy ? '正在保存…' : actionLabel}<ArrowRight size={17} /></Button>}
+        {snapshot?.status === 'ready' && <Button label={busy ? '正在保存…' : actionLabel} variant="primary" size="lg" className="nt-primary" isDisabled={!canLock} onClick={onRecommend}><LockKeyhole size={17} /> {busy ? '正在保存…' : actionLabel}<ArrowRight size={17} /></Button>}
         {pending && <Button label={busy ? '正在读取…' : actionLabel} variant="primary" size="lg" className="nt-primary nt-primary-amber" isDisabled={busy} onClick={() => onReveal(pending.recommendation_id)}><Beaker size={17} /> {busy ? '正在读取…' : actionLabel}<ArrowRight size={17} /></Button>}
         {snapshot && <div className="nt-secondary-actions"><button type="button" className="nt-link-button" onClick={onRefresh} disabled={busy}><RefreshCw size={13} /> 刷新</button><button type="button" className="nt-link-button" onClick={onReset}><PlusIcon /> 新建项目</button></div>}
       </div>
@@ -114,7 +122,7 @@ export default function ExperimentBench(props) {
 
       <div className="nt-bench-compare">
         {!roundComplete && <>
-        <div className="nt-compare-head"><span>两条方案 · 点击可切换</span>{pending && <span className="nt-pending-flag"><LockKeyhole size={12} /> 预测已保存</span>}</div>
+        <div className="nt-compare-head"><span>两条方案 · 点击可查看；锁定使用上方方法推荐</span>{pending && <span className="nt-pending-flag"><LockKeyhole size={12} /> 预测已保存</span>}</div>
         <div className="nt-compare-grid">
           <CandidateCard row={selected} pending={pending?.row_id === selected?.row_id ? pending : null} active side="A" onSelect={onSelect} onCompare={onCompare} compare={compareIds.includes(selected?.row_id)} research={research} />
           <CandidateCard row={compareRow} active={false} pending={pending?.row_id === compareRow?.row_id ? pending : null} side="B" onSelect={onSelect} onCompare={onCompare} compare={compareIds.includes(compareRow?.row_id)} research={research} />
@@ -123,7 +131,7 @@ export default function ExperimentBench(props) {
         {pending && <div className="nt-pending-banner"><LockKeyhole size={15} /><div><strong>预测已保存 · 实测仍隐藏</strong><p>点击“揭晓历史结果”查看实测。</p></div><span>{number(pending.prediction, 2)} {meta.target.unit || ''}</span></div>}
         </>}
         {last && <HistoryOutcome item={last} />}
-        {roundComplete && <div className="nt-round-complete"><Check size={17} /><div><strong>本轮完成</strong><p>已对照预测与实测。</p></div><div><button type="button" className="nt-link-button" onClick={() => onNavigate('trail')}>查看本轮总结 <ChevronRight size={13} /></button><button type="button" className="nt-secondary-button" disabled={busy} onClick={onRecommend}>继续下一轮 <ArrowRight size={13} /></button></div></div>}
+        {roundComplete && <div className="nt-round-complete"><Check size={17} /><div><strong>本轮完成</strong><p>已对照预测与实测。</p></div><div><button type="button" className="nt-link-button" onClick={() => onNavigate('trail')}>查看本轮总结 <ChevronRight size={13} /></button></div></div>}
         {snapshot?.status === 'budget_exhausted' && <div className="nt-done"><Check size={16} /><span>预算已用完。历史回放结束；没有新的现场实验。</span><button type="button" className="nt-link-button" onClick={onReset}><PlusIcon /> 新建项目</button></div>}
         {snapshot && ['release_uncertain', 'update_uncertain', 'update_failed'].includes(snapshot.status) && <div className="nt-stop"><ShieldAlert size={16} /><span><strong>本轮已停止，记录仍保留。</strong> 系统不会自动重试或补写；先执行只读刷新，仍异常时保存项目编号。</span><button type="button" className="nt-link-button" onClick={onRefresh} disabled={busy}><RefreshCw size={13} /> 只读刷新</button></div>}
       </div>

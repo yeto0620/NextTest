@@ -29,6 +29,7 @@ export default function PossibilityAtlas({ observedRows = [], candidates = [], s
   const [yMin, yMax] = extent(combined, yKey).length ? extent(combined, yKey) : [0, 1]
   const selected = candidates.find(row => row.row_id === selectedId)
   const compare = candidates.find(row => compareIds.includes(row.row_id) && row.row_id !== selectedId)
+  const replayEnded = ['budget_exhausted', 'candidate_pool_empty'].includes(view?.snapshot?.status)
   const tableRows = useMemo(() => candidates, [candidates])
   const focusRow = (event, index) => {
     if (!['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) return
@@ -59,7 +60,7 @@ export default function PossibilityAtlas({ observedRows = [], candidates = [], s
         {viewMode === 'table' ? <CandidateTable rows={tableRows} selectedId={selectedId} compareIds={compareIds} onSelect={onSelect} onCompare={onCompare} mode={mode} view={view} onFocusRow={focusRow} /> :
           <div className="nt-atlas-plot">
             {loading && !candidates.length && <div className="nt-atlas-loading"><span className="nt-scan-line" /> 正在读取未公布方案投影…</div>}
-            {!loading && !candidates.length && <div className="nt-unavailable"><ShieldAlert size={16} /> 方案投影不可用：后端没有返回方案数据，不生成示例点。</div>}
+            {!loading && !candidates.length && <div className="nt-unavailable"><ShieldAlert size={16} /> {replayEnded ? '本次回放已结束；没有下一条待选方案。可到「结果」核对本次记录。' : '方案投影不可用：后端没有返回方案数据，不生成示例点。'}</div>}
             {candidates.length > 0 && <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`方案与已观测记录的${labelFor(meta, xKey)}对${labelFor(meta, yKey)}投影`}>
               <defs>
                 <pattern id="nt-atlas-grid" width="45" height="38" patternUnits="userSpaceOnUse"><path d="M45 0H0V38" fill="none" stroke="rgba(83,227,194,.1)" /></pattern>
@@ -86,7 +87,7 @@ export default function PossibilityAtlas({ observedRows = [], candidates = [], s
               <text x={PAD.left} y={H - 10} className="nt-axis-label">{labelFor(meta, xKey)} / {xKey} → {unitFor(meta, xKey)}</text>
               <text transform={`rotate(-90 16 ${H - PAD.bottom})`} x="16" y={H - PAD.bottom} className="nt-axis-label">{labelFor(meta, yKey)} / {yKey} → {unitFor(meta, yKey)}</text>
             </svg>}
-            <div className="nt-plot-legend"><span><i className="nt-dot nt-dot-known" />已观测实测</span><span><i className="nt-dot nt-dot-candidate" />未公布方案</span><span><i className="nt-ring" />当前选择</span><em>方案强度标签不在前端；纵轴是配方配方参数。</em></div>
+            <div className="nt-plot-legend"><span><i className="nt-dot nt-dot-known" />已观测实测</span><span><i className="nt-dot nt-dot-candidate" />未公布方案</span><span><i className="nt-ring" />当前选择</span><em>方案实测强度不在前端；纵轴是配方参数。</em></div>
           </div>}
       </div>
       {!hideAside && <div className="nt-atlas-aside">
@@ -110,7 +111,10 @@ export default function PossibilityAtlas({ observedRows = [], candidates = [], s
 function CandidateTable({ rows, selectedId, compareIds, onSelect, onCompare, mode, view, onFocusRow }) {
   const meta = useDataset()
   const [expanded, setExpanded] = useState(false)
-  if (!rows.length) return <div className="nt-unavailable nt-unavailable-guided"><ShieldAlert size={16} /><div><strong>暂时没有可比较方案</strong><span>先确认数据已经载入；仍为空时，打开“数据”检查字段与闸门。</span></div></div>
+  if (!rows.length) {
+    const ended = ['budget_exhausted', 'candidate_pool_empty'].includes(view?.snapshot?.status)
+    return <div className="nt-unavailable nt-unavailable-guided"><ShieldAlert size={16} /><div><strong>{ended ? '本次回放已结束' : '暂时没有可比较方案'}</strong><span>{ended ? '没有下一条待选方案。请到「结果」核对已查看的历史记录。' : '先确认数据已经载入；仍为空时，打开“数据”检查字段与闸门。'}</span></div></div>
+  }
   const compactColumns = meta.features.slice(0, 3).map(item => item.key)
   const columns = mode === 'research' && expanded ? meta.features.map(item => item.key) : compactColumns
   return <div className="nt-table-shell">

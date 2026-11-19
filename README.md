@@ -6,7 +6,7 @@
 
 [3 分钟演示脚本](docs/DEMO_SCRIPT_CN.md) · [快速开始](#快速开始) · [使用说明](docs/DOWNLOAD_AND_USE_CN.md) · [图文说明书](docs/NextTest_使用说明书_图文版.docx)
 
-**评委材料：** [一页纸 PDF](https://github.com/yeto0620/NextTest/releases/download/v1.2.0/NextTest_OnePager_CN.pdf) · [6 页演示 PDF](https://github.com/yeto0620/NextTest/releases/download/v1.2.0/NextTest_3Min_Deck_CN.pdf) · [3 分钟脚本](docs/DEMO_SCRIPT_CN.md)
+**评委材料：** [一页纸 PDF](https://github.com/yeto0620/NextTest/releases/download/v1.3.0/NextTest_OnePager_CN.pdf) · [6 页演示 PDF](https://github.com/yeto0620/NextTest/releases/download/v1.3.0/NextTest_3Min_Deck_CN.pdf) · [3 分钟脚本](docs/DEMO_SCRIPT_CN.md)
 
 ---
 
@@ -148,7 +148,7 @@ NextTest 的输出不是一张预测图，而是：
 
 ### 普通用户：一键安装
 
-1. 打开 [Releases v1.2.0](https://github.com/yeto0620/NextTest/releases/tag/v1.2.0)，下载 `Install_NextTest.cmd`；
+1. 打开 [Releases v1.3.0](https://github.com/yeto0620/NextTest/releases/tag/v1.3.0)，下载 `Install_NextTest.cmd`；
 2. 双击运行；Windows 提示时选择“更多信息 → 仍要运行”；
 3. 等待安装完成，浏览器自动打开工作台。
 
@@ -156,8 +156,8 @@ NextTest 的输出不是一张预测图，而是：
 
 ### 直接下载
 
-- [Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v1.2.0/Install_NextTest.cmd)
-- [NextTest_V1.2_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v1.2.0/NextTest_V1.2_ReadyToRun.zip)
+- [Install_NextTest.cmd](https://github.com/yeto0620/NextTest/releases/download/v1.3.0/Install_NextTest.cmd)
+- [NextTest_V1.3_ReadyToRun.zip](https://github.com/yeto0620/NextTest/releases/download/v1.3.0/NextTest_V1.3_ReadyToRun.zip)
 
 ### 从源码运行
 

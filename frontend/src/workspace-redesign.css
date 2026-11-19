@@ -461,3 +461,18 @@ html[data-theme="light"] .nt-trail-foot { color: #6d887d; }
 html[data-theme="light"] .nt-trail-foot .nt-link-button { color: #176e59; }
 html[data-theme="light"] .nt-trail-boundary { color: #a36a25 !important; }
 html[data-theme="light"] .nt-trail .nt-state-diff, html[data-theme="light"] .nt-ledger { background: #fff; border-color: #d7e6df; }
+
+/* Keep empty states and terminal summaries readable in both themes. */
+.nt-atlas .nt-unavailable-guided { border: 1px solid #465047; border-radius: 12px; background: #202726; color: #e7d1a4; }
+.nt-atlas .nt-unavailable-guided strong { color: #f0f4ed; font-size: 14px; }
+.nt-atlas .nt-unavailable-guided span { color: #b7c4bb; font-size: 12px; }
+html[data-theme="light"] .nt-atlas .nt-unavailable-guided { border-color: #d8c6a7; background: #fffaf0; color: #75542e; }
+html[data-theme="light"] .nt-atlas .nt-unavailable-guided strong { color: #3d4034; }
+html[data-theme="light"] .nt-atlas .nt-unavailable-guided span { color: #626b5f; }
+.nt-bench-ended .nt-bench-end-summary { margin-bottom: 24px; }
+.nt-bench-ended .nt-bench-focus-action { gap: 10px; }
+.nt-bench-ended .nt-bench-focus-action .nt-secondary-button { width: 100%; min-height: 42px; }
+.nt-bench-ended .nt-outcome { margin: 0 0 24px; }
+.nt-package-metrics strong em { color: #9bb8b2; font-size: 12px; font-style: normal; font-weight: 500; }
+.nt-package-brief > small { display: block; margin: -7px 0 15px; color: #9db8b4; font-size: 11px; }
+.nt-trail-list { grid-template-columns: repeat(7, minmax(0, 1fr)); min-width: 840px; }

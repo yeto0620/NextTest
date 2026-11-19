@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import { CheckCircle2, Download, FileJson2, FileText, LoaderCircle, PackageCheck, ShieldCheck, X } from 'lucide-react'
+import { statusLabel } from './data'
 
 function displayMetric(value) {
-  return value == null ? '证据不足' : String(value)
+  return value == null || !Number.isFinite(Number(value)) ? '证据不足' : Number(value).toFixed(2)
 }
 
 export default function EvidencePackageDrawer({ open, onClose, busy, error, packageData, onMarkdown, onJson }) {
@@ -16,6 +17,10 @@ export default function EvidencePackageDrawer({ open, onClose, busy, error, pack
   const defense = packageData?.defense_brief
   const audit = packageData?.audit_public
   const snapshot = packageData?.snapshot_public
+  const unit = packageData?.dataset_public_metadata?.target?.unit || ''
+  const summary = defense?.evidence_status === 'available'
+    ? `已揭示 ${defense.revealed_count} 条历史结果；平均绝对误差 ${displayMetric(defense.mae)} ${unit}；最大绝对误差 ${displayMetric(defense.max_absolute_error)} ${unit}。历史回放，不是新实验。`
+    : defense?.summary || '服务端没有提供可公开的答辩摘要。'
   return <div className="nt-package-layer" role="dialog" aria-modal="true" aria-labelledby="nt-package-title">
     <button type="button" className="nt-package-backdrop" onClick={onClose} aria-label="关闭成果包" />
     <aside className="nt-package-panel">
@@ -25,11 +30,11 @@ export default function EvidencePackageDrawer({ open, onClose, busy, error, pack
       {!busy && packageData && <>
         <section className="nt-package-stamp"><PackageCheck size={19} /><div><span>PAYLOAD VERIFIED</span><strong>{defense?.evidence_status === 'available' ? '可导出' : '证据不足'}</strong></div><code>{packageData.payload_sha256?.slice(0, 16)}…</code></section>
         <section className="nt-package-metrics" aria-label="公开统计">
-          <div><span>已公布</span><strong>{defense?.revealed_count ?? '—'}</strong><small>历史记录</small></div>
-          <div><span>MAE</span><strong>{displayMetric(defense?.mae)}</strong><small>描述性统计</small></div>
-          <div><span>最大误差</span><strong>{displayMetric(defense?.max_absolute_error)}</strong><small>描述性统计</small></div>
+          <div><span>已查看</span><strong>{defense?.revealed_count ?? '—'}</strong><small>历史记录</small></div>
+          <div><span>平均误差</span><strong>{displayMetric(defense?.mae)} <em>{unit}</em></strong><small>描述性统计</small></div>
+          <div><span>最大误差</span><strong>{displayMetric(defense?.max_absolute_error)} <em>{unit}</em></strong><small>描述性统计</small></div>
         </section>
-        <section className="nt-package-brief"><span className="nt-kicker">DEFENSE BRIEF</span><p>{defense?.summary || '服务端没有提供可公开的答辩摘要。'}</p><dl><div><dt>项目</dt><dd>{packageData.project_id}</dd></div><div><dt>状态</dt><dd>{snapshot?.status || '—'}</dd></div><div><dt>审计</dt><dd>{audit?.status || '—'}</dd></div></dl></section>
+        <section className="nt-package-brief"><span className="nt-kicker">答辩摘要</span><p>{summary}</p><small>页面数字保留两位小数；下载文件保留原值。</small><dl><div><dt>项目</dt><dd>{packageData.project_id}</dd></div><div><dt>状态</dt><dd>{snapshot?.status ? statusLabel(snapshot.status) : '—'}</dd></div><div><dt>审计</dt><dd>{audit?.status ? statusLabel(audit.status) : '—'}</dd></div></dl></section>
         <section className="nt-package-boundaries"><span>导出包含</span><p><CheckCircle2 size={13} /> 已公布历史、公开审计摘要、确定性统计与科学边界。</p><span>导出不包含</span><p><ShieldCheck size={13} /> pending target、独立 test 标签、CSV、路径、环境变量与 API Key。</p></section>
         <div className="nt-package-actions"><button type="button" className="nt-secondary-button" onClick={onJson}><FileJson2 size={15} /> JSON</button><button type="button" className="nt-primary" onClick={onMarkdown}><FileText size={15} /> 下载 Markdown <Download size={14} /></button></div>
       </>}
