@@ -104,7 +104,7 @@ export default function App() {
   const [packageBusy, setPackageBusy] = useState(false)
   const [packageError, setPackageError] = useState('')
   const [evidencePackage, setEvidencePackage] = useState(null)
-  const [guideOpen, setGuideOpen] = useState(false)
+  const [guideOpen, setGuideOpen] = useState(() => localStorage.getItem('nexttest.guideSeen') !== '1')
   const [resumeId, setResumeId] = useState(() => localStorage.getItem(PROJECT_KEY) || '')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -434,7 +434,7 @@ export default function App() {
       </div>
     </main>
     <NewUserTour open={tourOpen} onClose={closeTour} />
-    <GuideDrawer open={guideOpen} onClose={() => setGuideOpen(false)} onNavigate={navigate} />
+    <GuideDrawer open={guideOpen} onClose={() => { setGuideOpen(false); localStorage.setItem('nexttest.guideSeen', '1') }} onNavigate={navigate} />
     <WorkspaceShortcuts open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} onNavigate={navigate}
       onStrategy={() => { setActive('strategy'); setObservatoryOpen(true) }} onGuide={() => setGuideOpen(true)} onAssistant={() => setAssistantOpen(true)} onLibrary={() => { setActive('library'); setLibraryOpen(true) }} />
     <PresentationStage open={presentationOpen} onClose={() => setPresentationOpen(false)} landscape={landscape} view={view} preview={preview}
