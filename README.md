@@ -6,6 +6,8 @@
 
 [3 分钟演示脚本](docs/DEMO_SCRIPT_CN.md) · [快速开始](#快速开始) · [使用说明](docs/DOWNLOAD_AND_USE_CN.md) · [图文说明书](docs/NextTest_使用说明书_图文版.docx)
 
+**评委材料：** [一页纸 PDF](https://github.com/yeto0620/NextTest/releases/download/v1.2.0/NextTest_OnePager_CN.pdf) · [6 页演示 PDF](https://github.com/yeto0620/NextTest/releases/download/v1.2.0/NextTest_3Min_Deck_CN.pdf) · [3 分钟脚本](docs/DEMO_SCRIPT_CN.md)
+
 ---
 
 ## 一句话
