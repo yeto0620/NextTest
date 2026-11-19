@@ -28,11 +28,10 @@ export default function ResearchCockpit({
   return <section className="nt-replay-home" id="mission" aria-labelledby="nt-replay-title">
     <div className="nt-replay-hero">
       <div className="nt-replay-intro">
-        <h1 id="nt-replay-title">下一批实验，<br /><em>先做哪几组？</em></h1>
+        <h1 id="nt-replay-title" title="材料配方决策 · 历史数据验证">下一批实验，<br /><em>先做哪几组？</em></h1>
         <button type="button" className="nt-replay-cta nt-head-action" onClick={() => onNavigate(ended ? 'trail' : 'bench')}>
           {nextAction}<ArrowRight size={20} />
         </button>
-        <span className="nt-replay-under-cta">材料配方决策 · 历史数据验证</span>
       </div>
       <div className="nt-replay-preview" aria-label="当前方案预览">
         <div className="nt-replay-preview-head"><span>{ended ? '最后一轮' : '方法推荐'}</span><strong>{candidateId || (ended ? '已结束' : '正在读取')}</strong></div>
