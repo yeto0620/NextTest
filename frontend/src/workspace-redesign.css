@@ -324,3 +324,41 @@ html[data-theme="light"] .nt-question-copy span, html[data-theme="light"] .nt-qu
 @media (prefers-reduced-motion: reduce) {
   .nt-main, .nt-topnav.nt-sidebar, .nt-workspace > * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+/* 2026-11 polish: quieter chrome, deliberate motion, no stray scrollbar. */
+html { scrollbar-width: thin; scrollbar-color: #425453 #0d0f11; }
+html::-webkit-scrollbar { width: 9px; height: 9px; }
+html::-webkit-scrollbar-track { background: #0d0f11; }
+html::-webkit-scrollbar-thumb { border: 3px solid #0d0f11; border-radius: 10px; background: #425453; }
+html::-webkit-scrollbar-thumb:hover { background: #5f7772; }
+.nt-topnav.nt-sidebar { scrollbar-width: none; -ms-overflow-style: none; }
+.nt-topnav.nt-sidebar::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.nt-topnav .nt-sidebar-nav button { position: relative; overflow: hidden; transition: background .18s ease, color .18s ease, transform .18s ease; }
+.nt-topnav .nt-sidebar-nav button::before { content: ""; position: absolute; left: 0; top: 9px; bottom: 9px; width: 2px; border-radius: 2px; background: #83d7c9; opacity: 0; transform: scaleY(.35); transition: opacity .2s ease, transform .2s ease; }
+.nt-topnav .nt-sidebar-nav button:hover { transform: translateX(2px); }
+.nt-topnav .nt-sidebar-nav button.is-active::before { opacity: 1; transform: scaleY(1); }
+.nt-topnav .nt-sidebar-nav button.is-active { background: linear-gradient(90deg, #263331, #222929 70%); }
+.nt-topnav .nt-sidebar-nav button.is-active svg { filter: drop-shadow(0 0 6px rgba(131,215,201,.45)); }
+.nt-sidebar-utilities button { transition: background .18s ease, color .18s ease, transform .18s ease; }
+.nt-sidebar-utilities button:hover { transform: translateY(-1px); }
+.nt-primary, .nt-replay-cta, .nt-bench-focus-action .nt-primary { transition: transform .18s ease, box-shadow .18s ease, filter .18s ease; }
+.nt-primary:hover, .nt-replay-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(94,234,212,.16); }
+.nt-primary:active, .nt-replay-cta:active { transform: translateY(0); }
+.nt-workspace > .nt-replay-home, .nt-workspace > .nt-atlas-layout, .nt-workspace > .nt-bench, .nt-workspace > .nt-trail { animation: nt-workspace-enter .46s cubic-bezier(.2,.8,.2,1) both; }
+.nt-bench-focus, .nt-control-block, .nt-compare-card, .nt-detail, .nt-trail-detail { animation: nt-rise-in .5s cubic-bezier(.2,.8,.2,1) both; }
+.nt-bench-focus { animation-delay: .04s; }
+.nt-control-block:nth-child(1) { animation-delay: .08s; }
+.nt-control-block:nth-child(2) { animation-delay: .13s; }
+.nt-control-block:nth-child(3) { animation-delay: .18s; }
+.nt-compare-card { animation-delay: .16s; }
+.nt-compare-card + .nt-compare-card { animation-delay: .22s; }
+.nt-replay-preview { animation: nt-rise-in .55s .08s cubic-bezier(.2,.8,.2,1) both; }
+.nt-replay-path button { transition: color .18s ease, background .18s ease, transform .18s ease; }
+.nt-replay-path button:hover { transform: translateY(-2px); }
+.nt-replay-path button.is-current b { animation: nt-current-pulse 2.4s ease-in-out infinite; }
+.nt-mode button { transition: background .2s ease, color .2s ease, transform .2s ease; }
+@keyframes nt-rise-in { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes nt-current-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(131,215,201,0); } 50% { box-shadow: 0 0 0 5px rgba(131,215,201,.10); } }
+@media (prefers-reduced-motion: reduce) {
+  .nt-topnav .nt-sidebar-nav button, .nt-sidebar-utilities button, .nt-primary, .nt-replay-cta, .nt-replay-path button { transition: none !important; }
+  .nt-bench-focus, .nt-control-block, .nt-compare-card, .nt-detail, .nt-trail-detail, .nt-replay-preview, .nt-replay-path button.is-current b { animation: none !important; }
+}

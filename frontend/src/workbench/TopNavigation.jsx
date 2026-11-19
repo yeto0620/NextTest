@@ -27,7 +27,7 @@ export default function TopNavigation({ active, onNavigate, mode, onMode, status
       <button type="button" className={active === 'library' ? 'is-active' : ''} title="档案" onClick={onLibrary}><Archive size={18} strokeWidth={1.8} /><span>档案</span></button>
       <button type="button" className={active === 'strategy' ? 'is-active' : ''} title="比较" onClick={onStrategy}><GitCompareArrows size={18} strokeWidth={1.8} /><span>比较</span></button>
       <button type="button" className={active === 'data' ? 'is-active' : ''} title="数据" onClick={onData}><Database size={18} strokeWidth={1.8} /><span>数据</span></button>
-      <button type="button" title="导出" disabled={!onExport} onClick={onExport}><Download size={18} strokeWidth={1.8} /><span>导出</span></button>
+      {onExport && <button type="button" title="导出当前项目" onClick={onExport}><Download size={18} strokeWidth={1.8} /><span>导出</span></button>}
     </nav>
     <div className="nt-sidebar-bottom">
       <button type="button" className="nt-sidebar-assistant" onClick={onAssistant} title="打开 AI 助手"><Sparkles size={18} /><span>AI 助手<small>{llmReady === false ? '本地帮助可用' : '解释公开证据'}</small></span><ChevronRight size={15} /></button>
