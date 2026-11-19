@@ -688,4 +688,6 @@ html[data-theme="light"] .nt-assistant-how .nt-assistant-why { background:#e4f3e
 html[data-theme=light] .nt-stage-talk { background: #fff7e8; border-left-color: #b7791f; }
 html[data-theme=light] .nt-stage-talk p { color: #35544c; }
 html[data-theme=light] .nt-stage-talk small { color: #6c8780; }
+html.nt-stage-open, html.nt-stage-open body { overflow: hidden; }
+html.nt-stage-open .nt-stage-layer { overscroll-behavior: contain; }
 

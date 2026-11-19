@@ -18,7 +18,8 @@ export default function PresentationStage({ open, onClose, landscape, view, prev
     const onKeyDown = event => { if (event.key === 'Escape') onClose() }
     const timer = window.setTimeout(() => closeRef.current?.focus(), 30)
     window.addEventListener('keydown', onKeyDown)
-    return () => { window.clearTimeout(timer); window.removeEventListener('keydown', onKeyDown) }
+    document.documentElement.classList.add('nt-stage-open')
+    return () => { window.clearTimeout(timer); window.removeEventListener('keydown', onKeyDown); document.documentElement.classList.remove('nt-stage-open') }
   }, [open, onClose])
   if (!open) return null
   const snapshot = view?.snapshot
