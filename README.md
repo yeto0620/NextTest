@@ -4,7 +4,7 @@
 >
 > 输入历史实验、候选配方、成本约束和研发目标；输出下一批最值得做的实验，并留下可审计的证据链。
 
-[▶ 功能演示](docs/NextTest_Demo.mp4) · [快速开始](#快速开始) · [使用说明](docs/DOWNLOAD_AND_USE_CN.md) · [图文说明书](docs/NextTest_使用说明书_图文版.docx)
+[▶ 功能演示](docs/NextTest_Demo.mp4) · [3 分钟演示脚本](docs/DEMO_SCRIPT_CN.md) · [快速开始](#快速开始) · [使用说明](docs/DOWNLOAD_AND_USE_CN.md) · [图文说明书](docs/NextTest_使用说明书_图文版.docx)
 
 ---
 

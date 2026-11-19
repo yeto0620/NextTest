@@ -39,7 +39,7 @@ export default function TopNavigation({ active, onNavigate, mode, onMode, status
       <div className="nt-sidebar-utilities">
         <button type="button" onClick={mode === 'research' ? onTour : onGuide} title="使用方法"><CircleHelp size={17} /><span>帮助</span></button>
         <button type="button" onClick={onShortcuts} title="快捷键"><Keyboard size={17} /><span>快捷键</span></button>
-        {mode === 'explore' && <button type="button" onClick={onStage} title="演示"><MonitorPlay size={17} /><span>演示</span></button>}
+        <button type="button" onClick={onStage} title="3 分钟演示"><MonitorPlay size={17} /><span>演示</span></button>
         <button type="button" onClick={onTheme} title={theme === 'light' ? '深色主题' : '亮色主题'}>{theme === 'light' ? <Moon size={17} /> : <Sun size={17} />}<span>主题</span></button>
       </div>
     </div>

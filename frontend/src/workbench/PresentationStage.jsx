@@ -5,9 +5,9 @@ import { number, statusLabel, strategyLabel } from './data'
 import { useDataset } from './dataset'
 
 function stageFor(view) {
-  if (view?.pending) return ['03', '保存']
-  if (view?.history?.length) return ['04', '更新']
-  return ['01', '观测']
+  if (view?.pending) return ['03', '实验']
+  if (view?.history?.length) return ['04', '结果']
+  return ['01', '数据']
 }
 
 export default function PresentationStage({ open, onClose, landscape, view, preview, selectedCandidate, compareCandidate, selection, onSelectObserved, onNavigate }) {
@@ -29,14 +29,14 @@ export default function PresentationStage({ open, onClose, landscape, view, prev
   const enter = id => { onClose(); onNavigate(id) }
   return <div className="nt-stage-layer" role="dialog" aria-modal="true" aria-labelledby="nt-stage-title">
     <div className="nt-stage-shell">
-      <header className="nt-stage-head"><div className="nt-stage-brand"><MonitorPlay size={17} /><span>NextTest</span><small>LIVE DEMO STAGE</small></div><div className="nt-stage-state"><i /><span>{stageCode}</span><strong>{stageName}</strong></div><button ref={closeRef} type="button" className="nt-icon-button" onClick={onClose} aria-label="退出演示模式"><X size={16} /></button></header>
+      <header className="nt-stage-head"><div className="nt-stage-brand"><MonitorPlay size={17} /><span>NextTest 智试</span><small>3 分钟演示</small></div><div className="nt-stage-state"><i /><span>{stageCode}</span><strong>{stageName}</strong></div><button ref={closeRef} type="button" className="nt-icon-button" onClick={onClose} aria-label="退出演示模式"><X size={16} /></button></header>
       <main className="nt-stage-main">
-        <section className="nt-stage-hero"><div className="nt-stage-copy"><span className="nt-kicker">HISTORICAL EXPERIMENT REPLAY</span><h1 id="nt-stage-title">让证据，<em>决定下一步。</em></h1><p>每次只公布一条历史记录。预测先保存，结果后出现。</p><div className="nt-stage-rail" aria-label="回放进度"><span className="is-ready"><i />观测</span><b /><span className={candidate ? 'is-ready' : ''}><i />方案</span><b /><span className={pending ? 'is-ready' : ''}><i />保存</span><b /><span className={last ? 'is-ready' : ''}><i />公布</span></div></div>
+        <section className="nt-stage-hero"><div className="nt-stage-copy"><span className="nt-kicker">MATERIAL FORMULATION / DECISION DEMO</span><h1 id="nt-stage-title">下一批实验，<em>先做哪几组？</em></h1><p>用历史配方数据，演示如何从候选方案中选出下一批最值得做的实验。</p><div className="nt-stage-rail" aria-label="演示进度"><span className="is-ready"><i />数据</span><b /><span className={candidate ? 'is-ready' : ''}><i />方案</span><b /><span className={pending ? 'is-ready' : ''}><i />实验</span><b /><span className={last ? 'is-ready' : ''}><i />结果</span></div></div>
           <ObservationPlate landscape={landscape} selectedCandidate={candidate} compareCandidate={compareCandidate} selection={selection} onSelectObserved={onSelectObserved} />
         </section>
-        <aside className="nt-stage-readout"><span className="nt-kicker">CURRENT READOUT</span>{pending ? <><div className="nt-stage-readout-title"><LockKeyhole size={16} /><strong>预测已保存</strong></div><p>历史实测仍隐藏；演示不会提前读取结果。</p><dl><div><dt>方案</dt><dd>{pending.row_id}</dd></div><div><dt>预测</dt><dd>{number(pending.prediction, 2)} {meta.target.unit || ''}</dd></div><div><dt>策略</dt><dd>{strategyLabel(snapshot?.strategy)}</dd></div></dl></> : last ? <><div className="nt-stage-readout-title"><Eye size={16} /><strong>最新公布</strong></div><p>只显示已经由当前项目公开的历史实测。</p><dl><div><dt>方案</dt><dd>{last.row_id}</dd></div><div><dt>预测</dt><dd>{number(last.prediction, 2)} {meta.target.unit || ''}</dd></div><div><dt>实测</dt><dd>{number(last.revealed_target, 2)} {meta.target.unit || ''}</dd></div><div><dt>误差</dt><dd>{number(last.absolute_error, 2)} {meta.target.unit || ''}</dd></div></dl></> : <><div className="nt-stage-readout-title"><Orbit size={16} /><strong>准备观察</strong></div><p>当前没有保存的建议。先进入方案空间或实验台。</p><dl><div><dt>观测</dt><dd>{landscape?.rows?.length ?? '—'} 条</dd></div><div><dt>方案</dt><dd>{snapshot?.candidate_count ?? preview?.candidate_count ?? '—'} 条</dd></div><div><dt>状态</dt><dd>{snapshot ? statusLabel(snapshot.status) : '未创建项目'}</dd></div></dl></>}
-          <div className="nt-stage-actions"><button type="button" className="nt-primary" onClick={() => enter('bench')}><Beaker size={15} /> 进入实验 <ArrowRight size={15} /></button><button type="button" className="nt-secondary-button" onClick={() => enter('atlas')}><Orbit size={15} /> 查看方案</button></div>
-          <footer>历史回放，不是新物理实验；模型预测不是实测。</footer>
+        <aside className="nt-stage-readout"><span className="nt-kicker">当前推荐 / CURRENT READOUT</span>{pending ? <><div className="nt-stage-readout-title"><LockKeyhole size={16} /><strong>预测已锁定</strong></div><p>历史结果仍隐藏；演示不会提前读取答案。</p><dl><div><dt>方案</dt><dd>{pending.row_id}</dd></div><div><dt>预测</dt><dd>{number(pending.prediction, 2)} {meta.target.unit || ''}</dd></div><div><dt>策略</dt><dd>{strategyLabel(snapshot?.strategy)}</dd></div></dl></> : last ? <><div className="nt-stage-readout-title"><Eye size={16} /><strong>本轮结果</strong></div><p>只显示当前项目已经查看过的历史结果。</p><dl><div><dt>方案</dt><dd>{last.row_id}</dd></div><div><dt>预测</dt><dd>{number(last.prediction, 2)} {meta.target.unit || ''}</dd></div><div><dt>实测</dt><dd>{number(last.revealed_target, 2)} {meta.target.unit || ''}</dd></div><div><dt>误差</dt><dd>{number(last.absolute_error, 2)} {meta.target.unit || ''}</dd></div></dl></> : <><div className="nt-stage-readout-title"><Orbit size={16} /><strong>准备开始</strong></div><p>先看数据与候选方案，再锁定一条预测。</p><dl><div><dt>观测</dt><dd>{landscape?.rows?.length ?? '—'} 条</dd></div><div><dt>方案</dt><dd>{snapshot?.candidate_count ?? preview?.candidate_count ?? '—'} 条</dd></div><div><dt>状态</dt><dd>{snapshot ? statusLabel(snapshot.status) : '未创建项目'}</dd></div></dl></>}
+          <div className="nt-stage-actions"><button type="button" className="nt-primary" onClick={() => enter('bench')}><Beaker size={15} /> 开始演示 <ArrowRight size={15} /></button><button type="button" className="nt-secondary-button" onClick={() => enter('atlas')}><Orbit size={15} /> 查看候选</button></div>
+          <footer>历史数据回放 · 不是新实验 · 预测不是实测</footer>
         </aside>
       </main>
     </div>
